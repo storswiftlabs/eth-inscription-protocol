@@ -1,6 +1,3 @@
 {
-  "extends": "@antfu",
-  "rules": {
-    "no-restricted-globals": ["error", { "name": "process", "message": "Use 'require(\"process\")' instead." }]
-  }
+  "extends": "@antfu"
 }
