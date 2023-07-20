@@ -1,19 +1,15 @@
 'use client'
 import { useTheme } from 'next-themes'
 import type { SwitchEvent } from '@nextui-org/react'
-import { Switch } from '@nextui-org/react'
+import { SwitchTheme } from './customUI/switch/SwitchTheme'
 
 export function ThemeChanger() {
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
 
   return (
     <div className="flex justify-center items-center">
-      Switch Theme &nbsp;
-      <Switch
-        onChange={(e: SwitchEvent) =>
-          e.target.checked ? setTheme('dark') : setTheme('light')
-        }
-      />
+      <SwitchTheme onChange={(e: SwitchEvent) => e.target.checked ? setTheme('dark') : setTheme('light')} />
+
     </div>
   )
 }
