@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ThemeProvider } from 'next-themes'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ThemeChanger } from './ThemeChanger'
+import '@rainbow-me/rainbowkit/styles.css'
 
 export function SideBar() {
   return (
@@ -17,7 +18,7 @@ export function SideBar() {
         <div className="flex flex-col items-center mt-6 -mx-2 text-red">
           <ThemeChanger />
           <br />
-          <ConnectButton chainStatus={'none'} accountStatus={'avatar'} />
+          <ConnectButton chainStatus={'none'} accountStatus={'avatar'} showBalance={false} />
         </div>
       </div>
     </ThemeProvider>

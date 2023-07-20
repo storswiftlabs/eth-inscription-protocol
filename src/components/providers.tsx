@@ -20,6 +20,7 @@ import {
   zora,
 } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
+import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
@@ -32,7 +33,7 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()],
 )
 
-const projectId = 'bb62d75a085c27d66e3e0d4ca807a16d'
+const projectId = ProjectId || ''
 
 const { wallets } = getDefaultWallets({
   appName: 'eth inscriptions',
