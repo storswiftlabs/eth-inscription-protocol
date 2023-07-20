@@ -15,6 +15,11 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+[data-theme='dark'] body {
+  --foreground-rgb: 215, 155, 55;
+    --background-start-rgb: 20, 220, 30;
+    --background-end-rgb: 0, 30, 220;
+}
 
 body {
   color: rgb(var(--foreground-rgb));
