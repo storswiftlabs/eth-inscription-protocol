@@ -18,7 +18,7 @@ export function SideBar() {
         <div className="flex flex-col items-center mt-6 -mx-2 text-red">
           <ThemeChanger />
           <br />
-          <ConnectButton chainStatus={'none'} accountStatus={'avatar'} showBalance={false} />
+          <ConnectButton chainStatus={'none'} accountStatus={'address'} showBalance={false} />
         </div>
       </div>
     </ThemeProvider>
