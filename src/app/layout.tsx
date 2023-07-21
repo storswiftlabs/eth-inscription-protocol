@@ -15,13 +15,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const combinedClassName = `${inter.className} flex max-h-screen`
+  const combinedClassName = `${inter.className} flex max-h-screen w-screen `
   return (
     <html lang="en">
       <body className={combinedClassName}>
         <Providers>
           <SideBar />
-          {children}
+          <div className='w-full'>{children}</div>
         </Providers>
       </body>
     </html>

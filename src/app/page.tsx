@@ -1,11 +1,17 @@
 'use client'
 import { ThemeProvider } from 'next-themes'
+import { Card } from '@/components/pages/Home/Card'
 
 export default function Home() {
   return (
     <ThemeProvider attribute="class">
-      <main className="flex min-h-screen  flex-col items-center justify-between p-24 border-x-10 bg-red-200 dark:bg-red-500">
-        chat2
+      <main className="flex min-h-screen justify-start border-indigo-600 min-w-max border-solid  flex-col items-center p-24 bg-white dark:bg-black">
+        <h1 className='font-bold text-5xl text-black dark:text-white mb-10'>
+          Discover
+        </h1>
+        <div>
+          <Card></Card>
+        </div>
       </main>
     </ThemeProvider>
   )
