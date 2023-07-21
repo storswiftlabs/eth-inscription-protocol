@@ -1,13 +1,12 @@
 'use client'
 
 import { ThemeProvider } from 'next-themes'
-import { ThemeChanger } from '@/components/ThemeChanger'
 
 export default function Home() {
   return (
-    <ThemeProvider>
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <ThemeChanger />
+    <ThemeProvider attribute='class'>
+      <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-red-300 dark:bg-black ">
+        1232
       </main>
     </ThemeProvider>
   )
