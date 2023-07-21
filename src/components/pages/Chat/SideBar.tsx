@@ -9,8 +9,8 @@ export function ChatSideBar({ type = 'general' }) {
             </h1>
             <div className='w-full flex justify-center flex-col'>
 
-                <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${type === 'general' ? 'bg-red-200' : ''}`}> 💬 General</div></Link>
-                <Link href="/chat/group"><div className={`m-2 rounded-lg p-2 ${type === 'group' ? 'bg-red-200' : ''}`}> 👥 Group</div></Link>
+                <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${type === 'general' ? 'bg-red-200 dark:bg-slate-300' : ''}`}> 💬 General</div></Link>
+                <Link href="/chat/group"><div className={`m-2 rounded-lg p-2 ${type === 'group' ? 'bg-red-200 dark:bg-slate-300' : ''}`}> 👥 Group</div></Link>
             </div>
 
         </div>
