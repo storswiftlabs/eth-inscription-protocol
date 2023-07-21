@@ -3,9 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background: white; /*背景颜色*/
+  --foreground: black; /*字体颜色*/
+  --hoverground: #edecf3; /*划入背景颜色*/
+  --iconground: #7d7e85; /*划入背景颜色*/
+  --hovericonground: #000000; /*划入icon颜色*/
+  --tweetIcon: #0f1419; /*tweet nav 图标颜色*/
+  --borderground: #edecf3; /*border颜色*/
+  --tweetIconopacity: 0.48; /*icon 没划入的时候透明度*/
+}
+
+[data-theme='dark'] {
+  --background: #121212; /*背景颜色*/
+  --foreground: white; /*字体颜色*/
+  --hoverground: #262626; /*划入背景颜色*/
+  --hovericonground: #ffffff; /*划入icon颜色*/
+  --tweetIcon: #fffdfd; /*tweet nav 图标颜色*/
+  --tweetIconopacity: 0.6; /*icon 划入的时候透明度*/
+  --borderground: #262626; /*border颜色*/
 }
 
 @media (prefers-color-scheme: dark) {
@@ -16,15 +31,12 @@
   }
 }
 
-[data-theme='dark'] body {
-  --foreground-rgb: 215, 155, 55;
-  --background-start-rgb: 20, 220, 30;
-  --background-end-rgb: 0, 30, 220;
-}
-
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }

@@ -1,0 +1,29 @@
+.nav {
+  background: var(--background);
+  border-right: 1px solid var(--borderground);
+  .r-18jsvk2 {
+    width: 24px;
+    height: 24px;
+    fill: var(--tweetIcon);
+    fill-opacity: var(--tweetIconopacity);
+  }
+  .icon-div {
+    cursor: pointer;
+    margin: 0.2rem;
+  }
+  .navSelected {
+    font-weight: 900;
+    border-radius: 1.5rem;
+    background: var(--hoverground);
+    .r-18jsvk2 {
+      fill-opacity: 1;
+    }
+  }
+  .icon-div:hover {
+    border-radius: 1.5rem;
+    background: var(--hoverground);
+    .r-18jsvk2 {
+      fill-opacity: 1;
+    }
+  }
+}
