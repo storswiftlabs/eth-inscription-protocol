@@ -13,26 +13,14 @@ import {
   trustWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
-import {
-  arbitrum,
-  mainnet,
-  optimism,
-  polygon,
-  zora,
-} from 'wagmi/chains'
+import { arbitrum, mainnet, optimism, polygon, zora } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { ThemeProvider } from 'next-themes'
 import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    zora,
-  ],
-  [publicProvider()],
+  [mainnet, polygon, optimism, arbitrum, zora],
+  [publicProvider()]
 )
 
 const projectId = ProjectId || ''
@@ -61,20 +49,21 @@ const connectors = connectorsForWallets([
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  connectors,
+  // connectors,
   publicClient,
   webSocketPublicClient,
 })
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   const color = 'f2f2f2'
-  return true
-    ? <img
+  return true ? (
+    <img
       src={'/logo.png'}
       width={size}
       height={size}
       style={{ borderRadius: 999 }}
     />
-    : <div
+  ) : (
+    <div
       style={{
         backgroundColor: color,
         borderRadius: 999,
@@ -84,19 +73,21 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
     >
       :^)
     </div>
+  )
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider >
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains} avatar={CustomAvatar} appInfo={demoAppInfo}>
-          <div className='flex'>
-            {children}
-          </div>
+        <RainbowKitProvider
+          chains={chains}
+          avatar={CustomAvatar}
+          appInfo={demoAppInfo}
+        >
+          <div className="flex">{children}</div>
         </RainbowKitProvider>
       </WagmiConfig>
-    </ThemeProvider >
-
+    </ThemeProvider>
   )
 }
