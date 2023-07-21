@@ -91,7 +91,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ThemeProvider attribute="class">
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains} avatar={CustomAvatar} appInfo={demoAppInfo}>
-          <div className='flex'>
+          <div className='flex w-screen max-h-screen'>
             {children}
           </div>
         </RainbowKitProvider>
