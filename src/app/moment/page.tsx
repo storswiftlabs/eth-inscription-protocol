@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <ThemeProvider>
-      <main className="nav flex min-h-screen flex-col items-center  p-20 ">
+      <main className="nav flex min-h-screen flex-col items-center  p-20">
         <div>
           {iconData.map((i, j) => {
             return iconComponent(i.icon, i.text)
