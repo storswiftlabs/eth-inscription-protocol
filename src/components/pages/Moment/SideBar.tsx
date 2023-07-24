@@ -1,59 +1,78 @@
 'use client'
-
-import { ThemeProvider } from 'next-themes'
-import '../../style/moment.css'
+import { Button } from '@nextui-org/react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { useState } from 'react'
-import { text } from 'stream/consumers'
+import Follower from './Follower'
 
-export default function Home() {
-  const [nav, setNav] = useState('Find')
+export default function MomentSideBar({ type = 'find' }) {
   const [iconData, setIcon] = useState([
     {
       text: 'Find',
       icon: findSvg,
+      link: '/moment/find',
     },
     {
       text: 'Message',
       icon: messageSvg,
+      link: '/moment/message',
     },
     {
       icon: bookmarkSvg,
       text: 'Bookmark',
+      link: '/moment/bookmark',
     },
     {
       icon: verifySvg,
       text: 'Verify',
+      link: '/moment/verify',
     },
     {
       icon: moreSvg,
       text: 'More',
+      link: '/moment/more',
     },
   ])
 
-  const iconComponent = (svg: React.JSX.Element, text: string) => {
+  function capitalizeFirstLetter(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
+  const iconComponent = (
+    svg: React.JSX.Element,
+    text: string,
+    link: string
+  ) => {
     return (
-      <div
-        onClick={() => setNav(text)}
-        className={`icon-div flex ${nav === text ? 'navSelected' : ''}`}
-        style={{ padding: '0.8rem 1rem' }}
+      <Link
+        href={link}
+        className={`icon-div flex p-2 pr-4 pl-4 ${
+          capitalizeFirstLetter(type) === text ? 'navSelected' : ''
+        }`}
       >
-        <span style={{ marginRight: '1rem' }}>{svg}</span>
+        <span className="mr-4" style={{ marginRight: '1rem' }}>
+          {svg}
+        </span>
         <span>{text}</span>
-      </div>
+      </Link>
     )
   }
 
   return (
-    <ThemeProvider>
-      <main className="nav flex min-h-screen flex-col items-center  p-20">
-        <div>
+    <div className="nav flex flex-col justify-start items-center w-[300px] h-full p-4 border-x border-gray-500">
+      <div>
+        <h1 className="font-bold text-2xl mb-5 mt-10 text-center">Tweet</h1>
+        <div className=" w-full flex justify-center flex-col">
+          <Follower />
           {iconData.map((i, j) => {
-            return iconComponent(i.icon, i.text)
+            return iconComponent(i.icon, i.text, i.link)
           })}
+          <Button rounded className="nav-button">
+            Publish Moment
+          </Button>
         </div>
-      </main>
-      <div>123</div>
-    </ThemeProvider>
+      </div>
+    </div>
   )
 }
 

@@ -80,12 +80,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider >
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider
-          chains={chains}
-          avatar={CustomAvatar}
-          appInfo={demoAppInfo}
-        >
-          <div className="flex">{children}</div>
+        <RainbowKitProvider chains={chains} avatar={CustomAvatar} appInfo={demoAppInfo}>
+          <div className='flex w-screen max-h-screen'>
+            {children}
+          </div>
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>

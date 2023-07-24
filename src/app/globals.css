@@ -11,6 +11,10 @@
   --tweetIcon: #0f1419; /*tweet nav 图标颜色*/
   --borderground: #edecf3; /*border颜色*/
   --tweetIconopacity: 0.48; /*icon 没划入的时候透明度*/
+  --navbuttonground: #0e76fd; /*nav 按钮颜色*/
+  --navbuttonborder: #0e76fd; /*nav 按钮边框颜色*/
+  --rigsidebarground: #f7f9f9; /* 右边框颜色 */
+  --rigsidebarboder: none; /* 右边框颜色 */
 }
 
 [data-theme='dark'] {
@@ -21,6 +25,10 @@
   --tweetIcon: #fffdfd; /*tweet nav 图标颜色*/
   --tweetIconopacity: 0.6; /*icon 划入的时候透明度*/
   --borderground: #262626; /*border颜色*/
+  --navbuttonground: #404040; /*nav 按钮颜色*/
+  --navbuttonborder: #696969; /*nav 按钮边框颜色*/
+  --rigsidebarground: #121212; /* black */
+  --rigsidebarboder: 1px solid #696969; /* 右边框颜色 */
 }
 
 @media (prefers-color-scheme: dark) {
