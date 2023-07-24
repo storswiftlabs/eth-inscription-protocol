@@ -20,7 +20,7 @@ import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, polygon, optimism, arbitrum, zora],
-  [publicProvider()]
+  [publicProvider()],
 )
 
 const projectId = ProjectId || ''
@@ -55,25 +55,27 @@ const wagmiConfig = createConfig({
 })
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   const color = 'f2f2f2'
-  return true ? (
-    <img
-      src={'/logo.png'}
-      width={size}
-      height={size}
-      style={{ borderRadius: 999 }}
-    />
-  ) : (
-    <div
-      style={{
-        backgroundColor: color,
-        borderRadius: 999,
-        height: size,
-        width: size,
-      }}
-    >
-      :^)
-    </div>
-  )
+  return true
+    ? (
+      <img
+        src={'/logo.png'}
+        width={size}
+        height={size}
+        style={{ borderRadius: 999 }}
+      />
+      )
+    : (
+      <div
+        style={{
+          backgroundColor: color,
+          borderRadius: 999,
+          height: size,
+          width: size,
+        }}
+      >
+        :^)
+      </div>
+      )
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -85,7 +87,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           avatar={CustomAvatar}
           appInfo={demoAppInfo}
         >
-          <div className="flex">{children}</div>
+          <div className="flex w-screen">{children}</div>
         </RainbowKitProvider>
       </WagmiConfig>
     </ThemeProvider>
