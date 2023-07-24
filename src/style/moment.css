@@ -1,6 +1,7 @@
 .nav {
   background: var(--background);
   border-right: 1px solid var(--borderground);
+  border-left: 1px solid var(--borderground);
   .r-18jsvk2 {
     width: 24px;
     height: 24px;
@@ -25,5 +26,52 @@
     .r-18jsvk2 {
       fill-opacity: 1;
     }
+  }
+  .nav-button {
+    margin-top: 1rem;
+    border: 1px solid var(--navbuttonborder);
+    background: var(--navbuttonground);
+    padding: 1.4rem;
+  }
+}
+
+.right-sidebar-nav {
+  .nav-button {
+    width: 10rem;
+    margin-top: 1rem;
+    border: 1px solid var(--navbuttonborder);
+    background: var(--navbuttonground);
+    padding: 1.4rem;
+  }
+
+  .sidebar-card {
+    background: var(--rigsidebarground);
+    border: var(--rigsidebarboder);
+    color: var(--hovericonground);
+  }
+  .nextui-c-eFfoBo {
+    padding: 0.4rem 1rem !important;
+  }
+}
+
+.content-border {
+  border-right: 1px solid var(--borderground);
+}
+
+
+
+.upper-div {
+  opacity: 0.5;
+
+  background-color: var(--upperground);
+  color: var(--uppercolor);
+
+  .upper {
+    border-right: 2px solid var(--borderground);
+  }
+
+  .upper-color {
+    font-weight: 600;
+    color: var(--tweetIcon);
   }
 }
