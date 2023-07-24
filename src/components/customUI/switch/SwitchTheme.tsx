@@ -1,8 +1,14 @@
+'use client'
+import { useEffect, useState } from 'react'
 import './switch.css'
 
 export function SwitchTheme({ onChange }: { onChange: (e: any) => void }) {
+  const [ckecked, setChecked] = useState(false)
+  useEffect(() => {
+    setChecked(window.localStorage.getItem('theme') === 'dark')
+  })
   return <label className="theme-switch">
-    <input type="checkbox" onChange={onChange} className="theme-switch__checkbox" />
+    <input type="checkbox" onChange={onChange} checked={ckecked} className="theme-switch__checkbox" />
     <div className="theme-switch__container">
       <div className="theme-switch__clouds"></div>
       <div className="theme-switch__stars-container">

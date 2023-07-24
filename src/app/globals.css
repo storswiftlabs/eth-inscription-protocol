@@ -55,3 +55,6 @@ body {
 .w-20vw {
   width: 12vw;
 }
+.children-div {
+  width: calc(100% - 12vw);
+}

@@ -58,9 +58,7 @@
   border-right: 1px solid var(--borderground);
 }
 
-.children-div {
-  width: calc(100% - 12vw);
-}
+
 
 .upper-div {
   opacity: 0.5;
