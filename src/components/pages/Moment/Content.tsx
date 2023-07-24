@@ -25,8 +25,8 @@ function MomentContent({ type }: MomentContentData) {
   }
 
   return (
-    <div className=" flex relative  overflow-y-auto h-screen ">
-      <div style={{ width: '60%' }} className="relative">
+    <div className=" w-full flex relative  overflow-y-auto h-screen ">
+      <div style={{ width: '50%' }} className="relative">
         <div className="upper-div sticky h-20 w-full bg-slate-400 flex text-center items-center top-0">
           <div
             onClick={() => isUpperFunction('Recommendation')}

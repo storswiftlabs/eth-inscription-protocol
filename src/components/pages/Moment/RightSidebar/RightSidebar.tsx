@@ -4,7 +4,7 @@ import React from 'react'
 function RightSidebar() {
   const cardData = () => {
     return (
-      <Card.Body >
+      <Card.Body>
         <Row className="right-sidebar-row flex pt-0 mb-0" align="center">
           <img
             style={{ width: '28px', height: '28px', borderRadius: '0.2rem' }}
@@ -27,7 +27,7 @@ function RightSidebar() {
   }
 
   return (
-    <div className="right-sidebar-nav h-screen  pl-4  pr-4 pt-14">
+    <div className="right-sidebar-nav h-screen  pl-4  pr-2 pt-14">
       <div className="mb-8  w-full pr-8">
         <Dropdown>
           <Dropdown.Button className="nav-button" style={{ width: '100%' }}>
@@ -47,9 +47,9 @@ function RightSidebar() {
       <Card
         className="sidebar-card "
         variant="bordered"
-        css={{ padding: '1rem' }}
+        css={{ padding: '1rem', borderRadius: '1.5rem' }}
       >
-        {[1, 2, 3, 4, 5].map((t, j) => cardData())}
+        {[1, 2, 3, 4, 5, 6].map((t, j) => cardData())}
       </Card>
     </div>
   )
