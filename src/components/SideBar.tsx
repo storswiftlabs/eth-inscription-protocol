@@ -9,6 +9,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 export function SideBar() {
   return (
     <ThemeProvider attribute='class'>
+      {/* //TODO:  w-20VW 未生效 已处理 */}
       <div className="flex flex-col w-20vw h-screen px-4 py-8 border-x-1 bg-grey dark:bg-black justify-between items-center">
         <div className="flex flex-col w-44 h-screen  border-gray-200 bg-grey dark:bg-black justify-start items-center">
           <Link href="/"><Image src="/logo.png" width={50} height={50} alt="Logo" /></Link>

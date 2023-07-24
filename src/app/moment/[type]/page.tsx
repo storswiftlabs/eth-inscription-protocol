@@ -9,7 +9,7 @@ import MomentContent from '@/components/pages/Moment/Content'
 
 export default function Home({ params: { type = 'Find' } }) {
   return (
-    <main className="flex  h-screen items-center overflow-hidden justify-between bg-grey dark:bg-black">
+    <main className="flex h-screen items-center bg-grey dark:bg-black">
       <MomentSideBar type={type} />
       <MomentContent type={type} />
     </main>

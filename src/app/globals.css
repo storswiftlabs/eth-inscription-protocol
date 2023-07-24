@@ -15,6 +15,8 @@
   --navbuttonborder: #0e76fd; /*nav 按钮边框颜色*/
   --rigsidebarground: #f7f9f9; /* 右边框颜色 */
   --rigsidebarboder: none; /* 右边框颜色 */
+  --upperground: rgb(254, 255, 255,.8); /* tweet 吸顶框背景颜色*/
+  --uppercolor: #040404; /* tweet 吸顶框字体颜色*/
 }
 
 [data-theme='dark'] {
@@ -29,6 +31,8 @@
   --navbuttonborder: #696969; /*nav 按钮边框颜色*/
   --rigsidebarground: #121212; /* black */
   --rigsidebarboder: 1px solid #696969; /* 右边框颜色 */
+  --upperground: rgb(4, 4, 4,.8); /* tweet 吸顶框背景颜色*/
+  --uppercolor: #666666; /* tweet 吸顶框字体颜色*/
 }
 
 @media (prefers-color-scheme: dark) {
@@ -47,4 +51,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+.w-20vw {
+  width: 12vw;
 }

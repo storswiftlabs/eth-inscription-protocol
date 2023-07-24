@@ -36,7 +36,6 @@
 }
 
 .right-sidebar-nav {
-  border-left: 1px solid var(--borderground);
   .nav-button {
     width: 10rem;
     margin-top: 1rem;
@@ -52,5 +51,29 @@
   }
   .nextui-c-eFfoBo {
     padding: 0.4rem 1rem !important;
+  }
+}
+
+.content-border {
+  border-right: 1px solid var(--borderground);
+}
+
+.children-div {
+  width: calc(100% - 12vw);
+}
+
+.upper-div {
+  opacity: 0.5;
+
+  background-color: var(--upperground);
+  color: var(--uppercolor);
+
+  .upper {
+    border-right: 2px solid var(--borderground);
+  }
+
+  .upper-color {
+    font-weight: 600;
+    color: var(--tweetIcon);
   }
 }

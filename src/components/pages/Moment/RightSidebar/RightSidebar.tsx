@@ -4,7 +4,7 @@ import React from 'react'
 function RightSidebar() {
   const cardData = () => {
     return (
-      <Card.Body>
+      <Card.Body >
         <Row className="right-sidebar-row flex pt-0 mb-0" align="center">
           <img
             style={{ width: '28px', height: '28px', borderRadius: '0.2rem' }}
@@ -16,10 +16,10 @@ function RightSidebar() {
           <Spacer x={0.4} />
           <span>@Tubose june 7</span>
         </Row>
-        <div className="flex w-80  items-center ">
+        <div className="flex items-center ">
           <span>{svg}</span>
           <span className="w-full truncate">
-            123333333333333333333333333333332222222222222
+            12333333333333333333333333333333222222222222211111111111
           </span>
         </div>
       </Card.Body>
@@ -27,8 +27,8 @@ function RightSidebar() {
   }
 
   return (
-    <div className="right-sidebar-nav h-screen  pl-8 mr-40 pt-14">
-      <div className="mb-8  w-full">
+    <div className="right-sidebar-nav h-screen  pl-4  pr-4 pt-14">
+      <div className="mb-8  w-full pr-8">
         <Dropdown>
           <Dropdown.Button className="nav-button" style={{ width: '100%' }}>
             FIlter
