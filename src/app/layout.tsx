@@ -22,7 +22,6 @@ export default function RootLayout({
         <Providers>
           <SideBar />
           <div className="children-div max-h-full">{children}</div>
-          {/* <div className='w-full max-h-full'>{children}</div> */}
         </Providers>
       </body>
     </html>
