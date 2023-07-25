@@ -49,33 +49,17 @@ const connectors = connectorsForWallets([
 
 const wagmiConfig = createConfig({
   autoConnect: true,
-  // connectors,
+  connectors,
   publicClient,
   webSocketPublicClient,
 })
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
-  const color = 'f2f2f2'
-  return true
-    ? (
-      <img
-        src={'/logo.png'}
-        width={size}
-        height={size}
-        style={{ borderRadius: 999 }}
-      />
-      )
-    : (
-      <div
-        style={{
-          backgroundColor: color,
-          borderRadius: 999,
-          height: size,
-          width: size,
-        }}
-      >
-        :^)
-      </div>
-      )
+  return <img
+    src={'/logo.png'}
+    width={size}
+    height={size}
+    style={{ borderRadius: 10 }}
+  />
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
