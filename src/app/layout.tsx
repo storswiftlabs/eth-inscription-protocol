@@ -21,8 +21,7 @@ export default function RootLayout({
       <body className={combinedClassName}>
         <Providers>
           <SideBar />
-          <div className="children-div max-h-full">{children}</div>
-          {/* <div className='w-full max-h-full'>{children}</div> */}
+          <div className="children-div max-h-full flex-1">{children}</div>
         </Providers>
       </body>
     </html>
