@@ -83,7 +83,75 @@
   display: flex;
   align-items: flex-start;
   font-size: 0.7rem;
+  position: relative;
   .ju367v10 {
     margin-left: 0.4rem;
   }
+  .grid-border {
+    border: 1px solid var(--borderground);
+    margin-top: 0.6rem;
+    width: 90%;
+    position: absolute;
+    left: 5%;
+  }
+  .iconhudong {
+    .selected {
+      fill: var(--tweetIcon);
+    }
+    .xihuan {
+      fill: red;
+    }
+  }
 }
+.DynamicCard-grid:hover {
+  cursor: pointer;
+  .grid-border {
+    border: 1px solid var(--cardborder);
+  }
+  background-color: var(--hoverground);
+}
+
+.FindInformation-container {
+  .nextui-c-PJLV {
+    color: var(--hovericonground);
+  }
+  .r-18jsvk2,.r-4qtqp9 {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    fill: var(--tweetIcon);
+    fill-opacity: var(--tweetIcon);
+  }
+  .nextui-user-name{
+    color: var(--tweetIcon);
+  }
+  .underline-on-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .data-presentation{
+    font-size: .75rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--borderground);
+    border-bottom: 1px solid var(--borderground);
+  }
+  .reply{
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--borderground);
+    .nextui-c-jeuecp{
+      background-color:transparent !important;
+      color: var(--tweetIcon);
+    }
+    .nextui-c-boZsAS{
+    border: 2px solid var(--borderground);
+    }
+  .nextui-c-boZsAS:focus-visible{
+    border: 2px solid var(--borderground);
+    }
+  }
+}
+
+.cursor{
+  cursor: pointer;
+}
+

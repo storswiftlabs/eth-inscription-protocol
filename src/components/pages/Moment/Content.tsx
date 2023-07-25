@@ -4,6 +4,11 @@ import RightSidebar from './RightSidebar/RightSidebar'
 import Find from './MomentContent/Find'
 import { useTheme } from 'next-themes'
 import { Navbar, Row } from '@nextui-org/react'
+import Bookmark from './MomentContent/Bookmark'
+import Message from './MomentContent/Message'
+import More from './MomentContent/More'
+import Verify from './MomentContent/Verify'
+import FindInformation from './MomentContent/FindInformation'
 interface MomentContentData {
   type: string // 判断是哪个路由
 }
@@ -15,8 +20,16 @@ function MomentContent({ type }: MomentContentData) {
     switch (type) {
       case 'find':
         return <Find />
+      case 'bookmark':
+        return <Bookmark />
+      case 'message':
+        return <Message />
+      case 'more':
+        return <More />
+      case 'verify':
+        return <Verify />
       default:
-        return <></>
+        return <FindInformation type={type} />
     }
   }
 

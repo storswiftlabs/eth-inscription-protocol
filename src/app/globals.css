@@ -17,7 +17,8 @@
   --rigsidebarboder: none; /* 右边框颜色 */
   --upperground: rgb(254, 255, 255, 0.8); /* tweet 吸顶框背景颜色*/
   --uppercolor: #040404; /* tweet 吸顶框字体颜色*/
-  --cardground: #ffffff; /*tweet 卡片背景颜色*/
+  --cardground: #f7f9f9; /*tweet 卡片背景颜色*/
+  --cardborder: #cfd9de; /* 卡片border分隔符 */
 }
 
 [data-theme='dark'] {
@@ -35,6 +36,7 @@
   --upperground: rgb(4, 4, 4, 0.8); /* tweet 吸顶框背景颜色*/
   --uppercolor: #666666; /* tweet 吸顶框字体颜色*/
   --cardground: #1e1e1e; /*tweet 卡片背景颜色*/
+  --cardborder: #404040; /* 卡片border分隔符 */
 }
 
 @media (prefers-color-scheme: dark) {
