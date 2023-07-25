@@ -1,0 +1,58 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Inscription API
+    version: 0.0.1
+paths:
+    /api/collection/ranking:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_CreateUser
+            parameters:
+                - name: nickName
+                  in: query
+                  schema:
+                    type: string
+                - name: password
+                  in: query
+                  schema:
+                    type: string
+                - name: mobile
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.UserInfoResponse'
+components:
+    schemas:
+        api.inscription.v1.UserInfoResponse:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                password:
+                    type: string
+                mobile:
+                    type: string
+                nickName:
+                    type: string
+                birthday:
+                    type: integer
+                    format: int64
+                gender:
+                    type: string
+                role:
+                    type: integer
+                    format: int32
+            description: 返回用户信息
+tags:
+    - name: Inscription

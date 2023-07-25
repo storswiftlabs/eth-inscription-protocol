@@ -1,0 +1,33 @@
+version: "3"
+services:
+  postgres:
+    container_name: postgres-inscription
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    #command: ["postgres", "-cshared_preload_libraries=pg_stat_statements", "-clog_statement=all"]
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secure
+      POSTGRES_DB: inscription
+    volumes:
+      - ./.data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5432"]
+      interval: 30s
+      timeout: 10s
+      retries: 15
+  pgweb:
+    container_name: pgweb-inscription
+    image: sosedoff/pgweb:0.11.10
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    command: [ "pgweb", "--bind=0.0.0.0", "--listen=8081", "--binary-codec=hex" ]
+    links:
+      - postgres:postgres
+    environment:
+      - DATABASE_URL=postgres://admin:secure@postgres:5432/inscription?sslmode=disable
+    depends_on:
+      - postgres

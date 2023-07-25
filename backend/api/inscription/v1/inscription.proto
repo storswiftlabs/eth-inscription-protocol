@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package api.inscription.v1;
+import "google/api/annotations.proto";
+
+option go_package = "backend/api/inscription/v1;v1";
+
+service Inscription {
+	rpc CreateUser(CreateUserInfo) returns (UserInfoResponse) {
+		option (google.api.http) = {
+			get: "/api/collection/ranking"
+		};
+	} // 创建用户
+}
+
+// 创建用户所需字段
+message  CreateUserInfo{
+	string nickName = 1;
+	string password = 2;
+	string mobile = 3;
+}
+
+// 返回用户信息
+message UserInfoResponse{
+	int64 id = 1;
+	string password = 2;
+	string mobile = 3;
+	string nickName = 4;
+	int64 birthday = 5;
+	string gender = 6;
+	int32 role = 7;
+}
