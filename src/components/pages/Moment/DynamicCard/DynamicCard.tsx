@@ -17,7 +17,7 @@ export default function DynamicCard() {
             <span>@Tushdhs junds 7</span>
           </div>
 
-          <div className="max-w-xs overflow-hidden overflow-ellipsis line-clamp-3">
+          <div className="max-w-xs overflow-hidden overflow-ellipsis line-clamp-3 mb-2">
             Playing the guitar has also taught me discipline and patience.
             Learning new chords and songs takes time and practice. It's a
             constant journey of improvement. When I finally master a
