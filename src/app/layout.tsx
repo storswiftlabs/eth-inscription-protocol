@@ -15,7 +15,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const combinedClassName = `${inter.className} flex max-h-screen w-screen `
+  const combinedClassName = 'flex max-h-screen w-screen '
   return (
     <html lang="en">
       <body className={combinedClassName}>

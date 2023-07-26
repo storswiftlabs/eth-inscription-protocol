@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTheme } from 'next-themes'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SendIcon, SpeechIcon } from './Icons'
 import { FillColor } from '@/type/Chat'
+import '@/style/chat/ChatInput.css'
 
 export function ChatInput() {
   const inputIcon = ['emojy', 'picture', 'lock', 'cloud', 'speech']
@@ -18,7 +19,7 @@ export function ChatInput() {
   }
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return <div className='p-4  w-full  h-[130px] '>
-    <div className='bg-neutral-200/40 dark:bg-neutral-500/30 h-full rounded-xl flex justify-between flex-col p-2'>
+    <div className='chat-input h-full rounded-xl flex justify-between flex-col p-2'>
       <input
         className="w-full mx-4 h-full bg-transparent outline-none"
         onKeyDown={handleKeyDown}

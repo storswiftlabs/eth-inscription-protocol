@@ -1,0 +1,7 @@
+.inscription-chat{
+    color: var(--foreground);
+    background-color: var(--background);
+}
+.selected-chat{
+    background-color: var(--chat-selected-sidebar);
+}
