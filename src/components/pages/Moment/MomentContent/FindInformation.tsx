@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { Col, Grid, Image, Row, Text, Container, User, Spacer, Textarea } from '@nextui-org/react'
+import { Col, Grid, Image, Row, Text, Container, User, Spacer, Textarea, useModal, Modal, Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
 import { FillColor } from '@/type/Chat'
@@ -19,8 +19,23 @@ function FindInformation({ type }: Props) {
   const [value, setValue] = useState('') // 踩和取消踩
   const textareaRef = useRef(null);  // 聚焦
 
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
+
   const router = useRouter();
   const { theme } = useTheme()
+
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
+
+
+  console.log(value, 'value');
+
+  function removeSpaces(inputString: string): string {
+    return inputString.replace(/\s/g, "");
+  }
 
 
   useEffect(() => { //  隐藏吸顶tab
@@ -81,7 +96,7 @@ function FindInformation({ type }: Props) {
           <User css={{ padding: "0" }} src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="" />
           <Row wrap='wrap' justify='space-between'>
             <div style={{ width: '100%' }}>
-              <Textarea ref={textareaRef} onChange={(e) => setValue(e.target.value)} value={value} bordered fullWidth placeholder="Default Textarea !" />
+              <Textarea bordered fullWidth placeholder="Default Textarea !" />
             </div>
             <Row className='cursor gap-4 mt-2'>
               <EmojiIcon fill={handleFillColor()}></EmojiIcon>
@@ -95,7 +110,7 @@ function FindInformation({ type }: Props) {
         <Spacer y={1} />
         {
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, j) => (
-            <>
+            <div>
               <Row wrap='wrap'>
                 <User className='commentaries-div' css={{ padding: "0" }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
                   <p className='commentaries'>
@@ -103,26 +118,80 @@ function FindInformation({ type }: Props) {
                     Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
                     Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
                   </p>
-                  <p className='flex items-center gap-4 mt-2 s-'>
+                  <p className='flex items-center gap-4 mt-1 s-'>
                     <span style={{ fontSize: "14px" }}> 2023-07-24 12:17 </span>
                     <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>{dz ? svg4 : svg3} <span>123</span></span>
                     <span className='flex gap-1 items-center' onClick={() => setCa(!ca)}>{ca ? svg5 : svg2} <span>44</span></span>
                     <span style={{ fontSize: "14px", cursor: "pointer" }} onClick={() => {
-
-                      setValue('@123 ')
-                      //@ts-ignore
-                      textareaRef.current.focus();
-                      //@ts-ignore
-                      textareaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      handler()
                     }}>reply</span>
                   </p>
+                  <User className='commentaries-div' css={{ padding: "0", marginTop: '1rem' }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
+                    <p className='commentaries'>
+                      Xbox Series X logo vs. Twitter's new
+                      Xbox Series X logo vs. Twitter's new
+                      Xbox Series X logo vs. Twitter's new
+                      Xbox Series X logo vs. Twitter's new
+                      Xbox Series X logo vs. Twitter's new
+                    </p>
+                    <p className='flex items-center gap-4 mt-1 s-'>
+                      <span style={{ fontSize: "14px" }}> 2023-07-24 12:17 </span>
+                      <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>{dz ? svg4 : svg3} <span>123</span></span>
+                      <span className='flex gap-1 items-center' onClick={() => setCa(!ca)}>{ca ? svg5 : svg2} <span>44</span></span>
+                      <span style={{ fontSize: "14px", cursor: "pointer" }} onClick={() => {
+                        handler()
+                      }}>reply</span>
+                    </p>
+                  </User>
                 </User>
               </Row>
               <Spacer y={1} />
-            </>
+            </div>
           ))
         }
       </Col>
+
+      <Modal
+        className='ijHtNE'
+        closeButton
+        width="50%"
+        aria-labelledby="modal-title"
+        open={visible}
+        onClose={closeHandler}
+      >
+        <Modal.Body className='commentaries-div'>
+          <User css={{ padding: "0", alignItems: 'flex-start ' }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
+            <p className='commentaries'>
+              Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
+              Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
+              Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
+            </p>
+          </User>
+          <div className="w-1 bg-gray-300 mt-2 ml-5 h-24 relative">
+            <div className="mt-4 text-base absolute top-6 left-8 w-40">Replying to @Amelia</div>
+          </div>
+
+          <User css={{ padding: "0", width: "100%", alignItems: 'flex-start', justifyContent: 'inherit' }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="">
+            <Row wrap='wrap' >
+              <div style={{ width: '100%' }}>
+                <Textarea value={value} onChange={(e) => setValue(e.target.value)} bordered fullWidth placeholder="Default Textarea !" />
+              </div>
+              <Row className='cursor gap-4 mt-2'>
+                <EmojiIcon fill={handleFillColor()}></EmojiIcon>
+                <LockIcon fill={handleFillColor()}></LockIcon>
+                <PictureIcon fill={handleFillColor()}></PictureIcon>
+                <SpeechIcon fill={handleFillColor()}></SpeechIcon>
+                <CloudIcon fill={handleFillColor()}></CloudIcon>
+              </Row>
+            </Row>
+          </User>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button disabled={removeSpaces(value) ? false : true} auto onPress={closeHandler}>
+            Repyl
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Grid.Container>
   )
 }

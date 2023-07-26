@@ -59,11 +59,8 @@
 }
 
 .upper-div {
-  opacity: 0.5;
-
   background-color: var(--upperground);
   color: var(--uppercolor);
-
   .upper {
     border-right: 2px solid var(--borderground);
   }
@@ -159,23 +156,41 @@
     display: flex;
     align-items: flex-start;
   }
-  .commentaries-div{
-    .commentaries{
-      white-space: break-spaces;
-      font-size: 0.875rem;
-      color: var(--tweetIcon);
-    }
-    .nextui-c-eGlVTL{
-      color: #9ca3af;
-    }
-    .selected {
-      fill: var(--tweetIcon);
-    }
-    .xihuan {
-      fill: red;
-    }
-  }
   
+}
+
+
+.ijHtNE{
+  background-color: var(--hoverground) !important;
+  .nextui-c-jeuecp{
+    color: var(--tweetIcon) !important;
+  }
+  color: var(--tweetIcon) !important;
+}
+
+.commentaries-div{
+  .nextui-c-ijHtNE{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .nextui-c-kNKVvs,.nextui-user-desc{
+    width: 100%;
+  }
+  .commentaries{
+    white-space: break-spaces;
+    font-size: 0.875rem;
+    color: var(--tweetIcon);
+  }
+  .nextui-c-eGlVTL{
+    color: #9ca3af;
+  }
+  .selected {
+    fill: var(--tweetIcon);
+  }
+  .xihuan {
+    fill: red;
+  }
 }
 
 .cursor{
