@@ -51,10 +51,24 @@ func NewPostgres(c *conf.Data) *xorm.Engine {
 	return engine
 }
 
-func (d *Data)InitDB()  {
-	swift := new(module.Swift)
-	err := d.postgre.CreateTables(swift)
+func (d *Data) InitDB() {
+	profile := new(module.Profile)
+	group := new(module.Group)
+	message := new(module.Message)
+	groupMessage := new(module.GroupMessage)
+	tweet := new(module.Tweet)
+	comment := new(module.Comment)
+	like := new(module.Like)
+	follow := new(module.Follow)
+
+	err := d.postgre.CreateTables(profile, group, message, groupMessage, tweet, comment, like, follow)
 	if err != nil {
 		log.Error(err)
 	}
+
+	_ = d.postgre.CreateIndexes(message)
+	_ = d.postgre.CreateIndexes(groupMessage)
+	_ = d.postgre.CreateIndexes(tweet)
+	_ = d.postgre.CreateIndexes(comment)
+	_ = d.postgre.CreateIndexes(like)
 }
