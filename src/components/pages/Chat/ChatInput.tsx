@@ -1,6 +1,9 @@
+/* eslint-disable n/prefer-global/buffer */
 'use client'
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { useSendTransaction, useWalletClient } from 'wagmi'
+
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SendIcon, SpeechIcon } from './Icons'
 import { FillColor } from '@/type/Chat'
 import '@/style/chat/ChatInput.css'
@@ -10,13 +13,19 @@ export function ChatInput() {
   const { theme } = useTheme()
   const [inputData, setInputData] = useState('')
   const [themeColor, setThemeColor] = useState('')
+  const { data: walletClient } = useWalletClient()
+  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
+    to: walletClient?.account.address,
+    data: `0x${Buffer.from(inputData, 'utf-8').toString('hex')}` || undefined,
+  })
   const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter') {
-      // console.log(inputData)
-    }
+    if (e.key === 'Enter')
+      sendTransaction()
+    isSuccess && setInputData('')
   }
+
   const handleSend = () => {
-    // console.log(inputData)
+    sendTransaction()
   }
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
@@ -29,6 +38,7 @@ export function ChatInput() {
       <input
         className="w-full mx-4 h-full bg-transparent outline-none"
         onKeyDown={handleKeyDown}
+        value={inputData}
         onChange={(e) => { setInputData(e.target.value) }}
         type="text"
       />
@@ -44,7 +54,7 @@ export function ChatInput() {
           </>}
 
         </div>
-        <div className='cursor-pointer'>
+        <div className='cursor-pointer' onClick={handleSend}>
           {themeColor && <SendIcon fill={handleFillColor()} />}
         </div>
       </div>

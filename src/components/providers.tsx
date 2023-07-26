@@ -13,13 +13,13 @@ import {
   trustWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
-import { arbitrum, mainnet, optimism, polygon, zora } from 'wagmi/chains'
+import { sepolia } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { ThemeProvider } from 'next-themes'
 import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, zora],
+  [sepolia],
   [publicProvider()],
 )
 
