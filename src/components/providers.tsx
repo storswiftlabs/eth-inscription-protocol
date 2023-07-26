@@ -64,7 +64,7 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute='class'>
+    <ThemeProvider >
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider
           chains={chains}
