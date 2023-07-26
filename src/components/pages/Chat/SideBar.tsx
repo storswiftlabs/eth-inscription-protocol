@@ -3,7 +3,7 @@ import Link from 'next/link'
 import '@/style/chat/SideBar.css'
 
 export function ChatSideBar({ path = 'general' }) {
-  return <div className="inscription-chat flex flex-col justify-start items-center w-[300px] h-full bg-white dark:bg-black p-4 border-x dark:text-white border-gray-200 dark:border-gray-500">
+  return <div className="inscription-chat flex flex-col justify-start items-center w-[300px] h-full  p-4 border-x ">
         <div className=' w-full'>
             <h1 className='font-bold text-2xl mb-5 mt-10 text-center'>
                 Chat

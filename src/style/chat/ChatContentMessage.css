@@ -1,3 +1,9 @@
 .chat-message{
     background-color: var(--chat-content-message);
 }
+.owner-chat-message{
+    background-color: lightgreen;
+}
+[data-theme='dark'] .owner-chat-message{
+    background-color: rgb(97, 190, 97);
+}
