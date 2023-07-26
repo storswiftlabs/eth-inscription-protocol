@@ -77,7 +77,7 @@ const solutions = [
 
 ]
 
-export default function Example() {
+export default function GroupMember() {
   return (
         <div className=" top-16 max-w-sm px-4">
             <Popover className="relative">
@@ -88,7 +88,7 @@ export default function Example() {
                 ${open ? '' : 'text-opacity-90'}
                 `}
                         >
-                            <div className='flex items-center m-4 bg-slate-300/20 rounded-md pr-2 cursor-pointer'>
+                            <div className='flex items-center m-4 bg-slate-300/20 rounded-xl pr-2 cursor-pointer'>
                                 <div className="flex items-center justify-between w-12">
                                     <div className="relative w-6 h-6 rounded-full bg-blue-500"></div>
                                     <div className="relative w-6 h-6 rounded-full bg-green-500 -ml-6"></div>
