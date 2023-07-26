@@ -1,6 +1,6 @@
 import { Input } from '@nextui-org/react'
 import Image from 'next/image'
-import Example from './GroupMumber'
+import GroupMember from './GroupMumber'
 
 export function ChatHeader() {
   return <div className="w-full flex items-center p-4 h-[100px] flex justify-between">
@@ -16,8 +16,8 @@ export function ChatHeader() {
 
                 &nbsp; 456
             </div> */}
-            <Example />
-            <Image src='/leave.svg' alt={''} width={20} height={20} ></Image>
+            <GroupMember />
+            <Image src='/leave.svg' className='cursor-pointer' alt={''} width={20} height={20} ></Image>
         </div>
 
     </div>
