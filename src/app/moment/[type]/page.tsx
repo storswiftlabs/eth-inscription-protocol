@@ -1,12 +1,7 @@
 'use client'
-
-import '../../../style/moment.css'
-import { useState } from 'react'
-
-import Link from 'next/link'
 import MomentSideBar from '@/components/pages/Moment/SideBar'
 import MomentContent from '@/components/pages/Moment/Content'
-
+import '@/style/moment.css'
 export default function Home({ params: { type = 'Find' } }) {
   return (
     <main className="flex h-screen items-center bg-grey dark:bg-black">

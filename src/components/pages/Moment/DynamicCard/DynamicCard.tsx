@@ -3,11 +3,12 @@ import Image from 'next/image'
 import { Textarea } from '@nextui-org/react'
 import { useState } from 'react'
 import Link from 'next/link'
-
+import { useRouter } from 'next/navigation'
 export default function DynamicCard() {
   const [love, setLove] = useState(false)
+  const router = useRouter()
   return (
-    <Link className="DynamicCard-grid" href={`/moment/${1}`}>
+    <div onClick={() => router.push((`/moment/${1}`))} className="DynamicCard-grid" >
       <img
         src="https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png"
         alt={''}
@@ -36,16 +37,20 @@ export default function DynamicCard() {
             />
           </div>
           <div className="grid-border"></div>
-          <div className=" mt-5 flex justify-between">
+          <div className=" mt-8 flex justify-between">
             <span>{fenxiang}</span>
             <span>{xinxi}</span>
-            <span onClick={() => setLove(!love)}>
+            <span onClick={(e) => {
+              console.log(e, 'e');
+              setLove(!love);
+              e.stopPropagation()
+            }}>
               {love ? xihuanLove : xihuan}
             </span>
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 

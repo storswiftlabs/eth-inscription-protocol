@@ -19,6 +19,7 @@
   --uppercolor: #040404; /* tweet 吸顶框字体颜色*/
   --cardground: #f7f9f9; /*tweet 卡片背景颜色*/
   --cardborder: #cfd9de; /* 卡片border分隔符 */
+  --likesandcancels:#00aeec;
 }
 
 [data-theme='dark'] {
