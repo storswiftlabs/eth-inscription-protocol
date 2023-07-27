@@ -1,6 +1,7 @@
 'use client'
 import MomentSideBar from '@/components/pages/Moment/SideBar'
 import MomentContent from '@/components/pages/Moment/Content'
+import '@/style/moment/moment.css'
 
 export default function Home({ params: { type = 'Find' } }) {
   return (

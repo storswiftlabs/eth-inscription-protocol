@@ -46,14 +46,10 @@ export default function DynamicCard({ avatar, name, time, text, img }: Props) {
           <div className="overflow-hidden overflow-ellipsis line-clamp-3 mb-2">
             {text}
           </div>
-          <div style={{ height: '14.857rem', width: '100%' }}>
-            <img
-              width={'100%'}
-              height={'100%'}
-              src={img}
-              alt=""
-            />
+          <div className=' w-full' >
+            <img className=' w-full' src={img} alt="" />
           </div>
+          <br></br>
           <div className="border-[1px] border-[#cfd9de] dark:border-[#404040]"></div>
           <div className="mt-8 flex justify-between">
             <ShareIcon fill={handleFillColor()} />

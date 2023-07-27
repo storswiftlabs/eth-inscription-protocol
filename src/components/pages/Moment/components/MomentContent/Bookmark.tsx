@@ -38,11 +38,11 @@ function Bookmark() {
         <Spacer y={1} />
       </div>
     </div>
-    <Solid />
-    <div className=' p-[1rem]'>
-      <List />
+    <Solid foll={'y'} />
+    <div>
+      <List data={[1, 2, 3, 4]} />
     </div>
-    <Solid />
+    <Solid foll={'y'}  />
   </>
 }
 
