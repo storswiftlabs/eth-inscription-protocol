@@ -8,6 +8,21 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        tahiti: {
+          '100': 'rgba(254,255,255,0.8)',
+          '101': 'rgb(4,4,4,0.8)',
+          'color-w': '#040404',
+          'color-d': '#666666',
+          'border-w': '#edecf3',
+          'border-d': '#262626',
+          'button-border-w': '#0e76fd',
+          'button-border-d': '#696969',
+          'button-bg-w': '#0e76fd',
+          'button-bg-d': '#404040',
+
+        },
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
@@ -30,21 +45,7 @@ module.exports = {
         },
       }),
     },
-    colors: {
-      'tahiti': {
-        100: 'rgba(254,255,255,0.8)',
-        101: 'rgb(4,4,4,0.8)',
-        'color-w': '#040404',
-        'color-d': '#666666',
-        'border-w':'#edecf3',
-        'border-d':'#262626',
-        'button-border-w':"#0e76fd",
-        'button-border-d':"#696969",
-        'button-bg-w':"#0e76fd",
-        'button-bg-d':"#404040",
-        
-      }
-    },
+
   },
 
   plugins: [],

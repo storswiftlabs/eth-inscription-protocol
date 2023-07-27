@@ -15,7 +15,7 @@ import {
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from 'next-themes'
 import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -61,8 +61,6 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
     style={{ borderRadius: 10 }}
   />
 }
-
-
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
