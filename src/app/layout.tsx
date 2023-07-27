@@ -18,7 +18,7 @@ export default function RootLayout({
   const combinedClassName = 'flex max-h-screen w-screen '
   return (
     <html lang="en">
-      <body className={combinedClassName}>
+      <body id='root' className={combinedClassName}>
         <Providers>
           <SideBar />
           <div className="children-div max-h-full flex-1">{children}</div>
