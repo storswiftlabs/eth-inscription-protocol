@@ -6,6 +6,7 @@ import { Col, Grid, Image, Row, Text, Container, User, Spacer, Textarea, useModa
 import { useRouter } from 'next/navigation'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
 import { FillColor } from '@/type/Chat'
+import { BackIcon, GreaterIcon } from '../Icons'
 
 
 interface Props {
@@ -52,26 +53,32 @@ function FindInformation({ type }: Props) {
   }, [type])
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
-    <Grid.Container css={{ minHeight: "100vh", padding: "1rem" }} id="yourElementId" className="FindInformation-container h-full">
+    <Grid.Container css={{ minHeight: "100vh", padding: "1rem" }} id="yourElementId" className="FindInformation-container h-full text-[#000] dark:text-[#fff]">
       <Col >
         <Row align='center' css={{ height: "3.4rem" }}>
           <Grid onClick={() => router.back()} xs={1}>
-            {svg}
+            <BackIcon fill={handleFillColor()} />
           </Grid>
-          <Text className=' font-bold' h2 size={'1.5rem'}>Tweet</Text>
+          <div className='font-bold text-[1.5rem]'>
+            Tweet
+          </div>
         </Row>
         <Row css={{ marginTop: "2rem", marginBottom: "1rem" }} justify='space-between'>
           <Col className='flex items-center gap-4'>
             <Col>
-              <User zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" description="UI/UX Designer @Github" />
+              <User css={{
+                '.nextui-c-eGlVTL': {
+                  color: theme === 'dark' ? "#fff" : "#000"
+                }
+              }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" description="UI/UX Designer @Github" />
             </Col>
           </Col>
           <div>
-            {svg1}
+            <GreaterIcon fill={handleFillColor()} />
           </div>
         </Row>
         <Row>
-          <Text>
+          <Text className='text-[#000]  dark:text-[#fff]'>
             Xbox Series X logo vs. Twitter's new X logo. Who did it better?
             Xbox Series X logo vs. Twitter's new X logo. Who did it better?
             Xbox Series X logo vs. Twitter's new X logo. Who did it better?
@@ -86,17 +93,24 @@ function FindInformation({ type }: Props) {
           <Text size={12}><span className='underline-on-hover'>5:29 PM · Jul 24, 2023</span> · 1.4M Views</Text>
         </Row>
         <Spacer y={1} />
-        <Row className='data-presentation'>
+        <Row className='data-presentation border-y-[1px] border-[#edecf3] dark:border-[#262626]'>
           <Col className='underline-on-hover'>1,227 Retweets</Col>
           <Col className='underline-on-hover'>263 Quotes</Col>
           <Col className='underline-on-hover'>21.2K Likes</Col>
           <Col>221 Bookmarks</Col>
         </Row>
-        <Row className='reply' >
-          <User css={{ padding: "0" }} src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="" />
+        <Row className='reply border-b border-[#edecf3] dark:border-[#262626]' >
+          <User css={{ padding: "0", }} src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="" />
           <Row wrap='wrap' justify='space-between'>
             <div style={{ width: '100%' }}>
-              <Textarea bordered fullWidth placeholder="Default Textarea !" />
+              <Textarea css={{
+                '.nextui-c-eXOOPO:hover': {
+                  border: 'none',
+                },
+                color: "#fff",
+                '.nextui-c-jeuecp': { color: theme === 'dark' ? "#fff" : "#000" },
+                '.nextui-c-boZsAS': { border: theme === 'dark' ? "2px solid #edecf3" : "2px solid #262626" }, '.nextui-c-boZsAS:focus-visible': { border: theme === 'dark' ? "2px solid #edecf3" : "2px solid #262626" }
+              }} bordered fullWidth placeholder="Default Textarea !" />
             </div>
             <Row className='cursor gap-4 mt-2'>
               <EmojiIcon fill={handleFillColor()}></EmojiIcon>
@@ -112,8 +126,13 @@ function FindInformation({ type }: Props) {
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, j) => (
             <div>
               <Row wrap='wrap'>
-                <User className='commentaries-div' css={{ padding: "0" }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
-                  <p className='commentaries'>
+                <User css={{
+                  '.nextui-c-eGlVTL': {
+                    color: theme === 'dark' ? "#fff" : "#000"
+                  },
+                  padding: "0"
+                }} className='commentaries-div' zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
+                  <p className='commentaries text-[#000]  dark:text-[#fff]'>
                     Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
                     Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
                     Xbox Series X logo vs. Twitter's new X logo. Who did it better?1111111111111111
@@ -126,15 +145,19 @@ function FindInformation({ type }: Props) {
                       handler()
                     }}>reply</span>
                   </p>
-                  <User className='commentaries-div' css={{ padding: "0", marginTop: '1rem' }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
-                    <p className='commentaries'>
+                  <User className='commentaries-div' css={{
+                    '.nextui-c-eGlVTL': {
+                      color: theme === 'dark' ? "#fff" : "#000"
+                    }, padding: "0", marginTop: '1rem'
+                  }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson">
+                    <p className='commentaries text-[#000]  dark:text-[#fff]'>
                       Xbox Series X logo vs. Twitter's new
                       Xbox Series X logo vs. Twitter's new
                       Xbox Series X logo vs. Twitter's new
                       Xbox Series X logo vs. Twitter's new
                       Xbox Series X logo vs. Twitter's new
                     </p>
-                    <p className='flex items-center gap-4 mt-1 s-'>
+                    <p className='flex items-center gap-4 mt-1 '>
                       <span style={{ fontSize: "14px" }}> 2023-07-24 12:17 </span>
                       <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>{dz ? svg4 : svg3} <span>123</span></span>
                       <span className='flex gap-1 items-center' onClick={() => setCa(!ca)}>{ca ? svg5 : svg2} <span>44</span></span>
@@ -198,7 +221,6 @@ function FindInformation({ type }: Props) {
 
 export default FindInformation
 
-const svg = <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03"><g><path d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z"></path></g></svg>
 
 const svg1 = <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi"><g><path d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></svg>
 

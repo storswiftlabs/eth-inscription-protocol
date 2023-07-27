@@ -9,7 +9,6 @@ export function ThemeChanger() {
   return (
     <div className="flex justify-center items-center">
       <SwitchTheme onChange={(e: SwitchEvent) => e.target.checked ? setTheme('dark') : setTheme('light')} />
-
     </div>
   )
 }
