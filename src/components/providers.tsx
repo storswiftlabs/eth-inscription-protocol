@@ -13,14 +13,13 @@ import {
   trustWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { WagmiConfig, configureChains, createConfig } from 'wagmi'
-import { arbitrum, mainnet, optimism, polygon, zora } from 'wagmi/chains'
+import { sepolia } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ThemeProvider } from 'next-themes';
 import { ProjectId } from '@/utils/getEnv'
-import { createTheme, NextUIProvider } from "@nextui-org/react"
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, zora],
+  [sepolia],
   [publicProvider()],
 )
 
@@ -67,7 +66,7 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider attribute="class" >
+    <ThemeProvider attribute='class'>
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider
           chains={chains}
@@ -77,6 +76,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <div className="flex w-screen">{children}</div>
         </RainbowKitProvider>
       </WagmiConfig>
-    </NextThemesProvider>
+    </ThemeProvider>
   )
 }

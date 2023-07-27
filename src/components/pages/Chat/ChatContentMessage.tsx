@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import type { ChatContentMessageType } from '@/type/Chat'
+import '@/style/chat/ChatContentMessage.css'
 
 export function ChatContentMessage({ data }: ChatContentMessageType) {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,7 +18,7 @@ export function ChatContentMessage({ data }: ChatContentMessageType) {
             <div className="relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500" />
             <div className={`flex flex-col ${data % 2 === 1 ? '' : 'items-end'} group relative`}>
                 Nick
-                <div className='max-w-[800px] rounded-xl p-2 bg-neutral-200 dark:bg-neutral-700 text-sm'>
+                <div className={`max-w-[800px] rounded-xl p-2 chat-message text-sm ${data % 2 === 1 ? '' : 'owner-chat-message'}`}>
                     NextUI needs to be wrapped in a provider to work properly. You need to set up the NextUIProvider at the root of your application.
 
                     Go to pages/_app.js or pages/_app.tsx (create it if it doesn't exist) and add the following code:</div>

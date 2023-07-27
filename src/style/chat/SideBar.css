@@ -1,0 +1,13 @@
+.inscription-chat{
+    color: var(--foreground);
+    background-color: var(--background);
+    border-color: rgb(238, 238, 238);
+}
+[data-theme='dark'] .inscription-chat{
+    border-color: rgb(62, 62, 62);
+}
+
+.selected-chat{
+    background-color: var(--chat-selected-sidebar);
+}
+ 

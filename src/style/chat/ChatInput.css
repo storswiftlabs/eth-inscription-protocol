@@ -1,0 +1,9 @@
+.chat-input{
+    background-color: var(--chat-content-message);
+}
+.division-line{
+    border-color: rgba(219, 219, 219, 0.5);
+}
+[data-theme='dark'] .division-line{
+    border-color: rgba(65, 65, 65, 0.5);
+}
