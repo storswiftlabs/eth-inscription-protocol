@@ -8,6 +8,7 @@ import { Loading } from '@nextui-org/react'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SendIcon, SpeechIcon } from './Icons'
 import { FillColor } from '@/type/Chat'
 import '@/style/chat/ChatInput.css'
+import { Notifications } from '@/components/Notifications'
 
 export function ChatInput() {
   const { theme } = useTheme()
@@ -36,6 +37,7 @@ export function ChatInput() {
   }, [])
 
   return <div className='p-4  w-full  h-[130px] '>
+    {isSuccess ? <Notifications data={data?.hash} /> : null}
     <div className='chat-input h-full rounded-xl flex justify-between flex-col p-2'>
       {isLoading
         ? <div className='h-full w-full mx-4'> <Loading /></div>
