@@ -3,8 +3,8 @@ import { Button } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Follower from './Follower'
-import { FindIcon, MessageIcom, BookmarkIcon, VerifyIcon, MoreIcon } from './Icons'
+import Follower from './components/Follower'
+import { FindIcon, MessageIcom, BookmarkIcon, VerifyIcon, MoreIcon } from './components/Icons'
 import { useTheme } from 'next-themes'
 import { FillColor } from '@/type/Moment'
 
@@ -58,9 +58,7 @@ export default function MomentSideBar({ type = 'find' }) {
     return (
       <Link
         href={link}
-        className={`icon-div hover:bg-[#edecf3] dark:hover:bg-[#262626] flex p-2 pr-4 pl-4 ${capitalizeFirstLetter(type) === text ? 'navSelected bg-[#edecf3] dark:bg-[#262626]' : ''
-          }`}
-      >
+        className={`icon-div hover:bg-[#edecf3] dark:hover:bg-[#262626] flex p-2 pr-4 pl-4 ${capitalizeFirstLetter(type) === text ? 'navSelected bg-[#edecf3] dark:bg-[#262626]' : ''}`}>
         <span className="mr-4" style={{ marginRight: '1rem' }}>
           {svg}
         </span>

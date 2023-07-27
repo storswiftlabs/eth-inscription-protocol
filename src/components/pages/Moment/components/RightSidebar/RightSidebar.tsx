@@ -27,7 +27,7 @@ function RightSidebar() {
   }
 
   return (
-    <div className="right-sidebar-nav h-screen  pl-4  pr-2 pt-14">
+    <div className="right-sidebar-nav h-screen  pl-4  pr-2 pt-14 mr-[20%]">
       <div className="mb-8  w-full pr-8">
         <Dropdown>
           <Dropdown.Button className="nav-button border-[1px] bg-tahiti-button-bg-w dark:bg-tahiti-button-bg-d border-tahiti-button-border-w dark:border-tahiti-button-border-d">
