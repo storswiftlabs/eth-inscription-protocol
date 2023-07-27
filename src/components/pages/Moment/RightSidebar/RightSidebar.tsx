@@ -30,7 +30,7 @@ function RightSidebar() {
     <div className="right-sidebar-nav h-screen  pl-4  pr-2 pt-14">
       <div className="mb-8  w-full pr-8">
         <Dropdown>
-          <Dropdown.Button className="nav-button" style={{ width: '100%' }}>
+          <Dropdown.Button className="nav-button border-[1px] bg-tahiti-button-bg-w dark:bg-tahiti-button-bg-d border-tahiti-button-border-w dark:border-tahiti-button-border-d">
             FIlter
           </Dropdown.Button>
           <Dropdown.Menu variant="solid" aria-label="Actions">
@@ -44,11 +44,7 @@ function RightSidebar() {
         </Dropdown>
       </div>
       <h2 className="text-2xl mb-4">Whats happening</h2>
-      <Card
-        className="sidebar-card "
-        variant="bordered"
-        css={{ padding: '1rem', borderRadius: '1.5rem' }}
-      >
+      <Card className="sidebar-card bg-[#f7f9f9] dark:bg-[#121212] dark:border-[#696969] dark:border-[1px] text-[#000] dark:text-[#fff]" variant="bordered" css={{ padding: '1rem', borderRadius: '1.5rem' }} >
         {[1, 2, 3, 4, 5, 6].map((t, j) => cardData())}
       </Card>
     </div>

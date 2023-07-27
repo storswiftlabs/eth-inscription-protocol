@@ -2,6 +2,8 @@
 
 import { ChatContent } from '@/components/pages/Chat/Content'
 import { ChatSideBar } from '@/components/pages/Chat/SideBar'
+import { ThemeProvider } from 'next-themes'
+
 
 export default function Home({ params: { type = 'general' } }) {
   return (

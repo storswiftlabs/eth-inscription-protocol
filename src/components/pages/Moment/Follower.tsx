@@ -5,7 +5,7 @@ function Follower() {
   return (
     <div className=" mb-8  w-full ">
       <Dropdown>
-        <Dropdown.Button className="nav-button" style={{ width: '100%' }}>
+        <Dropdown.Button className="nav-button border-2 border-[#0e76fd] gb-[#0e76fd] dark:bg-[#404040] dark:border-[#696969]" style={{ width: '100%' }}>
           Follower
         </Dropdown.Button>
         <Dropdown.Menu variant="solid" aria-label="Actions">
