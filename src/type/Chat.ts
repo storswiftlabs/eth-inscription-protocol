@@ -4,5 +4,11 @@ export enum FillColor {
 }
 
 export interface ChatContentMessageType {
-  data: number
+  type: string
+  title: string
+  text: string
+  image: string[]
+  receiver: string[]
+  c_at: string[]
+  c_with: string
 }
