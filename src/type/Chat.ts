@@ -1,6 +1,7 @@
 export enum FillColor {
   White = 'white',
   Black = 'black',
+  Orange = 'orange',
 }
 
 export interface ChatContentMessageType {
