@@ -6,21 +6,13 @@ info:
     title: Inscription API
     version: 0.0.1
 paths:
-    /api/collection/ranking:
+    /api/follow:
         get:
             tags:
                 - Inscription
-            operationId: Inscription_CreateUser
+            operationId: Inscription_GetFollow
             parameters:
-                - name: nickName
-                  in: query
-                  schema:
-                    type: string
-                - name: password
-                  in: query
-                  schema:
-                    type: string
-                - name: mobile
+                - name: address
                   in: query
                   schema:
                     type: string
@@ -30,29 +22,258 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.inscription.v1.UserInfoResponse'
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+    /api/follow_tweet:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetFollowTweet
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: startHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: endHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
+    /api/group:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetGroup
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+    /api/group_message:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetGroupMessage
+            parameters:
+                - name: title
+                  in: query
+                  schema:
+                    type: string
+                - name: startHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: endHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+    /api/message:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetMessage
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: startHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: endHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+    /api/profile:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetProfile
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+    /api/tweet:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetTweet
+            parameters:
+                - name: address
+                  in: query
+                  schema:
+                    type: string
+                - name: startHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: endHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
+    /api/tweet/{address}:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetTweetByAddress
+            parameters:
+                - name: address
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: startHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: endHeight
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
+    /api/{trxHash}:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetAnyByTrxHash
+            parameters:
+                - name: trxHash
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
 components:
     schemas:
-        api.inscription.v1.UserInfoResponse:
+        api.inscription.v1.SwiftResponse:
             type: object
             properties:
-                id:
+                type:
+                    type: string
+                title:
+                    type: string
+                text:
+                    type: string
+                image:
+                    type: array
+                    items:
+                        type: string
+                receiver:
+                    type: array
+                    items:
+                        type: string
+                at:
+                    type: array
+                    items:
+                        type: string
+                with:
+                    type: string
+                height:
                     type: integer
                     format: int64
-                password:
+                trxHash:
                     type: string
-                mobile:
+                trxTime:
                     type: string
-                nickName:
+                sender:
                     type: string
-                birthday:
+        api.inscription.v1.SwiftResponses:
+            type: object
+            properties:
+                groups:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+        api.inscription.v1.TweetResponse:
+            type: object
+            properties:
+                tweets:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.Tweets'
+        api.inscription.v1.Tweets:
+            type: object
+            properties:
+                tweet:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                with:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                comments:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                likeNum:
                     type: integer
                     format: int64
-                gender:
-                    type: string
-                role:
-                    type: integer
-                    format: int32
-            description: 返回用户信息
+                likeBool:
+                    type: boolean
 tags:
     - name: Inscription

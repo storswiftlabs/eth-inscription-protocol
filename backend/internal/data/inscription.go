@@ -1,10 +1,9 @@
 package data
 
 import (
+	"backend/internal/biz"
 	"backend/module"
 	"context"
-
-	"backend/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -32,14 +31,25 @@ func (r *inscriptionRepo) UpdateProfile(ctx context.Context, profile *module.Pro
 	return err
 }
 
+func (r *inscriptionRepo) GetProfile(ctx context.Context, profile *module.Profile) (*module.Profile, error) {
+	_, err := r.data.postgre.Get(profile)
+	return profile, err
+}
+
 func (r *inscriptionRepo) InsertGroup(ctx context.Context, group *module.Group) error {
 	_, err := r.data.postgre.Insert(group)
 	return err
 }
 
-func (r *inscriptionRepo) UpdateGroup(ctx context.Context, group *module.Group) error {
-	_, err := r.data.postgre.Where("title = ?", group.Title).Update(group)
+func (r *inscriptionRepo) DeleteGroupByAddressAndTitle(ctx context.Context, group *module.Group) error {
+	_, err := r.data.postgre.Where("address = ?", group.Address).And("title = ?", group.Title).Delete(group)
 	return err
+}
+
+func (r *inscriptionRepo) FindGroupByAddress(ctx context.Context, address string) ([]*module.Group, error) {
+	group := make([]*module.Group, 0)
+	err := r.data.postgre.Where("address = ?", address).Find(&group)
+	return group, err
 }
 
 func (r *inscriptionRepo) InsertMessage(ctx context.Context, message *module.Message) error {
@@ -47,14 +57,32 @@ func (r *inscriptionRepo) InsertMessage(ctx context.Context, message *module.Mes
 	return err
 }
 
+func (r *inscriptionRepo) FindMessageByAddressAndHeight(ctx context.Context, req *module.GetMessageReq) ([]*module.Message, error) {
+	message := make([]*module.Message, 0)
+	err := r.data.postgre.Where("receiver = ? AND height >= ? AND height <= ?", req.Address, req.StartHeight, req.EndHeight).Or("sender = ? AND height >= ? AND height <= ?", req.Address, req.StartHeight, req.EndHeight).Find(&message)
+	return message, err
+}
+
 func (r *inscriptionRepo) InsertGroupMessage(ctx context.Context, groupMessage *module.GroupMessage) error {
 	_, err := r.data.postgre.Insert(groupMessage)
 	return err
 }
 
+func (r *inscriptionRepo) FindGroupMessageByTitlesAndHeight(ctx context.Context, req *module.GetGroupMessageReq) ([]*module.GroupMessage, error) {
+	groupMessage := make([]*module.GroupMessage, 0)
+	err := r.data.postgre.Where("title = ? AND height >= ? AND height <= ?", req.Title, req.StartHeight, req.EndHeight).Find(&groupMessage)
+	return groupMessage, err
+}
+
 func (r *inscriptionRepo) InsertTweet(ctx context.Context, tweet *module.Tweet) error {
 	_, err := r.data.postgre.Insert(tweet)
 	return err
+}
+
+func (r *inscriptionRepo) GetFollowTweetByAddressAndHeight(ctx context.Context, req *module.GetMessageReq) ([]*module.Tweets, error) {
+	tweets := make([]*module.Tweets, 0)
+
+
 }
 
 func (r *inscriptionRepo) InsertComment(ctx context.Context, comment *module.Comment) error {
@@ -70,4 +98,10 @@ func (r *inscriptionRepo) InsertLike(ctx context.Context, like *module.Like) err
 func (r *inscriptionRepo) InsertFollow(ctx context.Context, follow *module.Follow) error {
 	_, err := r.data.postgre.Insert(follow)
 	return err
+}
+
+func (r *inscriptionRepo) FindFollowByAddress(ctx context.Context, address string) ([]*module.Follow, error) {
+	follower := make([]*module.Follow, 0)
+	err := r.data.postgre.Where("address = ?", address).Find(&follower)
+	return follower, err
 }

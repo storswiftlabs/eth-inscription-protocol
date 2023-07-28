@@ -6,27 +6,114 @@ import "google/api/annotations.proto";
 option go_package = "backend/api/inscription/v1;v1";
 
 service Inscription {
-	rpc CreateUser(CreateUserInfo) returns (UserInfoResponse) {
-		option (google.api.http) = {
-			get: "/api/collection/ranking"
-		};
-	} // 创建用户
+  rpc GetProfile(ByAddress) returns (SwiftResponse) {
+    option (google.api.http) = {
+      get: "/api/profile"
+    };
+  }
+
+  rpc GetGroup(ByAddress) returns (SwiftResponses) {
+    option (google.api.http) = {
+      get: "/api/group"
+    };
+  }
+
+  rpc GetMessage(GetMessageReq) returns (SwiftResponses) {
+    option (google.api.http) = {
+      get: "/api/message"
+    };
+  }
+
+  rpc GetGroupMessage(GetGroupMessageReq) returns (SwiftResponses) {
+    option (google.api.http) = {
+      get: "/api/group_message"
+    };
+  }
+
+  rpc GetTweet(GetTweetReq) returns (TweetResponse) {
+    option (google.api.http) = {
+      get: "/api/tweet"
+    };
+  }
+
+  rpc GetFollowTweet(GetTweetReq) returns (TweetResponse) {
+    option (google.api.http) = {
+      get: "/api/follow_tweet"
+    };
+  }
+
+  rpc GetTweetByAddress(GetTweetReq) returns (TweetResponse) {
+    option (google.api.http) = {
+      get: "/api/tweet/{address}"
+    };
+  }
+
+  rpc GetFollow(ByAddress) returns (SwiftResponses) {
+    option (google.api.http) = {
+      get: "/api/follow"
+    };
+  }
+
+  rpc GetAnyByTrxHash(GetAnyByTrxHashReq) returns (SwiftResponse) {
+    option (google.api.http) = {
+      get: "/api/{trx_hash}"
+    };
+  }
 }
 
-// 创建用户所需字段
-message  CreateUserInfo{
-	string nickName = 1;
-	string password = 2;
-	string mobile = 3;
+message GetAnyByTrxHashReq{
+  string trx_hash = 1;
 }
 
-// 返回用户信息
-message UserInfoResponse{
-	int64 id = 1;
-	string password = 2;
-	string mobile = 3;
-	string nickName = 4;
-	int64 birthday = 5;
-	string gender = 6;
-	int32 role = 7;
+message  ByAddress{
+  string address = 1;
+}
+
+message SwiftResponses{
+  repeated SwiftResponse groups = 1;
+}
+
+message GetMessageReq{
+  string address = 1;
+  int64 start_height = 2;
+  int64 end_height = 3;
+}
+
+message GetGroupMessageReq{
+  string title = 1;
+  int64 start_height = 2;
+  int64 end_height = 3;
+}
+
+message GetTweetReq{
+  string address = 1;
+  int64 start_height = 2;
+  int64 end_height = 3;
+}
+
+message SwiftResponse{
+  string type = 1;
+  string title = 2;
+  string text = 3;
+  repeated string image = 4;
+  repeated string receiver = 5;
+  repeated string at = 6;
+  string with = 7;
+  int64 height = 8;
+  string trx_hash = 9;
+  string trx_time = 10;
+  string sender = 11;
+}
+
+
+message Tweets{
+  SwiftResponse tweet = 1;
+  SwiftResponse with = 2;
+  repeated SwiftResponse comments = 3;
+  int64 like_num = 4;
+  bool like_bool = 5;
+}
+
+message TweetResponse{
+  repeated Tweets tweets = 1;
 }

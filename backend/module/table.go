@@ -2,16 +2,19 @@ package module
 
 import "time"
 
-//type Swift struct {
-//	Id       int64
-//	Type     string `xorm:"notnull"`
-//	Title    string
-//	Text     string
-//	Image    []string
-//	Receiver []string
-//	At       []string
-//	With     string
-//}
+type Swift struct {
+	Type     string
+	Title    string
+	Text     string
+	Image    []string
+	Receiver []string
+	At       []string
+	With     string
+	Height   int64
+	TrxHash  string
+	TrxTime  string
+	Sender   string
+}
 
 type Profile struct {
 	Address string `xorm:"pk"`
@@ -23,11 +26,11 @@ type Profile struct {
 }
 
 type Group struct {
-	Title    string    `xorm:"pk"`
-	Receiver []string  `xorm:"notnull"`
-	Height   int64     `xorm:"notnull"`
-	TrxHash  string    `xorm:"notnull"`
-	TrxTime  time.Time `xorm:"notnull"`
+	Address string    `xorm:"pk"`
+	Title   string    `xorm:"notnull"`
+	Height  int64     `xorm:"notnull"`
+	TrxHash string    `xorm:"notnull"`
+	TrxTime time.Time `xorm:"notnull"`
 }
 
 type Message struct {
@@ -92,4 +95,24 @@ type Follow struct {
 	Id       int64
 	Address  string `xorm:"notnull"`
 	Follower string `xorm:"notnull"`
+}
+
+type GetMessageReq struct {
+	Address     string
+	StartHeight int64
+	EndHeight   int64
+}
+
+type GetGroupMessageReq struct {
+	Title       string
+	StartHeight int64
+	EndHeight   int64
+}
+
+type Tweets struct {
+	Twt      Tweet
+	With     Tweet
+	Comments []*Comment
+	LikeNum  int64
+	LikeBool bool
 }
