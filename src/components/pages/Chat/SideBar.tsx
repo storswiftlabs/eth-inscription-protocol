@@ -1,3 +1,4 @@
+import { Collapse } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -9,7 +10,14 @@ export function ChatSideBar({ path = 'general' }) {
             </h1>
             <div className='w-full flex justify-center flex-col'>
                 <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${path === 'general' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 💬 General</div></Link>
-                <Link href="/chat/group"><div className={`m-2 rounded-lg p-2 ${path === 'group' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 👥 Group</div></Link>
+                <Collapse
+
+                    css={{ border: 'none', padding: '0 16px' }}
+                    title={<div className='text-black dark:text-white'>👥 Group</div>}
+                >
+                    <Link href="/chat/group"><div className={`m-2 rounded-lg p-2 ${path === 'group' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 👥 Group</div></Link>
+
+                </Collapse>
             </div>
 
         </div>
