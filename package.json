@@ -33,8 +33,10 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.39.8",
+    "@types/faker": "^6.6.9",
     "encoding": "^0.1.13",
     "eslint": "8.45.0",
+    "faker": "^6.6.6",
     "lint-staged": "^13.2.3",
     "lokijs": "^1.5.12",
     "node-fetch": "^3.3.1",
