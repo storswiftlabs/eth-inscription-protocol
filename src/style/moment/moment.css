@@ -1,0 +1,196 @@
+.nav {
+  /* background: var(--background); */
+  /* border-right: 1px solid var(--borderground); */
+  /* border-left: 1px solid var(--borderground); */
+  .r-18jsvk2 {
+    width: 24px;
+    height: 24px;
+    /* fill: var(--tweetIcon); */
+    fill-opacity: var(--tweetIconopacity);
+  }
+  .icon-div {
+    cursor: pointer;
+    margin: 0.2rem;
+  }
+  .navSelected {
+    font-weight: 900;
+    border-radius: 1.5rem;
+    /* background: var(--hoverground); */
+    .r-18jsvk2 {
+      fill-opacity: 1;
+    }
+  }
+  .icon-div:hover {
+    border-radius: 1.5rem;
+    /* background: var(--hoverground); */
+    .r-18jsvk2 {
+      fill-opacity: 1;
+    }
+  }
+  .nav-button {
+    margin-top: 1rem;
+    /* border: 1px solid var(--navbuttonborder); */
+    /* background: var(--navbuttonground); */
+    padding: 1.4rem;
+  }
+}
+
+.right-sidebar-nav {
+  .nav-button {
+    width: 100%;
+    margin-top: 1rem;
+    /* border: 1px solid var(--navbuttonborder); */
+    /* background: var(--navbuttonground); */
+    padding: 1.4rem;
+  }
+
+  .sidebar-card {
+    /* background: var(--rigsidebarground); */
+    /* border: var(--rigsidebarboder); */
+    /* color: var(--hovericonground); */
+  }
+  .nextui-c-eFfoBo {
+    padding: 0.4rem 1rem !important;
+  }
+}
+
+.content-border {
+  /* border-right: 1px solid var(--borderground); */
+}
+
+.upper-div {
+  /* background-color: var(--upperground); */
+  /* color: var(--uppercolor); */
+  /* .upper { */
+    /* border-right: 2px solid var(--borderground); */
+  /* } */
+
+  .upper-color {
+    font-weight: 600;
+    /* color: var(--tweetIcon); */
+  }
+}
+
+.DynamicCard-grid {
+  /* background-color: var(--cardground); */
+  margin: 2rem 3rem;
+  padding: 1.6rem 2rem 1rem 0.8rem;
+  border-radius: 2rem;
+  display: flex;
+  align-items: flex-start;
+  font-size: 0.7rem;
+  position: relative;
+  .ju367v10 {
+    margin-left: 0.4rem;
+  }
+  .grid-border {
+    /* border: 1px solid var(--borderground); */
+    margin-top: 1.4rem;
+    width: 90%;
+    position: absolute;
+    left: 5%;
+  }
+  .iconhudong {
+    /* .selected {
+      fill: var(--tweetIcon);
+    } */
+    /* .xihuan {
+      fill: red;
+    } */
+  }
+}
+.DynamicCard-grid:hover {
+  cursor: pointer;
+  
+  /* background-color: var(--hoverground); */
+}
+
+.FindInformation-container {
+  .nextui-c-PJLV {
+    /* color: var(--hovericonground); */
+  }
+  .r-18jsvk2,.r-4qtqp9 {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    /* fill: var(--tweetIcon); */
+    /* fill-opacity: var(--tweetIcon); */
+  }
+  .r-4{
+    /* fill: var(--tweetIcon); */
+    /* fill-opacity: var(--tweetIcon); */
+    cursor: pointer;
+  }
+  .nextui-user-name{
+    /* color: var(--tweetIcon); */
+  }
+  .underline-on-hover:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .data-presentation{
+    font-weight: 600;
+    font-size: .75rem;
+    padding: 1.5rem 0;
+    /* border-top: 1px solid var(--borderground); */
+    /* border-bottom: 1px solid var(--borderground); */
+  }
+  .reply{
+    padding: 1rem 0;
+    /* border-bottom: 1px solid var(--borderground); */
+    .nextui-c-jeuecp{
+      /* background-color:transparent !important; */
+      /* color: var(--tweetIcon); */
+    }
+    .nextui-c-boZsAS{
+    /* border: 2px solid var(--borderground); */
+    }
+  .nextui-c-boZsAS:focus-visible{
+    /* border: 2px solid var(--borderground); */
+    }
+  }
+  .nextui-c-ijHtNE{
+    display: flex;
+    align-items: flex-start;
+  }
+  
+}
+
+
+.ijHtNE{
+  /* background-color: var(--hoverground) !important; */
+  .nextui-c-jeuecp{
+    /* color: var(--tweetIcon) !important; */
+  }
+  /* color: var(--tweetIcon) !important; */
+}
+
+.commentaries-div{
+  .nextui-c-ijHtNE{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .nextui-c-kNKVvs,.nextui-user-desc{
+    width: 100%;
+  }
+  .commentaries{
+    white-space: break-spaces;
+    font-size: 0.875rem;
+    /* color: var(--tweetIcon); */
+  }
+  .nextui-c-eGlVTL{
+    color: #9ca3af;
+  }
+  .selected {
+    /* fill: var(--tweetIcon); */
+  }
+  .xihuan {
+    /* fill: red; */
+  }
+}
+
+.cursor{
+  cursor: pointer;
+}
+
