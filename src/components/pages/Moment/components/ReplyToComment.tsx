@@ -49,7 +49,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
       <div>
         <Row wrap='wrap'>
           <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: theme === 'dark' ? "#fff" : "#000" }, padding: "0" }}>
-            <p className='commentaries text-[#000]  dark:text-[#fff]'>
+            <p className='commentaries text-[#000] dark:text-[#fff]'>
               {evaluation}
             </p>
             <p className='flex items-center gap-4 mt-1 s-'>
@@ -105,13 +105,14 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
           </User>
         </Modal.Body>
         <Modal.Footer>
-          <Button disabled={removeSpaces(value) ? false : true} auto onPress={closeHandler}>
-            Repyl
+          <Button disabled={!removeSpaces(value)} auto onPress={closeHandler}>
+            Reply
           </Button>
         </Modal.Footer>
       </Modal>
     </>
-  )
+  );
+
 }
 
 export default ReplyToComment
