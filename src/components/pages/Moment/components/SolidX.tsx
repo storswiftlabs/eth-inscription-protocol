@@ -11,7 +11,7 @@ interface Props {
 
 function SolidX({ foll }: Props) {
   return (
-    <div className={`w-full border-${foll}-[0.5px] border-${foll}-[#edecf3] dark:border-${foll}-[#262626]`} />
+    <div className={`w-full border-${foll}-[0.5px] border-${foll}-[red] dark:border-y-[#262626]`} />
   )
 }
 

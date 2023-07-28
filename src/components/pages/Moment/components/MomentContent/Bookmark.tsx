@@ -1,20 +1,38 @@
+'use client'
 import { FillColor } from '@/type/Moment'
-import { Input, Row, Spacer } from '@nextui-org/react'
+import { Card, Grid, Input, Row, Spacer, Text } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
-import React from 'react'
+import React, { useState } from 'react'
 import { BackIcon, GreaterIcon, NewListIcon } from '../Icons'
 import Solid from '../SolidX'
 import List from '../List'
+import ListAddIcon from '../ListIcon/ListAddIcon'
+import ListFocusIcon from '../ListIcon/ListFocusIcon'
 
 function Bookmark() {
 
+  const [isAdd, setIsAdd] = useState(false)
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
+  const MockItem = ({ imgUrl }: any) => {
+    return (
+      <Card css={{ h: "$24", background: theme === 'dark' ? '#262626' : "white", padding: "0" }}>
+        <div style={{
+          height: "100%",
+          width: "100%",
+          background: `url(https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true) 50% / cover  no-repeat`,
+        }}></div>
+      </Card>
+    );
+  };
+
   return <>
-    <div className=' p-[1rem]'>
+    <div className=' p-[1rem] cursor-pointer'>
       <Row align='center' justify='space-between' >
-        <BackIcon fill={handleFillColor()} />
+        <div className='cursor-pointer'>
+          <BackIcon fill={handleFillColor()} />
+        </div>
         <Input
           className=' px-[2rem]'
           width={'100%'}
@@ -26,7 +44,7 @@ function Bookmark() {
             <>{svg}</>
           }
         />
-        <span className='flex gap-[1rem]'>
+        <span className='flex gap-[1rem] cursor-pointer'>
           <NewListIcon fill={handleFillColor()} />
           <GreaterIcon fill={handleFillColor()} />
         </span>
@@ -34,15 +52,31 @@ function Bookmark() {
       <div className=' p-[2rem]'>
         <p className=' font-bold text-[1.2rem]'>Pinned Lists</p>
         <Spacer y={0.5} />
-        <p>Nothing to see here yet — pin your favorite Lists to access them quickly.</p>
+        <Grid.Container gap={2} justify="flex-start">
+          {
+            [1, 2, 3, 4, 5, 6].map((item, index) => (
+              <Grid className=' flex-col' xs={3}>
+                <MockItem imgUrl="" />
+                <div className='truncate'>fosk jjj kkedsdd</div>
+              </Grid>
+            ))
+          }
+        </Grid.Container>
+        {
+          [1, 2, 3].length <= 0 && <p>Nothing to see here yet — pin your favorite Lists to access them quickly.</p>
+        }
         <Spacer y={1} />
       </div>
     </div>
     <Solid foll={'y'} />
     <div>
-      <List data={[1, 2, 3, 4]} />
+      <List children={<ListAddIcon />} head='Discover new Lists' data={[1, 2, 3, 4]} />
     </div>
-    <Solid foll={'y'}  />
+    <Solid foll={'y'} />
+    <div>
+      <List children={<ListFocusIcon />} head='Your Lists' data={[1, 2, 3]} />
+      <div className='p-[1rem]'>You haven't created or followed any Lists. When you do, they'll show up here.</div>
+    </div>
   </>
 }
 

@@ -1,30 +1,45 @@
+'use client'
 import { Row, Image, Spacer } from '@nextui-org/react'
-import React from 'react'
-import { AddIcon } from './Icons'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { FillColor } from '@/type/Moment'
 
 /**
  * @List - 列表展示
- * @param {any} props.avatar - 头像
+ * @param {any} props.data - 数据
+ * @param {string} props.head - 头部文本
  */
 
 interface Props {
   data: any
+  head: string
+  children: ReactNode
 }
 
-function List({ data }: Props) {
 
+
+function List({ data, head, children }: Props) {
+
+  const [dataList, setDataList] = useState([])
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
+  useEffect(() => {
+    const a = data.slice(0, 3)
+    setDataList(a)
+  }, [data])
+
+
+
+
+
   return (
     <div>
-      <p className=' font-bold text-[1.2rem]  p-[1rem]'>Discover new Lists</p>
+      <p className=' font-bold text-[1.2rem]  p-[1rem]'>{head}</p>
       <Spacer y={1} />
       {
-        data.map((i: any, j: any) => (
-          <Row align='center' className=' hover:bg-[#f7f7f7] py-[1rem] '>
+        dataList.map((i: any, j: any) => (
+          <Row align='center' className=' hover:bg-[#f7f7f7] py-[1rem] dark:hover:bg-[#262626]'>
             <div className='px-[1.2rem]'>
               <Image
                 css={{ borderRadius: "0.6rem" }}
@@ -44,7 +59,7 @@ function List({ data }: Props) {
                 <span>members</span>
               </div>
               <div>
-                <div className='flex items-center  bg-slate-300/20 rounded-xl cursor-pointer'>
+                <div className='flex items-center  bg-slate-300/20 rounded-xl cursor-pointer '>
                   <div className="flex items-center justify-between w-12">
                     <div className="relative w-6 h-6 rounded-full bg-blue-500"></div>
                     <div className="relative w-6 h-6 rounded-full bg-green-500 -ml-6"></div>
@@ -54,14 +69,21 @@ function List({ data }: Props) {
                 </div>
               </div>
             </div>
-            <div className='flex-1 flex text-right justify-end pr-[1rem]'>
-              <AddIcon fill={handleFillColor()} />
-            </div>
+            {children}
+            {/* <div className='flex-1 flex text-right justify-end pr-[1rem] cursor-pointer' onClick={() => setIsAdd(!isAdd)}> */}
+            {/* {children} */}
+            {/* </div> */}
           </Row>
         ))
+      }
+      {
+        dataList.length < data.length && <div onClick={() => setDataList(data)} className='hover:bg-[#f7f7f7]  dark:hover:bg-[#262626] p-[1rem] text-[#48adf1] cursor-pointer'>
+          Show more
+        </div>
       }
     </div>
   )
 }
 
 export default List
+
