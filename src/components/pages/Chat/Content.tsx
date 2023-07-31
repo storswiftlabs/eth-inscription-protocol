@@ -34,7 +34,7 @@ export function ChatContent({ type }: ContentData) {
         })}
       </div>
 
-      <ChatInput />
+      <ChatInput type={type} />
     </div>
   )
 }
