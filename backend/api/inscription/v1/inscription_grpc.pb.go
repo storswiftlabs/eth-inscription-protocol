@@ -26,8 +26,7 @@ const (
 	Inscription_GetTweet_FullMethodName          = "/api.inscription.v1.Inscription/GetTweet"
 	Inscription_GetFollowTweet_FullMethodName    = "/api.inscription.v1.Inscription/GetFollowTweet"
 	Inscription_GetTweetByAddress_FullMethodName = "/api.inscription.v1.Inscription/GetTweetByAddress"
-	Inscription_GetFollow_FullMethodName         = "/api.inscription.v1.Inscription/GetFollow"
-	Inscription_GetAnyByTrxHash_FullMethodName   = "/api.inscription.v1.Inscription/GetAnyByTrxHash"
+	Inscription_GetFollower_FullMethodName       = "/api.inscription.v1.Inscription/GetFollower"
 )
 
 // InscriptionClient is the client API for Inscription service.
@@ -39,10 +38,9 @@ type InscriptionClient interface {
 	GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error)
 	GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error)
 	GetTweet(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
-	GetFollowTweet(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
-	GetTweetByAddress(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
-	GetFollow(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error)
-	GetAnyByTrxHash(ctx context.Context, in *GetAnyByTrxHashReq, opts ...grpc.CallOption) (*SwiftResponse, error)
+	GetFollowTweet(ctx context.Context, in *GetFollowTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
+	GetTweetByAddress(ctx context.Context, in *GetTweetByAddressReq, opts ...grpc.CallOption) (*TweetResponse, error)
+	GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error)
 }
 
 type inscriptionClient struct {
@@ -98,7 +96,7 @@ func (c *inscriptionClient) GetTweet(ctx context.Context, in *GetTweetReq, opts 
 	return out, nil
 }
 
-func (c *inscriptionClient) GetFollowTweet(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error) {
+func (c *inscriptionClient) GetFollowTweet(ctx context.Context, in *GetFollowTweetReq, opts ...grpc.CallOption) (*TweetResponse, error) {
 	out := new(TweetResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetFollowTweet_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -107,7 +105,7 @@ func (c *inscriptionClient) GetFollowTweet(ctx context.Context, in *GetTweetReq,
 	return out, nil
 }
 
-func (c *inscriptionClient) GetTweetByAddress(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error) {
+func (c *inscriptionClient) GetTweetByAddress(ctx context.Context, in *GetTweetByAddressReq, opts ...grpc.CallOption) (*TweetResponse, error) {
 	out := new(TweetResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetTweetByAddress_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -116,18 +114,9 @@ func (c *inscriptionClient) GetTweetByAddress(ctx context.Context, in *GetTweetR
 	return out, nil
 }
 
-func (c *inscriptionClient) GetFollow(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error) {
+func (c *inscriptionClient) GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error) {
 	out := new(SwiftResponses)
-	err := c.cc.Invoke(ctx, Inscription_GetFollow_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *inscriptionClient) GetAnyByTrxHash(ctx context.Context, in *GetAnyByTrxHashReq, opts ...grpc.CallOption) (*SwiftResponse, error) {
-	out := new(SwiftResponse)
-	err := c.cc.Invoke(ctx, Inscription_GetAnyByTrxHash_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Inscription_GetFollower_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -143,10 +132,9 @@ type InscriptionServer interface {
 	GetMessage(context.Context, *GetMessageReq) (*SwiftResponses, error)
 	GetGroupMessage(context.Context, *GetGroupMessageReq) (*SwiftResponses, error)
 	GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
-	GetFollowTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
-	GetTweetByAddress(context.Context, *GetTweetReq) (*TweetResponse, error)
-	GetFollow(context.Context, *ByAddress) (*SwiftResponses, error)
-	GetAnyByTrxHash(context.Context, *GetAnyByTrxHashReq) (*SwiftResponse, error)
+	GetFollowTweet(context.Context, *GetFollowTweetReq) (*TweetResponse, error)
+	GetTweetByAddress(context.Context, *GetTweetByAddressReq) (*TweetResponse, error)
+	GetFollower(context.Context, *ByAddress) (*SwiftResponses, error)
 	mustEmbedUnimplementedInscriptionServer()
 }
 
@@ -169,17 +157,14 @@ func (UnimplementedInscriptionServer) GetGroupMessage(context.Context, *GetGroup
 func (UnimplementedInscriptionServer) GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTweet not implemented")
 }
-func (UnimplementedInscriptionServer) GetFollowTweet(context.Context, *GetTweetReq) (*TweetResponse, error) {
+func (UnimplementedInscriptionServer) GetFollowTweet(context.Context, *GetFollowTweetReq) (*TweetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollowTweet not implemented")
 }
-func (UnimplementedInscriptionServer) GetTweetByAddress(context.Context, *GetTweetReq) (*TweetResponse, error) {
+func (UnimplementedInscriptionServer) GetTweetByAddress(context.Context, *GetTweetByAddressReq) (*TweetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTweetByAddress not implemented")
 }
-func (UnimplementedInscriptionServer) GetFollow(context.Context, *ByAddress) (*SwiftResponses, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFollow not implemented")
-}
-func (UnimplementedInscriptionServer) GetAnyByTrxHash(context.Context, *GetAnyByTrxHashReq) (*SwiftResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAnyByTrxHash not implemented")
+func (UnimplementedInscriptionServer) GetFollower(context.Context, *ByAddress) (*SwiftResponses, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFollower not implemented")
 }
 func (UnimplementedInscriptionServer) mustEmbedUnimplementedInscriptionServer() {}
 
@@ -285,7 +270,7 @@ func _Inscription_GetTweet_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Inscription_GetFollowTweet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTweetReq)
+	in := new(GetFollowTweetReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -297,13 +282,13 @@ func _Inscription_GetFollowTweet_Handler(srv interface{}, ctx context.Context, d
 		FullMethod: Inscription_GetFollowTweet_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InscriptionServer).GetFollowTweet(ctx, req.(*GetTweetReq))
+		return srv.(InscriptionServer).GetFollowTweet(ctx, req.(*GetFollowTweetReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Inscription_GetTweetByAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTweetReq)
+	in := new(GetTweetByAddressReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -315,43 +300,25 @@ func _Inscription_GetTweetByAddress_Handler(srv interface{}, ctx context.Context
 		FullMethod: Inscription_GetTweetByAddress_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InscriptionServer).GetTweetByAddress(ctx, req.(*GetTweetReq))
+		return srv.(InscriptionServer).GetTweetByAddress(ctx, req.(*GetTweetByAddressReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Inscription_GetFollow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Inscription_GetFollower_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ByAddress)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(InscriptionServer).GetFollow(ctx, in)
+		return srv.(InscriptionServer).GetFollower(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Inscription_GetFollow_FullMethodName,
+		FullMethod: Inscription_GetFollower_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InscriptionServer).GetFollow(ctx, req.(*ByAddress))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Inscription_GetAnyByTrxHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAnyByTrxHashReq)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(InscriptionServer).GetAnyByTrxHash(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Inscription_GetAnyByTrxHash_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(InscriptionServer).GetAnyByTrxHash(ctx, req.(*GetAnyByTrxHashReq))
+		return srv.(InscriptionServer).GetFollower(ctx, req.(*ByAddress))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -392,12 +359,8 @@ var Inscription_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Inscription_GetTweetByAddress_Handler,
 		},
 		{
-			MethodName: "GetFollow",
-			Handler:    _Inscription_GetFollow_Handler,
-		},
-		{
-			MethodName: "GetAnyByTrxHash",
-			Handler:    _Inscription_GetAnyByTrxHash_Handler,
+			MethodName: "GetFollower",
+			Handler:    _Inscription_GetFollower_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

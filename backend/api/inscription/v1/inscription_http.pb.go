@@ -19,9 +19,8 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationInscriptionGetAnyByTrxHash = "/api.inscription.v1.Inscription/GetAnyByTrxHash"
-const OperationInscriptionGetFollow = "/api.inscription.v1.Inscription/GetFollow"
 const OperationInscriptionGetFollowTweet = "/api.inscription.v1.Inscription/GetFollowTweet"
+const OperationInscriptionGetFollower = "/api.inscription.v1.Inscription/GetFollower"
 const OperationInscriptionGetGroup = "/api.inscription.v1.Inscription/GetGroup"
 const OperationInscriptionGetGroupMessage = "/api.inscription.v1.Inscription/GetGroupMessage"
 const OperationInscriptionGetMessage = "/api.inscription.v1.Inscription/GetMessage"
@@ -30,15 +29,14 @@ const OperationInscriptionGetTweet = "/api.inscription.v1.Inscription/GetTweet"
 const OperationInscriptionGetTweetByAddress = "/api.inscription.v1.Inscription/GetTweetByAddress"
 
 type InscriptionHTTPServer interface {
-	GetAnyByTrxHash(context.Context, *GetAnyByTrxHashReq) (*SwiftResponse, error)
-	GetFollow(context.Context, *ByAddress) (*SwiftResponses, error)
-	GetFollowTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
+	GetFollowTweet(context.Context, *GetFollowTweetReq) (*TweetResponse, error)
+	GetFollower(context.Context, *ByAddress) (*SwiftResponses, error)
 	GetGroup(context.Context, *ByAddress) (*SwiftResponses, error)
 	GetGroupMessage(context.Context, *GetGroupMessageReq) (*SwiftResponses, error)
 	GetMessage(context.Context, *GetMessageReq) (*SwiftResponses, error)
 	GetProfile(context.Context, *ByAddress) (*SwiftResponse, error)
 	GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
-	GetTweetByAddress(context.Context, *GetTweetReq) (*TweetResponse, error)
+	GetTweetByAddress(context.Context, *GetTweetByAddressReq) (*TweetResponse, error)
 }
 
 func RegisterInscriptionHTTPServer(s *http.Server, srv InscriptionHTTPServer) {
@@ -50,8 +48,7 @@ func RegisterInscriptionHTTPServer(s *http.Server, srv InscriptionHTTPServer) {
 	r.GET("/api/tweet", _Inscription_GetTweet0_HTTP_Handler(srv))
 	r.GET("/api/follow_tweet", _Inscription_GetFollowTweet0_HTTP_Handler(srv))
 	r.GET("/api/tweet/{address}", _Inscription_GetTweetByAddress0_HTTP_Handler(srv))
-	r.GET("/api/follow", _Inscription_GetFollow0_HTTP_Handler(srv))
-	r.GET("/api/{trx_hash}", _Inscription_GetAnyByTrxHash0_HTTP_Handler(srv))
+	r.GET("/api/follow", _Inscription_GetFollower0_HTTP_Handler(srv))
 }
 
 func _Inscription_GetProfile0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
@@ -151,13 +148,13 @@ func _Inscription_GetTweet0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx htt
 
 func _Inscription_GetFollowTweet0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetTweetReq
+		var in GetFollowTweetReq
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
 		http.SetOperation(ctx, OperationInscriptionGetFollowTweet)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetFollowTweet(ctx, req.(*GetTweetReq))
+			return srv.GetFollowTweet(ctx, req.(*GetFollowTweetReq))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -170,7 +167,7 @@ func _Inscription_GetFollowTweet0_HTTP_Handler(srv InscriptionHTTPServer) func(c
 
 func _Inscription_GetTweetByAddress0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in GetTweetReq
+		var in GetTweetByAddressReq
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -179,7 +176,7 @@ func _Inscription_GetTweetByAddress0_HTTP_Handler(srv InscriptionHTTPServer) fun
 		}
 		http.SetOperation(ctx, OperationInscriptionGetTweetByAddress)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetTweetByAddress(ctx, req.(*GetTweetReq))
+			return srv.GetTweetByAddress(ctx, req.(*GetTweetByAddressReq))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -190,15 +187,15 @@ func _Inscription_GetTweetByAddress0_HTTP_Handler(srv InscriptionHTTPServer) fun
 	}
 }
 
-func _Inscription_GetFollow0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
+func _Inscription_GetFollower0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in ByAddress
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationInscriptionGetFollow)
+		http.SetOperation(ctx, OperationInscriptionGetFollower)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetFollow(ctx, req.(*ByAddress))
+			return srv.GetFollower(ctx, req.(*ByAddress))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
@@ -209,38 +206,15 @@ func _Inscription_GetFollow0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx ht
 	}
 }
 
-func _Inscription_GetAnyByTrxHash0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
-	return func(ctx http.Context) error {
-		var in GetAnyByTrxHashReq
-		if err := ctx.BindQuery(&in); err != nil {
-			return err
-		}
-		if err := ctx.BindVars(&in); err != nil {
-			return err
-		}
-		http.SetOperation(ctx, OperationInscriptionGetAnyByTrxHash)
-		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.GetAnyByTrxHash(ctx, req.(*GetAnyByTrxHashReq))
-		})
-		out, err := h(ctx, &in)
-		if err != nil {
-			return err
-		}
-		reply := out.(*SwiftResponse)
-		return ctx.Result(200, reply)
-	}
-}
-
 type InscriptionHTTPClient interface {
-	GetAnyByTrxHash(ctx context.Context, req *GetAnyByTrxHashReq, opts ...http.CallOption) (rsp *SwiftResponse, err error)
-	GetFollow(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponses, err error)
-	GetFollowTweet(ctx context.Context, req *GetTweetReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
+	GetFollowTweet(ctx context.Context, req *GetFollowTweetReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
+	GetFollower(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponses, err error)
 	GetGroup(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponses, err error)
 	GetGroupMessage(ctx context.Context, req *GetGroupMessageReq, opts ...http.CallOption) (rsp *SwiftResponses, err error)
 	GetMessage(ctx context.Context, req *GetMessageReq, opts ...http.CallOption) (rsp *SwiftResponses, err error)
 	GetProfile(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponse, err error)
 	GetTweet(ctx context.Context, req *GetTweetReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
-	GetTweetByAddress(ctx context.Context, req *GetTweetReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
+	GetTweetByAddress(ctx context.Context, req *GetTweetByAddressReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
 }
 
 type InscriptionHTTPClientImpl struct {
@@ -251,37 +225,24 @@ func NewInscriptionHTTPClient(client *http.Client) InscriptionHTTPClient {
 	return &InscriptionHTTPClientImpl{client}
 }
 
-func (c *InscriptionHTTPClientImpl) GetAnyByTrxHash(ctx context.Context, in *GetAnyByTrxHashReq, opts ...http.CallOption) (*SwiftResponse, error) {
-	var out SwiftResponse
-	pattern := "/api/{trx_hash}"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationInscriptionGetAnyByTrxHash))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *InscriptionHTTPClientImpl) GetFollow(ctx context.Context, in *ByAddress, opts ...http.CallOption) (*SwiftResponses, error) {
-	var out SwiftResponses
-	pattern := "/api/follow"
-	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationInscriptionGetFollow))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
-func (c *InscriptionHTTPClientImpl) GetFollowTweet(ctx context.Context, in *GetTweetReq, opts ...http.CallOption) (*TweetResponse, error) {
+func (c *InscriptionHTTPClientImpl) GetFollowTweet(ctx context.Context, in *GetFollowTweetReq, opts ...http.CallOption) (*TweetResponse, error) {
 	var out TweetResponse
 	pattern := "/api/follow_tweet"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationInscriptionGetFollowTweet))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *InscriptionHTTPClientImpl) GetFollower(ctx context.Context, in *ByAddress, opts ...http.CallOption) (*SwiftResponses, error) {
+	var out SwiftResponses
+	pattern := "/api/follow"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationInscriptionGetFollower))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
@@ -355,7 +316,7 @@ func (c *InscriptionHTTPClientImpl) GetTweet(ctx context.Context, in *GetTweetRe
 	return &out, err
 }
 
-func (c *InscriptionHTTPClientImpl) GetTweetByAddress(ctx context.Context, in *GetTweetReq, opts ...http.CallOption) (*TweetResponse, error) {
+func (c *InscriptionHTTPClientImpl) GetTweetByAddress(ctx context.Context, in *GetTweetByAddressReq, opts ...http.CallOption) (*TweetResponse, error) {
 	var out TweetResponse
 	pattern := "/api/tweet/{address}"
 	path := binding.EncodeURL(pattern, in, true)

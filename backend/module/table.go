@@ -61,7 +61,8 @@ type GroupMessage struct {
 }
 
 type Tweet struct {
-	TrxHash string `xorm:"pk"`
+	Id      int64
+	TrxHash string `xorm:"notnull"`
 	Sender  string `xorm:"notnull index"`
 	Title   string `xorm:"notnull"`
 	Text    string `xorm:"notnull"`
@@ -97,16 +98,15 @@ type Follow struct {
 	Follower string `xorm:"notnull"`
 }
 
-type GetMessageReq struct {
+type GetMTReq struct {
+	Owner       string
 	Address     string
-	StartHeight int64
-	EndHeight   int64
+	Limit       int64
+	Offset      int64
 }
 
 type GetGroupMessageReq struct {
 	Title       string
-	StartHeight int64
-	EndHeight   int64
 }
 
 type Tweets struct {
@@ -115,4 +115,9 @@ type Tweets struct {
 	Comments []*Comment
 	LikeNum  int64
 	LikeBool bool
+}
+
+type Record struct {
+	Owner string `xorm:"pk"`
+	Last  int64  `xorm:"notnull"`
 }

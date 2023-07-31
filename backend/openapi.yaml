@@ -10,7 +10,7 @@ paths:
         get:
             tags:
                 - Inscription
-            operationId: Inscription_GetFollow
+            operationId: Inscription_GetFollower
             parameters:
                 - name: address
                   in: query
@@ -29,16 +29,16 @@ paths:
                 - Inscription
             operationId: Inscription_GetFollowTweet
             parameters:
-                - name: address
+                - name: owner
                   in: query
                   schema:
                     type: string
-                - name: startHeight
+                - name: limit
                   in: query
                   schema:
                     type: integer
                     format: int64
-                - name: endHeight
+                - name: offset
                   in: query
                   schema:
                     type: integer
@@ -77,16 +77,10 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: startHeight
+                - name: owner
                   in: query
                   schema:
-                    type: integer
-                    format: int64
-                - name: endHeight
-                  in: query
-                  schema:
-                    type: integer
-                    format: int64
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -100,20 +94,10 @@ paths:
                 - Inscription
             operationId: Inscription_GetMessage
             parameters:
-                - name: address
+                - name: owner
                   in: query
                   schema:
                     type: string
-                - name: startHeight
-                  in: query
-                  schema:
-                    type: integer
-                    format: int64
-                - name: endHeight
-                  in: query
-                  schema:
-                    type: integer
-                    format: int64
             responses:
                 "200":
                     description: OK
@@ -144,16 +128,16 @@ paths:
                 - Inscription
             operationId: Inscription_GetTweet
             parameters:
-                - name: address
+                - name: owner
                   in: query
                   schema:
                     type: string
-                - name: startHeight
+                - name: limit
                   in: query
                   schema:
                     type: integer
                     format: int64
-                - name: endHeight
+                - name: offset
                   in: query
                   schema:
                     type: integer
@@ -176,32 +160,8 @@ paths:
                   required: true
                   schema:
                     type: string
-                - name: startHeight
+                - name: owner
                   in: query
-                  schema:
-                    type: integer
-                    format: int64
-                - name: endHeight
-                  in: query
-                  schema:
-                    type: integer
-                    format: int64
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
-    /api/{trxHash}:
-        get:
-            tags:
-                - Inscription
-            operationId: Inscription_GetAnyByTrxHash
-            parameters:
-                - name: trxHash
-                  in: path
-                  required: true
                   schema:
                     type: string
             responses:
@@ -210,7 +170,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                                $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
 components:
     schemas:
         api.inscription.v1.SwiftResponse:
