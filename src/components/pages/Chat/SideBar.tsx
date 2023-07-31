@@ -1,8 +1,61 @@
+/* eslint-disable n/prefer-global/buffer */
+
 import { Collapse } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
+import { useTheme } from 'next-themes'
+import { EmojiDialog } from './EmojiDialog'
+import { GroupIcon } from './Icons'
+import { type MessageOnChain, sendMessageOnChain } from '@/utils/sendMessageOnChain'
+import { FillColor } from '@/type/Chat'
 
 export function ChatSideBar({ path = 'general' }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>()
+  const [submitData, setSubmitData] = useState(false)
+  const { data: walletClient } = useWalletClient()
+  const { address, isConnected } = useAccount()
+  const { theme } = useTheme()
+  const [themeColor, setThemeColor] = useState('')
+  useEffect(() => {
+    setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
+  }, [])
+  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
+    to: walletClient?.account.address,
+    data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
+  })
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  const handleSend = () => {
+    !isConnected && alert('Please connect your wallet first')
+    sendTransaction()
+  }
+  function randomNumberFromTime() {
+    const timeSeed = new Date().getTime()
+    const randomNumber = Math.random() * 10000
+
+    return Math.floor(randomNumber * timeSeed)
+  }
+  function selectedOK(selected: string[]) {
+    setSendDataOnChain({ ...sendDataOnChain, receiver: selected, type: 'create-group', title: randomNumberFromTime().toString() })
+    setSubmitData(true)
+    closeModal()
+  }
+  useEffect(() => {
+    if (sendDataOnChain?.receiver?.length > 0 && submitData)
+      handleSend()
+    setSubmitData(false)
+  }, [submitData])
+  const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
+
   return <div className="flex flex-col justify-start items-center w-[300px] h-full bg-white dark:bg-black p-4 border-x dark:text-white border-gray-200 dark:border-gray-700">
         <div className=' w-full'>
             <h1 className='font-bold text-2xl mb-5 mt-10 text-center'>
@@ -30,6 +83,14 @@ export function ChatSideBar({ path = 'general' }) {
                 <div className='flex'>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; 0xEa...B65c</div>
 
             </div>
+
+        </div>
+        <br />
+        <div onClick={openModal} className='w-20 h-10 border bg-none hover:bg-slate-200  transition-all dark:hover:bg-slate-500/50 dark:hover:border-none w-full flex justify-center items-center rounded-xl font-bold cursor-pointer'>
+            {themeColor && <GroupIcon fill={handleFillColor()} />}
+            &nbsp;
+            Add Group
+            <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'addGroup'} selectedOK={x => selectedOK(x)} />
 
         </div>
     </div>

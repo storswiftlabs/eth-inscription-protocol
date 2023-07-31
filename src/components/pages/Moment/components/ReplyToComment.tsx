@@ -1,10 +1,12 @@
 'use client'
 import { Button, Modal, Row, Spacer, Textarea, User } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 import { KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
 import { FillColor } from '@/type/Moment'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
+import Pictures from './Pictures'
+import DialogueInput from './DialogueInput'
 
 /**
  * @用户信息评论组件
@@ -30,6 +32,7 @@ interface Props {
 }
 
 function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, agree, noAgree, avatar }: Props) {
+  const [pictureArr, setPictureArr] = useState<string[]>([])
   const [dz, setDz] = useState(false) // 点赞和取消点赞
   const [ca, setCa] = useState(false) // 踩和取消踩
   const [visible, setVisible] = React.useState(false);
@@ -43,6 +46,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
   function removeSpaces(inputString: string): string {
     return inputString.replace(/\s/g, "");
   }
+
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <>
@@ -80,7 +84,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
         open={visible}
         onClose={closeHandler}
       >
-        <Modal.Body className='commentaries-div'>
+        <Modal.Body >
           <User css={{ padding: "0", alignItems: 'flex-start ', '.nextui-c-eGlVTL': { color: "#000" } }} zoomed src={aimsAvatar} name={name}>
             <p className='commentaries'>
               {evaluation}
@@ -89,26 +93,8 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
           <div className="w-[2px] bg-[#cfd9de] mt-2 ml-5 h-24 relative">
             <div className="mt-4 text-base absolute top-[1.2rem] left-[2rem] w-[15rem] max-w-[15rem] truncate">Replying to @{name + ""}</div>
           </div>
-          <User css={{ padding: "0", width: "100%", alignItems: 'flex-start', justifyContent: 'inherit' }} zoomed src={avatar} name="">
-            <Row wrap='wrap' >
-              <div style={{ width: '100%' }}>
-                <Textarea value={value} onChange={(e) => setValue(e.target.value)} bordered fullWidth placeholder="Default Textarea !" />
-              </div>
-              <Row className='cursor gap-4 mt-2'>
-                <EmojiIcon fill={handleFillColor()}></EmojiIcon>
-                <LockIcon fill={handleFillColor()}></LockIcon>
-                <PictureIcon fill={handleFillColor()}></PictureIcon>
-                <SpeechIcon fill={handleFillColor()}></SpeechIcon>
-                <CloudIcon fill={handleFillColor()}></CloudIcon>
-              </Row>
-            </Row>
-          </User>
+          <DialogueInput rowCss={'p-0'} isSolid={true} />
         </Modal.Body>
-        <Modal.Footer>
-          <Button disabled={!removeSpaces(value)} auto onPress={closeHandler}>
-            Reply
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

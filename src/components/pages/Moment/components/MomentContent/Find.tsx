@@ -1,6 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import DynamicCard from '../DynamicCard/DynamicCard'
+import { FillColor } from '@/type/Moment'
+import { useTheme } from 'next-themes'
+import DialogueInput from '../DialogueInput'
 
 interface Props {
   isUpper: string //判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -11,21 +14,21 @@ function Find({ isUpper }: Props) {
   const [data, setData] = useState([] as any[])
 
   useEffect(() => {
-
     if (isUpper === 'Recommendation') {
       setData([1, 2, 3])
     } else {
       setData([4, 5, 6])
     }
-
   }, [isUpper])
 
-
+  const image = 'https://pbs.twimg.com/semantic_core_img/1376695792417693699/hpBiuH-q?format=jpg&name=360x360'
   return (
     <div style={{ width: '100%', overflow: 'hidden' }}>
-      {data.map((i, j) => (
+      <DialogueInput />
+      {data.map((i, index) => (
         <DynamicCard
-          img={img}
+          key={index}
+          img={image}
           text={text}
           time={`${i}h`}
           name={`Mewtru tuiie ${i}`}
@@ -33,12 +36,11 @@ function Find({ isUpper }: Props) {
         />
       ))}
     </div>
+
   )
 }
 
 export default Find
-
-const img = "https://pbs.twimg.com/media/F1yPk5VXoAA3rGZ?format=jpg&name=medium"
 
 const text = ' Playing the guitar has also taught me discipline and patience Learning new chords and songs takes time and practice.Its aconstant journey of improvement.When I finally master adifficult1difficult1difficult1difficult1difficult1difficult1123'
 

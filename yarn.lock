@@ -103,7 +103,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.17.2", "@babel/runtime@^7.20.1", "@babel/runtime@^7.20.7", "@babel/runtime@^7.22.3", "@babel/runtime@^7.6.2":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.17.2", "@babel/runtime@^7.18.9", "@babel/runtime@^7.20.1", "@babel/runtime@^7.20.6", "@babel/runtime@^7.20.7", "@babel/runtime@^7.21.0", "@babel/runtime@^7.22.3", "@babel/runtime@^7.22.6", "@babel/runtime@^7.6.2":
   version "7.22.6"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.22.6.tgz#57d64b9ae3cff1d67eb067ae117dac087f5bd438"
   integrity sha512-wDb5pWm4WDdF6LFUde3Jl8WzPA+3ZbxYqkC6xAXuD3irdEHN1k0NfTRrJD8ZD378SJ61miMLCqIOXYhd8x+AJQ==
@@ -1906,6 +1906,13 @@
   dependencies:
     "@types/ms" "*"
 
+"@types/faker@^6.6.9":
+  version "6.6.9"
+  resolved "https://registry.npmmirror.com/@types/faker/-/faker-6.6.9.tgz#1064e7c46be58388fa326e2f918a4f02ab740a7a"
+  integrity sha512-Y9YYm5L//8ooiiknO++4Gr539zzdI0j3aXnOBjo1Vk+kTvffY10GuE2wn78AFPECwZ5MYGTjiDVw1naLLdDimw==
+  dependencies:
+    faker "*"
+
 "@types/json-schema@^7.0.12", "@types/json-schema@^7.0.9":
   version "7.0.12"
   resolved "https://registry.npmmirror.com/@types/json-schema/-/json-schema-7.0.12.tgz#d70faba7039d5fca54c83c7dbab41051d2b6f6cb"
@@ -2799,6 +2806,14 @@ atomic-sleep@^1.0.0:
   resolved "https://registry.npmmirror.com/atomic-sleep/-/atomic-sleep-1.0.0.tgz#eb85b77a601fc932cfe432c5acd364a9e2c9075b"
   integrity sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==
 
+automation-events@^6.0.8:
+  version "6.0.8"
+  resolved "https://registry.npmmirror.com/automation-events/-/automation-events-6.0.8.tgz#52929699924cd791eaefc51916ffc033c4d0f42f"
+  integrity sha512-OXI9rEbA0LwWr+Tmvka4EHtVHBIVw8KD2NM7fIGjd4dyGnuiM3ULZL+Jlo4aKXZDY98raT4R4rEDOHAbz8Jm9A==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    tslib "^2.6.1"
+
 autoprefixer@10.4.14:
   version "10.4.14"
   resolved "https://registry.npmmirror.com/autoprefixer/-/autoprefixer-10.4.14.tgz#e28d49902f8e759dd25b153264e862df2705f79d"
@@ -2938,6 +2953,16 @@ braces@^3.0.2, braces@~3.0.2:
   integrity sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
   dependencies:
     fill-range "^7.0.1"
+
+broker-factory@^3.0.75, broker-factory@^3.0.84:
+  version "3.0.84"
+  resolved "https://registry.npmmirror.com/broker-factory/-/broker-factory-3.0.84.tgz#20a471254e6e0e8cb3588a36aee060a23ee2bf16"
+  integrity sha512-Z5ihhfifx7n//u99AG88z1q4csVt8vgf72jN5JYD4FqkPWTMp+xCvUaKdWQUaiPFOmNYOV8uPIcqB1MtrLGjiQ==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    fast-unique-numbers "^8.0.7"
+    tslib "^2.6.1"
+    worker-factory "^7.0.9"
 
 brorand@^1.1.0:
   version "1.1.0"
@@ -3190,6 +3215,26 @@ commander@^4.0.0:
   resolved "https://registry.npmmirror.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
+compilerr@^10.0.2:
+  version "10.0.2"
+  resolved "https://registry.npmmirror.com/compilerr/-/compilerr-10.0.2.tgz#d6ecff912304634ebef232f0d660a724187b5f03"
+  integrity sha512-CFwUXxJ9OuWsSvnLSbefxi+GLsZ0YnuJh40ry5QdmZ1FWK59OG+QB8XSj6t7Kq+/c5DSS7en+cML6GlzHKH58A==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    dashify "^2.0.0"
+    indefinite-article "0.0.2"
+    tslib "^2.5.0"
+
+compilerr@^11.0.8:
+  version "11.0.8"
+  resolved "https://registry.npmmirror.com/compilerr/-/compilerr-11.0.8.tgz#1a433665d18cea9561f1e5477065026e8c419fae"
+  integrity sha512-tKUqynRzLkmVXCFDohSNUOPe3LfAGbvI+mVvF/21YydavzWrm+v27bpH6us9zYKwbSz7xF1/ncRgiXoNWT1hsQ==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    dashify "^2.0.0"
+    indefinite-article "0.0.2"
+    tslib "^2.6.1"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.npmmirror.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -3237,6 +3282,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.npmmirror.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+dashify@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/dashify/-/dashify-2.0.0.tgz#fff270ca2868ca427fee571de35691d6e437a648"
+  integrity sha512-hpA5C/YrPjucXypHPPc0oJ1l9Hf6wWbiOL7Ik42cxnsUOhWiCB/fylKbKqqJalW9FgkNQCw16YO8uW9Hs0Iy1A==
 
 data-uri-to-buffer@^4.0.0:
   version "4.0.1"
@@ -4096,10 +4146,57 @@ execa@^7.0.0, execa@^7.1.1:
     signal-exit "^3.0.7"
     strip-final-newline "^3.0.0"
 
+extendable-media-recorder-wav-encoder-broker@^7.0.88:
+  version "7.0.88"
+  resolved "https://registry.npmmirror.com/extendable-media-recorder-wav-encoder-broker/-/extendable-media-recorder-wav-encoder-broker-7.0.88.tgz#b56091a18d5f3cdb96068c6bd2a33d4f2327ce46"
+  integrity sha512-QmihcCI51YJbbH/09NaFxQPbK3pwp71mXUX+f4xKN/ACWUu4s/XQx65KEpK02TnufmX9wCom5xagbtPiCQzWGQ==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    broker-factory "^3.0.84"
+    extendable-media-recorder-wav-encoder-worker "^8.0.86"
+    tslib "^2.6.1"
+
+extendable-media-recorder-wav-encoder-worker@^8.0.86:
+  version "8.0.86"
+  resolved "https://registry.npmmirror.com/extendable-media-recorder-wav-encoder-worker/-/extendable-media-recorder-wav-encoder-worker-8.0.86.tgz#a0b27826a27883806ac19c5d1137aea9d04a7481"
+  integrity sha512-CCJzijR+w1+V/j9fFelKhU7h20Bw3oIkIUNG/egevYUbwGhZC+5Y0edttU66MbiL1CsopOJ6lHpB3ag7+M6R5A==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    tslib "^2.6.1"
+    worker-factory "^7.0.9"
+
+extendable-media-recorder-wav-encoder@^7.0.68:
+  version "7.0.96"
+  resolved "https://registry.npmmirror.com/extendable-media-recorder-wav-encoder/-/extendable-media-recorder-wav-encoder-7.0.96.tgz#a04407366dce627b0f5ebae87f17082e4477a735"
+  integrity sha512-xNwVUeajBMsrgdiMEcakZ/0LCmcvnn6ZRCT5TTfQe8VqMPCJJyrW+0KyEgqzBEe2bQmq8dEpIMzzYg+5BnIzMA==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    extendable-media-recorder-wav-encoder-broker "^7.0.88"
+    extendable-media-recorder-wav-encoder-worker "^8.0.86"
+    tslib "^2.6.1"
+
+extendable-media-recorder@^6.6.5:
+  version "6.6.10"
+  resolved "https://registry.npmmirror.com/extendable-media-recorder/-/extendable-media-recorder-6.6.10.tgz#44f3ac8f15441e8499ea9f311761dbbbc1561161"
+  integrity sha512-gnSmLqDFq40ZdbGfuarnMLNqYPLCPpPr0p21V+g67wG4Pv2oCc/ga8sfsZrEM5GywEi7FcpyRm3z99JWZ/0aPw==
+  dependencies:
+    "@babel/runtime" "^7.18.9"
+    media-encoder-host "^8.0.76"
+    multi-buffer-data-view "^3.0.20"
+    recorder-audio-worklet "^5.1.26"
+    standardized-audio-context "^25.3.29"
+    subscribable-things "^2.1.6"
+    tslib "^2.4.0"
+
 eyes@^0.1.8:
   version "0.1.8"
   resolved "https://registry.npmmirror.com/eyes/-/eyes-0.1.8.tgz#62cf120234c683785d902348a800ef3e0cc20bc0"
   integrity sha512-GipyPsXO1anza0AOZdy69Im7hGFCNB7Y/NGjDlZGJ3GJJLtwNSb2vrzYrTYJRrRloVx7pl+bhUaTB8yiccPvFQ==
+
+faker@*, faker@^6.6.6:
+  version "5.5.3"
+  resolved "https://registry.npmmirror.com/faker/-/faker-5.5.3.tgz#c57974ee484431b25205c2c8dc09fda861e51e0e"
+  integrity sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==
 
 fast-copy@^3.0.0:
   version "3.0.1"
@@ -4146,6 +4243,22 @@ fast-stable-stringify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/fast-stable-stringify/-/fast-stable-stringify-1.0.0.tgz#5c5543462b22aeeefd36d05b34e51c78cb86d313"
   integrity sha512-wpYMUmFu5f00Sm0cj2pfivpmawLZ0NKdviQ4w9zJeR8JVtOpOxHmLaJuj0vxvGqMJQWyP/COUkF75/57OKyRag==
+
+fast-unique-numbers@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.npmmirror.com/fast-unique-numbers/-/fast-unique-numbers-7.0.2.tgz#d66d7118204461be6cb8d0802a91a3f7e40c6130"
+  integrity sha512-xnqpsnu889bHbq5cbDMwCJ2BPf6kjFPMu+RHfqKvisRxeEbTOVxY5aW/ZNsZ/r8OlwatxmjdFEVQog2xAhLkvg==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    tslib "^2.5.0"
+
+fast-unique-numbers@^8.0.7:
+  version "8.0.7"
+  resolved "https://registry.npmmirror.com/fast-unique-numbers/-/fast-unique-numbers-8.0.7.tgz#6267c1119041e4c2e99e2ae552cbb105ade2dabb"
+  integrity sha512-I+VCWGlHB6HSqE0W0FxB5mgmgBHJiBs19kS9y6JJKXDp84IzuE7H24NRwpnZbuONK7T2r+7T0z1OZbehc5URxA==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    tslib "^2.6.1"
 
 fastq@^1.6.0:
   version "1.15.0"
@@ -4566,6 +4679,11 @@ imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.npmmirror.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
   integrity sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==
+
+indefinite-article@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.npmmirror.com/indefinite-article/-/indefinite-article-0.0.2.tgz#4bc855257066cfab61ea68beba75d100d6e2506b"
+  integrity sha512-Au/2XzRkvxq2J6w5uvSSbBKPZ5kzINx5F2wb0SF8xpRL8BP9Lav81TnRbfPp6p+SYjYxwaaLn4EUwI3/MmYKSw==
 
 indent-string@^4.0.0:
   version "4.0.0"
@@ -5158,6 +5276,37 @@ mdast-util-to-string@^2.0.0:
   resolved "https://registry.npmmirror.com/mdast-util-to-string/-/mdast-util-to-string-2.0.0.tgz#b8cfe6a713e1091cb5b728fc48885a4767f8b97b"
   integrity sha512-AW4DRS3QbBayY/jJmD8437V1Gombjf8RSOUCMFBuo5iHi58AGEgVCKQ+ezHkZZDpAQS75hcBMpLqjpJTjtUL7w==
 
+media-encoder-host-broker@^7.0.89:
+  version "7.0.89"
+  resolved "https://registry.npmmirror.com/media-encoder-host-broker/-/media-encoder-host-broker-7.0.89.tgz#c58bc9af5107b793d3bd2402cbb291ecdda48086"
+  integrity sha512-2J57Dj1jBvo3EfmON8LK1Xuwe/3gJ+7N5c22nTxvMrxDo79xPYbSbVRGXFvY/rpO6rlhMlNcLoGecV6Tq1bu0g==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    broker-factory "^3.0.84"
+    fast-unique-numbers "^8.0.7"
+    media-encoder-host-worker "^9.1.11"
+    tslib "^2.6.1"
+
+media-encoder-host-worker@^9.1.11:
+  version "9.1.11"
+  resolved "https://registry.npmmirror.com/media-encoder-host-worker/-/media-encoder-host-worker-9.1.11.tgz#0fcb0a2afe32f820c195b6fcfeb3f33abebc9335"
+  integrity sha512-7eBfNSFtJ366f3iLtOchuMY8a4+n8wAyVlVYeyh8d9EdxAytieYU+zjjluXYGSczqKKKFrP4tE/8Y3TJtQBhCg==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    extendable-media-recorder-wav-encoder-broker "^7.0.88"
+    tslib "^2.6.1"
+    worker-factory "^7.0.9"
+
+media-encoder-host@^8.0.76:
+  version "8.0.99"
+  resolved "https://registry.npmmirror.com/media-encoder-host/-/media-encoder-host-8.0.99.tgz#7a0a2c274cad1a869f763f048db5ab9c7ffe4059"
+  integrity sha512-F+4v70AsYbDO4d9TusWDDeSbdJuRK5XlcAsv29o2vbv4Cn212WwR78w9MYEq0iBAkkHg9/aLrJpog3Yhz5BzFQ==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    media-encoder-host-broker "^7.0.89"
+    media-encoder-host-worker "^9.1.11"
+    tslib "^2.6.1"
+
 media-query-parser@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npmmirror.com/media-query-parser/-/media-query-parser-2.0.2.tgz#ff79e56cee92615a304a1c2fa4f2bd056c0a1d29"
@@ -5256,6 +5405,14 @@ ms@^2.0.0, ms@^2.1.1:
   version "2.1.3"
   resolved "https://registry.npmmirror.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
+
+multi-buffer-data-view@^3.0.20:
+  version "3.0.24"
+  resolved "https://registry.npmmirror.com/multi-buffer-data-view/-/multi-buffer-data-view-3.0.24.tgz#5c9be6445812f6ececc901e6e0eb57ef02312aea"
+  integrity sha512-jm7Ycplx37ExXyQmqhwl7zfQmAj81y5LLzVx0XyWea4omP9W/xJhLEHs/5b+WojGyYSRt8BHiXZVcYzu68Ma0Q==
+  dependencies:
+    "@babel/runtime" "^7.20.6"
+    tslib "^2.4.1"
 
 multiformats@^9.4.2:
   version "9.9.0"
@@ -5903,6 +6060,14 @@ react-is@^16.13.1:
   resolved "https://registry.npmmirror.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-media-recorder@^1.6.6:
+  version "1.6.6"
+  resolved "https://registry.npmmirror.com/react-media-recorder/-/react-media-recorder-1.6.6.tgz#4067c54e3f11c56f33a7df9daa1650a7aa4305f1"
+  integrity sha512-VdC4bUINMWJyqOAHw1DaZ8HZhdCyVBK85zJ4cHMo9tsrekui3wq5ZxNtBmNe6nbAFQBTNj/pRnLEsiVrCW+TNQ==
+  dependencies:
+    extendable-media-recorder "^6.6.5"
+    extendable-media-recorder-wav-encoder "^7.0.68"
+
 react-remove-scroll-bar@^2.3.3:
   version "2.3.4"
   resolved "https://registry.npmmirror.com/react-remove-scroll-bar/-/react-remove-scroll-bar-2.3.4.tgz#53e272d7a5cb8242990c7f144c44d8bd8ab5afd9"
@@ -5995,6 +6160,28 @@ real-require@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmmirror.com/real-require/-/real-require-0.1.0.tgz#736ac214caa20632847b7ca8c1056a0767df9381"
   integrity sha512-r/H9MzAWtrv8aSVjPCMFpDMl5q66GqtmmRkRjpHTsp4zBAa+snZyiQNlMONiUmEJcsnaw0wCauJ2GWODr/aFkg==
+
+recorder-audio-worklet-processor@^4.2.21:
+  version "4.2.21"
+  resolved "https://registry.npmmirror.com/recorder-audio-worklet-processor/-/recorder-audio-worklet-processor-4.2.21.tgz#24129ffda37084543b9f639ab1367dd2618b4881"
+  integrity sha512-oiiS2sp6eMxkvjt13yetSYUJvnAxBZk60mIxz0Vf/2lDWa/4svCyMLHIDzYKbHahkISd0UYyqLS9dI7xDlUOCA==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    tslib "^2.5.0"
+
+recorder-audio-worklet@^5.1.26:
+  version "5.1.39"
+  resolved "https://registry.npmmirror.com/recorder-audio-worklet/-/recorder-audio-worklet-5.1.39.tgz#7bbffd2d4e7028e0954c68350e50177e05acaa7f"
+  integrity sha512-w/RazoBwZnkFnEPRsJYNThOHznLQC98/IzWRrutpJQVvCcL0nbLsVSLDaRrnrqVpRUI11VgiXRh30HaHiSdVhQ==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    broker-factory "^3.0.75"
+    fast-unique-numbers "^7.0.2"
+    recorder-audio-worklet-processor "^4.2.21"
+    standardized-audio-context "^25.3.41"
+    subscribable-things "^2.1.14"
+    tslib "^2.5.0"
+    worker-factory "^6.0.76"
 
 regenerator-runtime@^0.13.11:
   version "0.13.11"
@@ -6120,6 +6307,11 @@ run-parallel@^1.1.9:
   integrity sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==
   dependencies:
     queue-microtask "^1.2.2"
+
+rxjs-interop@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/rxjs-interop/-/rxjs-interop-2.0.0.tgz#dca61a93789a8304f653d2e159e377cefa348ec7"
+  integrity sha512-ASEq9atUw7lualXB+knvgtvwkCEvGWV2gDD/8qnASzBkzEARZck9JAyxmY8OS6Nc1pCPEgDTKNcx+YqqYfzArw==
 
 rxjs@^6.6.3:
   version "6.6.7"
@@ -6343,6 +6535,15 @@ split2@^4.0.0:
   resolved "https://registry.npmmirror.com/split2/-/split2-4.2.0.tgz#c9c5920904d148bab0b9f67145f245a86aadbfa4"
   integrity sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==
 
+standardized-audio-context@^25.3.29, standardized-audio-context@^25.3.41:
+  version "25.3.55"
+  resolved "https://registry.npmmirror.com/standardized-audio-context/-/standardized-audio-context-25.3.55.tgz#4d87ea6052de80ecf5abf56eb71ecd71f7e52e4e"
+  integrity sha512-ym9g7FZ5S1FykbQ1///ktTJgk+zTtGF1hGR/BFRQjRkN6G2Xy9GbL5kOcM7DlzflV2yJtqVwfU2gL042b1oHwg==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    automation-events "^6.0.8"
+    tslib "^2.6.1"
+
 stream-browserify@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmmirror.com/stream-browserify/-/stream-browserify-3.0.0.tgz#22b0a2850cdf6503e73085da1fc7b7d0c2122f2f"
@@ -6484,6 +6685,15 @@ styled-jsx@5.1.1:
   integrity sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==
   dependencies:
     client-only "0.0.1"
+
+subscribable-things@^2.1.14, subscribable-things@^2.1.6:
+  version "2.1.23"
+  resolved "https://registry.npmmirror.com/subscribable-things/-/subscribable-things-2.1.23.tgz#049ecb0997c4351d3917cb14c217e5f72fbd00cf"
+  integrity sha512-ks4rvqxofzIcXzOdRUCoNbAptNzsoa1LEJEbJBCy/ADahzWNEiy1Oa3LpRVw12QcTGUXHblxO4Gpb+JQNjprKQ==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    rxjs-interop "^2.0.0"
+    tslib "^2.6.1"
 
 sucrase@^3.32.0:
   version "3.34.0"
@@ -6660,6 +6870,11 @@ tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.5.0, tslib@^2.6
   version "2.6.0"
   resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.0.tgz#b295854684dbda164e181d259a22cd779dcd7bc3"
   integrity sha512-7At1WUettjcSRHXCyYtTselblcHl9PJFFVKiCAy/bY97+BPZXSQ2wbq0P9s8tK2G7dFQfNnlJnPAiArVBVBsfA==
+
+tslib@^2.4.1, tslib@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.6.1.tgz#fd8c9a0ff42590b25703c0acb3de3d3f4ede0410"
+  integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
 
 tsutils@^3.21.0:
   version "3.21.0"
@@ -6954,6 +7169,26 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
+worker-factory@^6.0.76:
+  version "6.0.76"
+  resolved "https://registry.npmmirror.com/worker-factory/-/worker-factory-6.0.76.tgz#78f86a300b959b1b5ebe010f042aae22e72346e4"
+  integrity sha512-W1iBNPmE9p0asU4aFmYJYCnMxhkvk4qlKc660GlHxWgmflY64NxxTbmKqipu4K5p9LiKKPjqXfcQme6153BZEQ==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    compilerr "^10.0.2"
+    fast-unique-numbers "^7.0.2"
+    tslib "^2.5.0"
+
+worker-factory@^7.0.9:
+  version "7.0.9"
+  resolved "https://registry.npmmirror.com/worker-factory/-/worker-factory-7.0.9.tgz#385b12b41ae81ca74bf99d9f823dd90cfe53fc55"
+  integrity sha512-t5tPtTLXh663SzgCW/2oFSLtsKZYI3Oko/lcOgrakH2EZ8Qm9p0zea/ceGmiEwwVgVdqjg+xE8AboIOwY3A7iA==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    compilerr "^11.0.8"
+    fast-unique-numbers "^8.0.7"
+    tslib "^2.6.1"
+
 wrap-ansi@^6.2.0:
   version "6.2.0"
   resolved "https://registry.npmmirror.com/wrap-ansi/-/wrap-ansi-6.2.0.tgz#e9393ba07102e6c91a3b221478f0257cd2856e53"
@@ -7071,7 +7306,7 @@ zod@3.21.4:
   resolved "https://registry.npmmirror.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
 
-zustand@^4.3.1:
+zustand@^4.3.1, zustand@^4.3.9:
   version "4.3.9"
   resolved "https://registry.npmmirror.com/zustand/-/zustand-4.3.9.tgz#a7d4332bbd75dfd25c6848180b3df1407217f2ad"
   integrity sha512-Tat5r8jOMG1Vcsj8uldMyqYKC5IZvQif8zetmLHs9WoZlntTHmIoNM8TpLRY31ExncuUvUOXehd0kvahkuHjDw==

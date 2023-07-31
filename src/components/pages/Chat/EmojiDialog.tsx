@@ -1,13 +1,55 @@
 import { Dialog, Transition } from '@headlessui/react'
+import { Checkbox } from '@nextui-org/react'
 import { Fragment, useState } from 'react'
 
 interface Props {
   isOpen: boolean
+  type: string
   closeModal: () => void
   selectedOK: (x: string) => void
 }
-export function EmojiDialog({ isOpen, closeModal, selectedOK }: Props) {
+export function EmojiDialog({ isOpen, closeModal, selectedOK, type }: Props) {
   const [selected, setSelected] = useState('')
+  const [selectedGroupMember, setSelectedGroupMember] = useState(['buenos-aires', 'sydney'])
+
+  const render = () => {
+    switch (type) {
+      case 'addGroup':
+        return <> < Dialog.Title
+                    as="h2"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                >
+                    Add Group
+                </Dialog.Title >
+                    <br />
+                    <Checkbox.Group
+                        color="secondary"
+                        defaultValue={['buenos-aires']}
+                        label="Select cities"
+                        value={selectedGroupMember}
+                        onChange={setSelectedGroupMember}
+                    >
+                        <Checkbox value="buenos-aires">Buenos Aires</Checkbox>
+                        <Checkbox value="sydney">Sydney</Checkbox>
+                        <Checkbox value="london">London</Checkbox>
+                        <Checkbox value="tokyo">Tokyo</Checkbox>
+                    </Checkbox.Group>
+                </>
+      case 'emoji':
+        return <> < Dialog.Title
+                    as="h2"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                >
+                    Add Reaction
+                </Dialog.Title >
+                    <div className="mt-2">
+                        <div className="grid overflow-y-scroll h-[300px] grid-cols-12  scrollbar-hide text-2xl  scrollbar-thick scrollbar-thumb-blue-500 scrollbar-track-blue-100">
+                            {'😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 🥰 😗 😙 😚 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 🥵 🥶 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🥳 🥴 🥺 🤥 🤫 🤭 🧐 🤓 👩‍👧‍👦 👩‍👦‍👦 👩‍👧‍👧 👨‍👦 👨‍👧 👨‍👧‍👦 👨‍👦‍👦 👨‍👧‍👧 🤲 👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤟 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🦵 🦶 🖕 ✍️ 🤲🏻 👐🏻 🙌🏻 👏🏻 🙏🏻 👍🏻 👎🏻 👊🏻 ✊🏻 🤛🏻 🤜🏻 🤞🏻 ✌🏻 🤟🏻 🤘🏻 👌🏻 👈🏻 👉🏻 👆🏻 👇🏻 ☝🏻 ✋🏻 🤚🏻 🖐🏻 🖖🏻 👋🏻 🤙🏻 💪🏻 🖕🏻 ✍🏻 🤳🏻 💅🏻 👂🏻 🤲🏼 👐🏼 🙌🏼 👏🏼 🙏🏼 👍🏼 👎🏼 👊🏼 ✊🏼 🤛🏼 🤜🏼 🤞🏼 ✌🏼 🤟🏼 🤘🏼 👌🏼 👈🏼 👉🏼 👆🏼 👇🏼 ☝🏼 ✋🏼 🤚🏼 🖐🏼 🖖🏼 👋🏼 🤙🏼 💪🏼 🖕🏼 ✍🏼 🤳🏼'.split(' ').map(t => <span onClick={() => setSelected(t)} className={`cursor-pointer flex justify-center rounded-md hover:bg-slate-200 ${selected === t ? 'bg-slate-200' : ''}`} > {t}</span>)}
+                        </div>
+                    </div>
+                </>
+    }
+  }
   return <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
             <Transition.Child
@@ -34,24 +76,14 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK }: Props) {
                         leaveTo="opacity-0 scale-95"
                     >
                         <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                            <Dialog.Title
-                                as="h2"
-                                className="text-lg font-medium leading-6 text-gray-900"
-                            >
-                                Add Reaction
-                            </Dialog.Title>
-                            <div className="mt-2">
-                                <div className="grid overflow-y-scroll h-[300px] grid-cols-12  scrollbar-hide text-2xl  scrollbar-thick scrollbar-thumb-blue-500 scrollbar-track-blue-100">
-                                    {'😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 🥰 😗 😙 😚 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 🥵 🥶 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🥳 🥴 🥺 🤥 🤫 🤭 🧐 🤓 👩‍👧‍👦 👩‍👦‍👦 👩‍👧‍👧 👨‍👦 👨‍👧 👨‍👧‍👦 👨‍👦‍👦 👨‍👧‍👧 🤲 👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤟 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🦵 🦶 🖕 ✍️ 🤲🏻 👐🏻 🙌🏻 👏🏻 🙏🏻 👍🏻 👎🏻 👊🏻 ✊🏻 🤛🏻 🤜🏻 🤞🏻 ✌🏻 🤟🏻 🤘🏻 👌🏻 👈🏻 👉🏻 👆🏻 👇🏻 ☝🏻 ✋🏻 🤚🏻 🖐🏻 🖖🏻 👋🏻 🤙🏻 💪🏻 🖕🏻 ✍🏻 🤳🏻 💅🏻 👂🏻 🤲🏼 👐🏼 🙌🏼 👏🏼 🙏🏼 👍🏼 👎🏼 👊🏼 ✊🏼 🤛🏼 🤜🏼 🤞🏼 ✌🏼 🤟🏼 🤘🏼 👌🏼 👈🏼 👉🏼 👆🏼 👇🏼 ☝🏼 ✋🏼 🤚🏼 🖐🏼 🖖🏼 👋🏼 🤙🏼 💪🏼 🖕🏼 ✍🏼 🤳🏼'.split(' ').map(t => <span onClick={() => setSelected(t)} className={`cursor-pointer flex justify-center rounded-md hover:bg-slate-200 ${selected === t ? 'bg-slate-200' : ''}`} > {t}</span>)}
-                                </div>
-                            </div>
+                            {render()}
 
                             <div className="mt-4 flex flex-row-reverse">
 
                                 <button
                                     type="button"
                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    onClick={() => selectedOK(selected)}
+                                    onClick={() => selectedOK(type === 'emoji' ? selected : selectedGroupMember)}
                                 >
                                     OK!
                                 </button>

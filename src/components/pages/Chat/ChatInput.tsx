@@ -25,7 +25,7 @@ export function ChatInput({ type }: Props) {
   const chatInputRef = useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const { address, isConnected } = useAccount()
-  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type })
+  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
 
   function closeModal() {
     setIsOpen(false)
@@ -33,9 +33,6 @@ export function ChatInput({ type }: Props) {
 
   function openModal() {
     setIsOpen(true)
-  }
-  const onChainData = () => {
-    return `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`
   }
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
@@ -69,7 +66,7 @@ export function ChatInput({ type }: Props) {
     setSendDataOnChain({ ...sendDataOnChain, text: newValue })
   }
   return <div className='p-4  w-full  min-h-[130px] '>
-    <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} />
+    <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
 
     {isSuccess ? <Notifications data={data?.hash} /> : null}
     <div className='bg-neutral-200/40 dark:bg-neutral-500/30 h-full rounded-xl flex justify-between flex-col p-2 '>
@@ -97,7 +94,6 @@ export function ChatInput({ type }: Props) {
             })}
           </div>
         </>}
-
       <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target?.files && e.target?.files[0]
         const reader = new FileReader()
@@ -105,7 +101,7 @@ export function ChatInput({ type }: Props) {
           const dataURL = reader.result as string
           setPictureArr([...pictureArr, dataURL])
         }
-        reader.readAsDataURL(file)
+        file && reader.readAsDataURL(file)
       }} className='w-0 h-0 none' />
       <div className=' border-b m-2 border-neutral-300 dark:border-neutral-600' />
       <div className="h-full mx-3 flex items-center justify-between">
