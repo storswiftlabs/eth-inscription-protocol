@@ -9,10 +9,10 @@ interface Props {
   foll: string
 }
 
-function SolidX({ foll }: Props) {
+function Solid({ foll }: Props) {
   return (
-    <div className={`w-full border-${foll}-[0.5px] border-${foll}-[red] dark:border-y-[#262626]`} />
+    <div className={`w-full border-y-[0.5px] border-y-[#edecf3] dark:border-y-[#262626]`} />
   )
 }
 
-export default SolidX
+export default Solid
