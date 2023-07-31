@@ -97,7 +97,6 @@ export function ChatInput({ type }: Props) {
             })}
           </div>
         </>}
-
       <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target?.files && e.target?.files[0]
         const reader = new FileReader()
@@ -105,7 +104,7 @@ export function ChatInput({ type }: Props) {
           const dataURL = reader.result as string
           setPictureArr([...pictureArr, dataURL])
         }
-        reader.readAsDataURL(file)
+        file && reader.readAsDataURL(file)
       }} className='w-0 h-0 none' />
       <div className=' border-b m-2 border-neutral-300 dark:border-neutral-600' />
       <div className="h-full mx-3 flex items-center justify-between">

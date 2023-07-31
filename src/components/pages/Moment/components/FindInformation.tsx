@@ -8,6 +8,7 @@ import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../C
 import { FillColor } from '@/type/Chat'
 import { BackIcon, GreaterIcon, KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
+import DialogueInput from './DialogueInput'
 
 
 interface Props {
@@ -79,28 +80,9 @@ function FindInformation({ type }: Props) {
           <Col className='underline-on-hover'>21.2K Likes</Col>
           <Col>221 Bookmarks</Col>
         </Row>
-        <Row className='reply border-b border-[#edecf3] dark:border-[#262626]' >
-          <User css={{ padding: "0", }} src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="" />
-          <Row wrap='wrap' justify='space-between'>
-            <div style={{ width: '100%' }}>
-              <Textarea css={{
-                '.nextui-c-eXOOPO:hover': {
-                  border: 'none',
-                },
-                color: "#fff",
-                '.nextui-c-jeuecp': { color: theme === 'dark' ? "#fff" : "#000" },
-                '.nextui-c-boZsAS': { border: theme === 'dark' ? "2px solid #edecf3" : "2px solid #262626" }, '.nextui-c-boZsAS:focus-visible': { border: theme === 'dark' ? "2px solid #edecf3" : "2px solid #262626" }
-              }} bordered fullWidth placeholder="Default Textarea !" />
-            </div>
-            <Row className='cursor gap-4 mt-2'>
-              <EmojiIcon fill={handleFillColor()}></EmojiIcon>
-              <LockIcon fill={handleFillColor()}></LockIcon>
-              <PictureIcon fill={handleFillColor()}></PictureIcon>
-              <SpeechIcon fill={handleFillColor()}></SpeechIcon>
-              <CloudIcon fill={handleFillColor()}></CloudIcon>
-            </Row>
-          </Row>
-        </Row>
+
+        <DialogueInput />
+
         <Spacer y={1} />
         {
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, j) => (
