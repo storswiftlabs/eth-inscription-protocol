@@ -53,11 +53,11 @@ func newInscriptionRepo() (biz.InscriptionRepo, error) {
 
 func TestInscriptionRepo_InsertProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3",
-		Image:   "",
-		Text:    "sui",
-		Height:  10000,
-		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b",
+		Address: "ddd",
+		Image:   "ipfs://test",
+		Text:    "ddd",
+		Height:  100005,
+		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b5",
 		TrxTime: time.Now(),
 	}
 
@@ -69,9 +69,9 @@ func TestInscriptionRepo_InsertProfile(t *testing.T) {
 
 func TestInscriptionRepo_UpdateProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3",
+		Address: "0x9d4841ad749878456c9d65",
 		Image:   "",
-		Text:    "aptos",
+		Text:    "aptos5",
 		Height:  20000,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b",
 		TrxTime: time.Now(),
@@ -85,11 +85,11 @@ func TestInscriptionRepo_UpdateProfile(t *testing.T) {
 
 func TestInscriptionRepo_InsertGroup(t *testing.T) {
 	group := &module.Group{
-		Title:    "sui1",
-		Receiver: []string{"0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3", "aa"},
-		Height:   100000,
-		TrxHash:  "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3",
-		TrxTime:  time.Now(),
+		Address: "0x123456789r4",
+		Title:   "eth2",
+		Height:  1000001,
+		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3q",
+		TrxTime: time.Now(),
 	}
 	err := aRepo.InsertGroup(context.Background(), group)
 	if err != nil {
@@ -97,15 +97,14 @@ func TestInscriptionRepo_InsertGroup(t *testing.T) {
 	}
 }
 
-func TestInscriptionRepo_UpdateGroup(t *testing.T) {
+func TestInscriptionRepo_DeleteGroupByAddressAndTitle(t *testing.T) {
 	group := &module.Group{
-		Title:    "sui",
-		Receiver: []string{"0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3", "bb"},
-		Height:   200000,
-		TrxHash:  "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3",
-		TrxTime:  time.Now(),
+		Address: "0x123456789r4",
+		Title:   "eth2",
+		//Height:  1000001,
+		//TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3q",
 	}
-	err := aRepo.UpdateGroup(context.Background(), group)
+	err := aRepo.DeleteGroupByAddressAndTitle(context.Background(), group)
 	if err != nil {
 		t.Log(err)
 	}
@@ -113,12 +112,12 @@ func TestInscriptionRepo_UpdateGroup(t *testing.T) {
 
 func TestInscriptionRepo_InsertMessage(t *testing.T) {
 	message := &module.Message{
-		Receiver: "0x9d4841ad7498784561",
-		Sender:   "0x9d4841ad74987845624",
-		Text:     "this is inscription",
-		Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
-		At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
-		With:     "0x9d4841ad74987845612",
+		Receiver: "bbb",
+		Sender:   "aaa",
+		Text:     "test9",
+		//Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		//At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		//With:     "0x9d4841ad74987845612",
 		Height:   300000,
 		TrxHash:  "0x9d4841ad7498784564",
 		TrxTime:  time.Now(),
@@ -132,13 +131,12 @@ func TestInscriptionRepo_InsertMessage(t *testing.T) {
 
 func TestInscriptionRepo_InsertGroupMessage(t *testing.T) {
 	groupMessage := &module.GroupMessage{
-		Title:    "sui",
-		Receiver: []string{"0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3", "bb"},
-		Sender:   "0x9d4841ad7498784561",
-		Text:     "this is scipt",
-		Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
-		At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
-		With:     "0x9d4841ad7498784562",
+		Title:    "group2",
+		Sender:   "0x2",
+		Text:     "test2",
+		//Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		//At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		With:     "0x1112",
 		Height:   3000000,
 		TrxHash:  "0x9d4841ad7498784562",
 		TrxTime:  time.Now(),
@@ -151,13 +149,13 @@ func TestInscriptionRepo_InsertGroupMessage(t *testing.T) {
 
 func TestInscriptionRepo_InsertTweet(t *testing.T) {
 	tweet := &module.Tweet{
-		TrxHash: "0x9d4841ad749878456132",
-		Sender:  "0x9d4841ad7498784562",
-		Title:   "sui",
-		Text:    "this is inscription",
+		TrxHash: "0x11113",
+		Sender:  "0x13",
+		Title:   "sui3",
+		Text:    "this is inscription3",
 		Image:   []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		At:      nil,
-		With:    "0x9d4841ad7498784563",
+		//With:    "0x9d4841ad7498784563",
 		Height:  200000,
 		TrxTime: time.Now(),
 	}
@@ -170,9 +168,9 @@ func TestInscriptionRepo_InsertTweet(t *testing.T) {
 
 func TestInscriptionRepo_InsertComment(t *testing.T) {
 	comment := &module.Comment{
-		With:    "0x9d4841ad74987845612",
-		Sender:  "0x9d4841ad7498784562",
-		Text:    "this is inscription",
+		With:    "0x9d4841ad749878456132",
+		Sender:  "0x1",
+		Text:    "0x1 commnet",
 		Image:   nil,
 		At:      []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		Height:  20000,
@@ -187,8 +185,8 @@ func TestInscriptionRepo_InsertComment(t *testing.T) {
 
 func TestInscriptionRepo_InsertLike(t *testing.T) {
 	like := &module.Like{
-		With:    "0x9d4841ad74987845612",
-		Sender:  "0x9d4841ad7498784562",
+		With:    "0x1111",
+		Sender:  "aaac",
 		Height:  1000,
 		TrxHash: "0x9d4841ad7498784563",
 		TrxTime: time.Now(),
@@ -201,11 +199,35 @@ func TestInscriptionRepo_InsertLike(t *testing.T) {
 
 func TestInscriptionRepo_InsertFollow(t *testing.T) {
 	follow := &module.Follow{
-		Address:  "0x9d4841ad74987845613",
-		Follower: "0x9d4841ad7498784562",
+		Address:  "1112",
+		Follower: "0x2141111",
 	}
 	err := aRepo.InsertFollow(context.Background(), follow)
 	if err != nil {
 		t.Log(err)
 	}
+}
+
+func TestInscriptionRepo_InsertMessageWindow(t *testing.T) {
+	mw := &module.MessageWindow{
+		Owner: "qwe",
+		Link:  "ddd",
+	}
+	err := aRepo.InsertMessageWindow(context.Background(), mw)
+	if err != nil {
+		t.Log(err)
+	}
+}
+
+func TestInscriptionRepo_GetMessageWindowByOwner(t *testing.T) {
+	owner, err := aRepo.GetMessageWindowByOwner(context.Background(), "qwe")
+	if err != nil {
+		t.Log(err)
+	}
+	t.Log(owner)
+}
+
+func TestInscriptionRepo_GetLikeByTrxHash(t *testing.T) {
+	hash, b, err := aRepo.GetLikeByTrxHash(context.Background(), "0x1111", "aaac")
+	t.Log(hash, "\n", b, "\n", err)
 }

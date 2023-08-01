@@ -46,12 +46,16 @@ func (s *InscriptionService) GetGroup(ctx context.Context, req *pb.ByAddress) (*
 	}
 	swiftResponses := make([]*pb.SwiftResponse, len(groups))
 	for k, v := range groups {
+		receiver, err := s.uc.GetGroupReceiverHandle(ctx, v.Title)
+		if err != nil {
+			s.log.Warn(err)
+		}
 		swiftResponses[k] = &pb.SwiftResponse{
 			Type:     "group",
 			Title:    v.Title,
 			Text:     "",
 			Image:    nil,
-			Receiver: nil,
+			Receiver: receiver,
 			At:       nil,
 			With:     "",
 			Height:   v.Height,
@@ -63,8 +67,37 @@ func (s *InscriptionService) GetGroup(ctx context.Context, req *pb.ByAddress) (*
 	return &pb.SwiftResponses{Groups: swiftResponses}, nil
 }
 
-func (s *InscriptionService) GetMessage(ctx context.Context, req *pb.GetMessageReq) (*pb.SwiftResponses, error) {
-	messages, err := s.uc.GetMessageHandle(ctx, req.Owner)
+func (s *InscriptionService) GetMessageWindow(ctx context.Context, req *pb.GetMessageWindowReq) (*pb.MessageWindow, error) {
+	profiles, err := s.uc.GetMessageWindowHandle(ctx, req.Owner)
+	if err != nil {
+		s.log.Warn(err)
+	}
+	swiftResponses := make([]*pb.SwiftResponse, len(profiles))
+	for k, v := range profiles {
+		swiftResponses[k] = &pb.SwiftResponse{
+			Type:     "profile",
+			Title:    "",
+			Text:     v.Text,
+			Image:    []string{v.Image},
+			Receiver: nil,
+			At:       nil,
+			With:     "",
+			Height:   v.Height,
+			TrxHash:  v.TrxHash,
+			TrxTime:  v.TrxTime.String(),
+			Sender:   v.Address,
+		}
+	}
+	return &pb.MessageWindow{Profiles: swiftResponses}, nil
+}
+
+func (s *InscriptionService) GetMessage(ctx context.Context, req *pb.GetMessageReq) (*pb.GetMessageResponse, error) {
+	messages, err := s.uc.GetMessageHandle(ctx, &module.GetMTReq{
+		Owner:   req.Owner,
+		Address: req.To,
+		Limit:   req.Limit,
+		Offset:  req.Offset,
+	})
 	if err != nil {
 		s.log.Warn(err)
 	}
@@ -84,11 +117,16 @@ func (s *InscriptionService) GetMessage(ctx context.Context, req *pb.GetMessageR
 			Sender:   v.Sender,
 		}
 	}
-	return &pb.SwiftResponses{Groups: swiftResponses}, nil
+	return &pb.GetMessageResponse{Messages: swiftResponses}, nil
 }
 
-func (s *InscriptionService) GetGroupMessage(ctx context.Context, req *pb.GetGroupMessageReq) (*pb.SwiftResponses, error) {
-	groupMessages, err := s.uc.GetGroupMessageHandle(ctx, req.Title, req.Owner)
+func (s *InscriptionService) GetGroupMessage(ctx context.Context, req *pb.GetGroupMessageReq) (*pb.GetMessageResponse, error) {
+	groupMessages, err := s.uc.GetGroupMessageHandle(ctx, &module.GetMTReq{
+		Owner:   req.Title,
+		Address: "",
+		Limit:   req.Limit,
+		Offset:  req.Offset,
+	})
 	if err != nil {
 		s.log.Warn(err)
 	}
@@ -108,7 +146,7 @@ func (s *InscriptionService) GetGroupMessage(ctx context.Context, req *pb.GetGro
 			Sender:   v.Sender,
 		}
 	}
-	return &pb.SwiftResponses{Groups: swiftResponses}, nil
+	return &pb.GetMessageResponse{Messages: swiftResponses}, nil
 }
 
 func (s *InscriptionService) GetTweet(ctx context.Context, req *pb.GetTweetReq) (*pb.TweetResponse, error) {
@@ -189,7 +227,7 @@ func (s *InscriptionService) GetTweetByAddress(ctx context.Context, req *pb.GetT
 	return &pb.TweetResponse{Tweets: tweetResponse}, err
 }
 
-func (s *InscriptionService) GetFollower(ctx context.Context, req *pb.ByAddress) (*pb.SwiftResponses, error) {
+func (s *InscriptionService) GetFollower(ctx context.Context, req *pb.ByAddress) (*pb.GetFollowerResponse, error) {
 	profiles, err := s.uc.GetFollowerHandler(ctx, req.Address)
 	if err != nil {
 		s.log.Warn(err)
@@ -210,7 +248,7 @@ func (s *InscriptionService) GetFollower(ctx context.Context, req *pb.ByAddress)
 			Sender:   "",
 		}
 	}
-	return &pb.SwiftResponses{Groups: swiftResponses}, nil
+	return &pb.GetFollowerResponse{Follower: swiftResponses}, nil
 }
 
 func tweetChangeSwiftResponse(tweet module.Tweet) *pb.SwiftResponse {

@@ -22,7 +22,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+                                $ref: '#/components/schemas/api.inscription.v1.GetFollowerResponse'
     /api/follow_tweet:
         get:
             tags:
@@ -77,22 +77,59 @@ paths:
                   in: query
                   schema:
                     type: string
-                - name: owner
+                - name: limit
                   in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int64
+                - name: offset
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+                                $ref: '#/components/schemas/api.inscription.v1.GetMessageResponse'
     /api/message:
         get:
             tags:
                 - Inscription
             operationId: Inscription_GetMessage
+            parameters:
+                - name: owner
+                  in: query
+                  schema:
+                    type: string
+                - name: to
+                  in: query
+                  schema:
+                    type: string
+                - name: limit
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+                - name: offset
+                  in: query
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.GetMessageResponse'
+    /api/message_window:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetMessageWindow
             parameters:
                 - name: owner
                   in: query
@@ -104,7 +141,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponses'
+                                $ref: '#/components/schemas/api.inscription.v1.MessageWindow'
     /api/profile:
         get:
             tags:
@@ -173,6 +210,27 @@ paths:
                                 $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
 components:
     schemas:
+        api.inscription.v1.GetFollowerResponse:
+            type: object
+            properties:
+                follower:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+        api.inscription.v1.GetMessageResponse:
+            type: object
+            properties:
+                messages:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+        api.inscription.v1.MessageWindow:
+            type: object
+            properties:
+                profiles:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
         api.inscription.v1.SwiftResponse:
             type: object
             properties:

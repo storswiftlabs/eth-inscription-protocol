@@ -26,6 +26,7 @@ func (r *inscriptionRepo) InsertProfile(ctx context.Context, profile *module.Pro
 	return err
 }
 
+// TODO 创建时候插入N条
 func (r *inscriptionRepo) InsertGroup(ctx context.Context, group *module.Group) error {
 	_, err := r.data.postgre.Insert(group)
 	return err
@@ -61,18 +62,23 @@ func (r *inscriptionRepo) InsertLike(ctx context.Context, like *module.Like) err
 	return err
 }
 
-func (r *inscriptionRepo) InsertRecord(ctx context.Context, record *module.Record) error {
-	_, err := r.data.postgre.Insert(record)
+// TODO 每产生一条message 插入两条记录
+func (r *inscriptionRepo) InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error {
+	exist, _ := r.ExistMessageWindow(ctx, messageWindow)
+	if exist == true {
+		return nil
+	}
+	_, err := r.data.postgre.Insert(messageWindow)
 	return err
+}
+
+func (r *inscriptionRepo) ExistMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) (bool, error) {
+	exist, err := r.data.postgre.Exist(messageWindow)
+	return exist, err
 }
 
 func (r *inscriptionRepo) UpdateProfile(ctx context.Context, profile *module.Profile) error {
 	_, err := r.data.postgre.Where("address = ?", profile.Address).Update(profile)
-	return err
-}
-
-func (r *inscriptionRepo) UpdateRecord(ctx context.Context, record *module.Record) error {
-	_, err := r.data.postgre.Where("owner = ?", record.Owner).Update(record)
 	return err
 }
 
@@ -81,21 +87,26 @@ func (r *inscriptionRepo) DeleteGroupByAddressAndTitle(ctx context.Context, grou
 	return err
 }
 
-func (r *inscriptionRepo) GetRecordByAddress(ctx context.Context, address string) (*module.Record, error) {
-	record := new(module.Record)
-	_, err := r.data.postgre.Where("owner = ?", address).Get(record)
-	return record, err
+func (r *inscriptionRepo) GetMessageWindowByOwner(ctx context.Context, owner string) ([]*module.Profile, error){
+	var link []string
+	err := r.data.postgre.Table("message_window").Cols("link").Where("owner = ?", owner).Find(&link)
+	if err != nil {
+		return nil, err
+	}
+	profiles := make([]*module.Profile, len(link))
+	for k, v := range link {
+		profile, err := r.GetProfile(ctx, &module.Profile{Address: v})
+		if err != nil {
+			r.log.Warn(err)
+		}
+		profiles[k] = profile
+	}
+	return profiles, nil
 }
 
 func (r *inscriptionRepo) GetProfile(ctx context.Context, profile *module.Profile) (*module.Profile, error) {
 	_, err := r.data.postgre.Get(profile)
 	return profile, err
-}
-
-func (r *inscriptionRepo) GetLatestId() int64 {
-	tweet := new(module.Tweet)
-	_, _ = r.data.postgre.Desc("id").Get(tweet)
-	return tweet.Id
 }
 
 func (r *inscriptionRepo) FindGroupByAddress(ctx context.Context, address string) ([]*module.Group, error) {
@@ -104,41 +115,21 @@ func (r *inscriptionRepo) FindGroupByAddress(ctx context.Context, address string
 	return group, err
 }
 
-func (r *inscriptionRepo) FindMessageByAddress(ctx context.Context, owner string) ([]*module.Message, error) {
-	message := make([]*module.Message, 0)
-	record, err := r.GetRecordByAddress(ctx, owner)
+func (r *inscriptionRepo) FindGroupReceiverByTitle(ctx context.Context, title string) ([]string, error) {
+	var receiver []string
+	err := r.data.postgre.Table("group").Cols("address").Where("title = ?", title).Find(&receiver)
+	return receiver, err
+}
 
-	err = r.data.postgre.Where("receiver = ? AND id >= ?", owner, record.Last).Or("sender = ? AND id >= ?", record.Last).Find(&message)
-	if record.Last == 0 {
-		_ = r.InsertRecord(ctx, &module.Record{
-			Owner: owner,
-			Last:  r.GetLatestId(),
-		})
-	} else {
-		_ = r.UpdateRecord(ctx, &module.Record{
-			Owner: owner,
-			Last:  r.GetLatestId(),
-		})
-	}
+func (r *inscriptionRepo) FindMessageByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error) {
+	message := make([]*module.Message, 0)
+	err := r.data.postgre.Where("receiver = ? AND sender = ?", req.Owner, req.Address).Or("sender = ? AND receiver = ?", req.Owner, req.Address).Limit(int(req.Limit), int(req.Offset)).Find(&message)
 	return message, err
 }
 
-func (r *inscriptionRepo) FindGroupMessageByTitle(ctx context.Context, groupName string, owner string) ([]*module.GroupMessage, error) {
+func (r *inscriptionRepo) FindGroupMessageByTitle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error) {
 	groupMessage := make([]*module.GroupMessage, 0)
-	record, _ := r.GetRecordByAddress(ctx, owner)
-
-	err := r.data.postgre.Where("title = ? AND id > ?", groupName, record.Last).Find(&groupMessage)
-	if record.Last == 0 {
-		_ = r.InsertRecord(ctx, &module.Record{
-			Owner: owner,
-			Last:  r.GetLatestId(),
-		})
-	} else {
-		_ = r.UpdateRecord(ctx, &module.Record{
-			Owner: owner,
-			Last:  r.GetLatestId(),
-		})
-	}
+	err := r.data.postgre.Where("title = ?", req.Owner).Limit(int(req.Limit), int(req.Offset)).Find(&groupMessage)
 	return groupMessage, err
 }
 
@@ -185,14 +176,14 @@ func (r *inscriptionRepo) FindFollowTweet(ctx context.Context, req *module.GetMT
 }
 
 func (r *inscriptionRepo) FindTweet(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error) {
-	tweets := make([]*module.Tweets, 0)
 	tweet := make([]*module.Tweet, 0)
 	err := r.data.postgre.Desc("id").Limit(int(req.Limit), int(req.Offset)).Find(&tweet)
 	if err != nil {
 		return nil, err
 	}
-
+	tweets := make([]*module.Tweets, len(tweet))
 	for k, v := range tweet {
+		tmpTweets := new(module.Tweets)
 		likeNum, b, err := r.GetLikeByTrxHash(ctx, v.TrxHash, req.Owner)
 		if err != nil {
 			r.log.Warn(err)
@@ -203,16 +194,17 @@ func (r *inscriptionRepo) FindTweet(ctx context.Context, req *module.GetMTReq) (
 			if err != nil {
 				r.log.Warn(err)
 			}
-			tweets[k].With = *withTweet
+			tmpTweets.With = *withTweet
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
-		tweets[k].Twt = *v
-		tweets[k].LikeNum = likeNum
-		tweets[k].LikeBool = b
-		tweets[k].Comments = comments
+		tmpTweets.Twt = *v
+		tmpTweets.LikeNum = likeNum
+		tmpTweets.LikeBool = b
+		tmpTweets.Comments = comments
+		tweets[k] = tmpTweets
 	}
 	return tweets, err
 }
@@ -272,11 +264,11 @@ func (r *inscriptionRepo) GetLikeByTrxHash(ctx context.Context, hash string, own
 	like := new(module.Like)
 	count, err := r.data.postgre.Where("with = ?", hash).Count(like)
 	if err != nil {
-		return 0, false, err
+		r.log.Info(count, err)
 	}
 	has, err := r.data.postgre.Where("with = ? AND sender = ?", hash, owner).Exist(new(module.Like))
 	if err != nil {
-		return 0, false, err
+		r.log.Info(err)
 	}
 	return count, has, nil
 }

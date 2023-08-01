@@ -61,8 +61,9 @@ func (d *Data) InitDB() {
 	like := new(module.Like)
 	follow := new(module.Follow)
 	record := new(module.Record)
+	messageWindow := new(module.MessageWindow)
 
-	err := d.postgre.CreateTables(profile, group, message, groupMessage, tweet, comment, like, follow, record)
+	err := d.postgre.CreateTables(profile, group, message, groupMessage, tweet, comment, like, follow, record, messageWindow)
 	if err != nil {
 		log.Error(err)
 	}

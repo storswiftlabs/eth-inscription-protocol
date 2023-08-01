@@ -20,10 +20,11 @@ type InscriptionRepo interface {
 	InsertGroup(ctx context.Context, group *module.Group) error
 	DeleteGroupByAddressAndTitle(ctx context.Context, group *module.Group) error
 	FindGroupByAddress(ctx context.Context, address string) ([]*module.Group, error)
+	FindGroupReceiverByTitle(ctx context.Context, title string) ([]string, error)
 	InsertMessage(ctx context.Context, message *module.Message) error
-	FindMessageByAddress(ctx context.Context, owner string) ([]*module.Message, error)
+	FindMessageByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error)
 	InsertGroupMessage(ctx context.Context, groupMessage *module.GroupMessage) error
-	FindGroupMessageByTitle(ctx context.Context, groupName string, owner string) ([]*module.GroupMessage, error)
+	FindGroupMessageByTitle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error)
 	InsertTweet(ctx context.Context, tweet *module.Tweet) error
 	InsertComment(ctx context.Context, comment *module.Comment) error
 	InsertLike(ctx context.Context, like *module.Like) error
@@ -35,10 +36,9 @@ type InscriptionRepo interface {
 	GetTweetByTrxHash(ctx context.Context, hash string) (*module.Tweet, error)
 	FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comment, error)
 	GetLikeByTrxHash(ctx context.Context, hash string, owner string) (int64, bool, error)
-	InsertRecord(ctx context.Context, record *module.Record) error
-	UpdateRecord(ctx context.Context, record *module.Record) error
-	GetRecordByAddress(ctx context.Context, address string) (*module.Record, error)
-	GetLatestId() int64
+	InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error
+	ExistMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) (bool, error)
+	GetMessageWindowByOwner(ctx context.Context, owner string) ([]*module.Profile, error)
 }
 
 // InscriptionUsecase is a inscription usecase.
@@ -62,12 +62,20 @@ func (uc *InscriptionUsecase) GetGroupHandle(ctx context.Context, address string
 	return uc.repo.FindGroupByAddress(ctx, address)
 }
 
-func (uc *InscriptionUsecase) GetMessageHandle(ctx context.Context, owner string) ([]*module.Message, error) {
-	return uc.repo.FindMessageByAddress(ctx, owner)
+func (uc *InscriptionUsecase) GetGroupReceiverHandle(ctx context.Context, title string) ([]string, error) {
+	return uc.repo.FindGroupReceiverByTitle(ctx, title)
 }
 
-func (uc *InscriptionUsecase) GetGroupMessageHandle(ctx context.Context, groupName string, owner string) ([]*module.GroupMessage, error) {
-	return uc.repo.FindGroupMessageByTitle(ctx, groupName, owner)
+func (uc *InscriptionUsecase) GetMessageWindowHandle(ctx context.Context, owner string) ([]*module.Profile, error) {
+	return uc.repo.GetMessageWindowByOwner(ctx, owner)
+}
+
+func (uc *InscriptionUsecase) GetMessageHandle(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error) {
+	return uc.repo.FindMessageByAddress(ctx, req)
+}
+
+func (uc *InscriptionUsecase) GetGroupMessageHandle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error) {
+	return uc.repo.FindGroupMessageByTitle(ctx, req)
 }
 
 func (uc *InscriptionUsecase) GetTweetHandle(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error) {

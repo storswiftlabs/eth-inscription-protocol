@@ -26,11 +26,18 @@ type Profile struct {
 }
 
 type Group struct {
-	Address string    `xorm:"pk"`
+	Id      int64
+	Address string    `xorm:"notnull"`
 	Title   string    `xorm:"notnull"`
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+}
+
+type MessageWindow struct {
+	Id    int64
+	Owner string `xorm:"notnull"`
+	Link  string `xorm:"notnull"`
 }
 
 type Message struct {
@@ -48,10 +55,10 @@ type Message struct {
 
 type GroupMessage struct {
 	Id       int64
-	Title    string   `xorm:"notnull index"`
-	Receiver []string `xorm:"notnull"`
-	Sender   string   `xorm:"notnull"`
-	Text     string   `xorm:"notnull"`
+	Title    string `xorm:"notnull index"`
+	Receiver []string
+	Sender   string `xorm:"notnull"`
+	Text     string `xorm:"notnull"`
 	Image    []string
 	At       []string
 	With     string
@@ -64,7 +71,7 @@ type Tweet struct {
 	Id      int64
 	TrxHash string `xorm:"notnull"`
 	Sender  string `xorm:"notnull index"`
-	Title   string `xorm:"notnull"`
+	Title   string
 	Text    string `xorm:"notnull"`
 	Image   []string
 	At      []string
@@ -85,7 +92,8 @@ type Comment struct {
 }
 
 type Like struct {
-	With    string    `xorm:"pk"`
+	Id      int64
+	With    string    `xorm:"notnull"`
 	Sender  string    `xorm:"notnull index"`
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
@@ -99,14 +107,14 @@ type Follow struct {
 }
 
 type GetMTReq struct {
-	Owner       string
-	Address     string
-	Limit       int64
-	Offset      int64
+	Owner   string
+	Address string
+	Limit   int64
+	Offset  int64
 }
 
 type GetGroupMessageReq struct {
-	Title       string
+	Title string
 }
 
 type Tweets struct {

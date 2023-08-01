@@ -18,13 +18,19 @@ service Inscription {
     };
   }
 
-  rpc GetMessage(GetMessageReq) returns (SwiftResponses) {
+  rpc GetMessageWindow(GetMessageWindowReq) returns (MessageWindow) {
+    option (google.api.http) = {
+      get: "/api/message_window"
+    };
+  }
+
+  rpc GetMessage(GetMessageReq) returns (GetMessageResponse) {
     option (google.api.http) = {
       get: "/api/message"
     };
   }
 
-  rpc GetGroupMessage(GetGroupMessageReq) returns (SwiftResponses) {
+  rpc GetGroupMessage(GetGroupMessageReq) returns (GetMessageResponse) {
     option (google.api.http) = {
       get: "/api/group_message"
     };
@@ -48,7 +54,7 @@ service Inscription {
     };
   }
 
-  rpc GetFollower(ByAddress) returns (SwiftResponses) {
+  rpc GetFollower(ByAddress) returns (GetFollowerResponse) {
     option (google.api.http) = {
       get: "/api/follow"
     };
@@ -68,19 +74,39 @@ message SwiftResponses{
   repeated SwiftResponse groups = 1;
 }
 
+message GetMessageResponse{
+  repeated SwiftResponse messages = 1;
+}
+
+message GetFollowerResponse{
+  repeated SwiftResponse follower = 1;
+}
+
+message GetMessageWindowReq{
+  string owner = 1;
+}
+
 message GetMessageReq{
   string owner = 1;
+  string to = 2;
+  int64 limit = 3;
+  int64 offset = 4;
 }
 
 message GetGroupMessageReq{
   string title = 1;
-  string owner = 2;
+  int64 limit = 2;
+  int64 offset = 3;
 }
 
 message GetTweetReq{
   string owner = 1;
   int64 limit = 2;
   int64 offset = 3;
+}
+
+message MessageWindow{
+  repeated SwiftResponse profiles = 1;
 }
 
 message GetFollowTweetReq{

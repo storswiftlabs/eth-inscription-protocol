@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Inscription_GetProfile_FullMethodName        = "/api.inscription.v1.Inscription/GetProfile"
 	Inscription_GetGroup_FullMethodName          = "/api.inscription.v1.Inscription/GetGroup"
+	Inscription_GetMessageWindow_FullMethodName  = "/api.inscription.v1.Inscription/GetMessageWindow"
 	Inscription_GetMessage_FullMethodName        = "/api.inscription.v1.Inscription/GetMessage"
 	Inscription_GetGroupMessage_FullMethodName   = "/api.inscription.v1.Inscription/GetGroupMessage"
 	Inscription_GetTweet_FullMethodName          = "/api.inscription.v1.Inscription/GetTweet"
@@ -35,12 +36,13 @@ const (
 type InscriptionClient interface {
 	GetProfile(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponse, error)
 	GetGroup(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error)
-	GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error)
-	GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error)
+	GetMessageWindow(ctx context.Context, in *GetMessageWindowReq, opts ...grpc.CallOption) (*MessageWindow, error)
+	GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error)
+	GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error)
 	GetTweet(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
 	GetFollowTweet(ctx context.Context, in *GetFollowTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
 	GetTweetByAddress(ctx context.Context, in *GetTweetByAddressReq, opts ...grpc.CallOption) (*TweetResponse, error)
-	GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error)
+	GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*GetFollowerResponse, error)
 }
 
 type inscriptionClient struct {
@@ -69,8 +71,17 @@ func (c *inscriptionClient) GetGroup(ctx context.Context, in *ByAddress, opts ..
 	return out, nil
 }
 
-func (c *inscriptionClient) GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error) {
-	out := new(SwiftResponses)
+func (c *inscriptionClient) GetMessageWindow(ctx context.Context, in *GetMessageWindowReq, opts ...grpc.CallOption) (*MessageWindow, error) {
+	out := new(MessageWindow)
+	err := c.cc.Invoke(ctx, Inscription_GetMessageWindow_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inscriptionClient) GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error) {
+	out := new(GetMessageResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetMessage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -78,8 +89,8 @@ func (c *inscriptionClient) GetMessage(ctx context.Context, in *GetMessageReq, o
 	return out, nil
 }
 
-func (c *inscriptionClient) GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*SwiftResponses, error) {
-	out := new(SwiftResponses)
+func (c *inscriptionClient) GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error) {
+	out := new(GetMessageResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetGroupMessage_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -114,8 +125,8 @@ func (c *inscriptionClient) GetTweetByAddress(ctx context.Context, in *GetTweetB
 	return out, nil
 }
 
-func (c *inscriptionClient) GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error) {
-	out := new(SwiftResponses)
+func (c *inscriptionClient) GetFollower(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*GetFollowerResponse, error) {
+	out := new(GetFollowerResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetFollower_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -129,12 +140,13 @@ func (c *inscriptionClient) GetFollower(ctx context.Context, in *ByAddress, opts
 type InscriptionServer interface {
 	GetProfile(context.Context, *ByAddress) (*SwiftResponse, error)
 	GetGroup(context.Context, *ByAddress) (*SwiftResponses, error)
-	GetMessage(context.Context, *GetMessageReq) (*SwiftResponses, error)
-	GetGroupMessage(context.Context, *GetGroupMessageReq) (*SwiftResponses, error)
+	GetMessageWindow(context.Context, *GetMessageWindowReq) (*MessageWindow, error)
+	GetMessage(context.Context, *GetMessageReq) (*GetMessageResponse, error)
+	GetGroupMessage(context.Context, *GetGroupMessageReq) (*GetMessageResponse, error)
 	GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
 	GetFollowTweet(context.Context, *GetFollowTweetReq) (*TweetResponse, error)
 	GetTweetByAddress(context.Context, *GetTweetByAddressReq) (*TweetResponse, error)
-	GetFollower(context.Context, *ByAddress) (*SwiftResponses, error)
+	GetFollower(context.Context, *ByAddress) (*GetFollowerResponse, error)
 	mustEmbedUnimplementedInscriptionServer()
 }
 
@@ -148,10 +160,13 @@ func (UnimplementedInscriptionServer) GetProfile(context.Context, *ByAddress) (*
 func (UnimplementedInscriptionServer) GetGroup(context.Context, *ByAddress) (*SwiftResponses, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroup not implemented")
 }
-func (UnimplementedInscriptionServer) GetMessage(context.Context, *GetMessageReq) (*SwiftResponses, error) {
+func (UnimplementedInscriptionServer) GetMessageWindow(context.Context, *GetMessageWindowReq) (*MessageWindow, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMessageWindow not implemented")
+}
+func (UnimplementedInscriptionServer) GetMessage(context.Context, *GetMessageReq) (*GetMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMessage not implemented")
 }
-func (UnimplementedInscriptionServer) GetGroupMessage(context.Context, *GetGroupMessageReq) (*SwiftResponses, error) {
+func (UnimplementedInscriptionServer) GetGroupMessage(context.Context, *GetGroupMessageReq) (*GetMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupMessage not implemented")
 }
 func (UnimplementedInscriptionServer) GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error) {
@@ -163,7 +178,7 @@ func (UnimplementedInscriptionServer) GetFollowTweet(context.Context, *GetFollow
 func (UnimplementedInscriptionServer) GetTweetByAddress(context.Context, *GetTweetByAddressReq) (*TweetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTweetByAddress not implemented")
 }
-func (UnimplementedInscriptionServer) GetFollower(context.Context, *ByAddress) (*SwiftResponses, error) {
+func (UnimplementedInscriptionServer) GetFollower(context.Context, *ByAddress) (*GetFollowerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFollower not implemented")
 }
 func (UnimplementedInscriptionServer) mustEmbedUnimplementedInscriptionServer() {}
@@ -211,6 +226,24 @@ func _Inscription_GetGroup_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InscriptionServer).GetGroup(ctx, req.(*ByAddress))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Inscription_GetMessageWindow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessageWindowReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InscriptionServer).GetMessageWindow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Inscription_GetMessageWindow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InscriptionServer).GetMessageWindow(ctx, req.(*GetMessageWindowReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -337,6 +370,10 @@ var Inscription_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGroup",
 			Handler:    _Inscription_GetGroup_Handler,
+		},
+		{
+			MethodName: "GetMessageWindow",
+			Handler:    _Inscription_GetMessageWindow_Handler,
 		},
 		{
 			MethodName: "GetMessage",
