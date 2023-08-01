@@ -5,7 +5,8 @@ import { FillColor } from '@/type/Moment'
 import { useTheme } from 'next-themes'
 import DialogueInput from '../DialogueInput'
 import { cochainTweetSend } from '@/utils/request'
-import { ItemType } from '@/utils/InterfaceType'
+import { ItemType, tweetSend } from '@/utils/InterfaceType'
+import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
 
 interface Props {
   isUpper: string //判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -13,7 +14,18 @@ interface Props {
 
 function Find({ isUpper }: Props) {
 
-  const [data, setData] = useState([] as any[])
+  const [data1, setData] = useState([] as any[])
+  const { address, isConnected } = useAccount()
+  const [uploadData, setUploadData] = useState<tweetSend>({
+    type: ItemType.tweet_send,
+    title: '',
+    text: 'shouci',
+    image: ['1', '2'],
+    at: ['12'],
+    with: '123'
+  })
+
+  const { data: walletClient } = useWalletClient()
 
   useEffect(() => {
     if (isUpper === 'Recommendation') {
@@ -23,22 +35,29 @@ function Find({ isUpper }: Props) {
     }
   }, [isUpper])
 
-  const closeHandler = (pictureArr: string[], inputData: string) => {
-    const { sendTransaction, data, isLoading, isSuccess } = cochainTweetSend({
-      type: ItemType.tweet_send,
-      title: '123',
-      text: '456',
-      image: ['1'],
-      at: ['12'],
-      with: '123'
-    })
+  const { data, isLoading, isSuccess, sendTransaction } = cochainTweetSend(walletClient?.account.address, uploadData);
+  
+  if (!isConnected) {
+    alert('Please connect your wallet first');
   }
+  
+  const closeHandler = (tweetSendArr: tweetSend) => {
+    setUploadData({ ...uploadData, ...tweetSendArr });
+    sendTransaction();
+  };
+  
+
+
+  console.log(uploadData,'123');
+  console.log(data,'123');
+  console.log(isSuccess,'isSuccess');
+  
 
   const image = 'https://pbs.twimg.com/semantic_core_img/1376695792417693699/hpBiuH-q?format=jpg&name=360x360'
   return (
     <div style={{ width: '100%', overflow: 'hidden' }}>
-      <DialogueInput closeHandler={closeHandler} />
-      {data.map((i, index) => (
+      <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
+      {data1.map((i, index) => (
         <DynamicCard
           key={index}
           img={image}

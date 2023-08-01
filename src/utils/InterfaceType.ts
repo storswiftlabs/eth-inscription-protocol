@@ -64,8 +64,8 @@ export interface updateGroupDel {
 
 
 export interface tweetSend { //  发送推文
-  type:ItemType.tweet_send
-  title:string    // 标题
+  type?:ItemType.tweet_send
+  title?:string    // 标题
   text: string    // 文本
   image?:string[] // 为图片（ 选填 )
   at?:string[]    //  @ 为 艾特人物 （ 选填 )

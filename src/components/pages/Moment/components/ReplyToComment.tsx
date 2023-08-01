@@ -7,6 +7,7 @@ import { FillColor } from '@/type/Moment'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
 import Pictures from './Pictures'
 import DialogueInput from './DialogueInput'
+import { tweetSend } from '@/utils/InterfaceType'
 
 /**
  * @用户信息评论组件
@@ -47,8 +48,8 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
     return inputString.replace(/\s/g, "");
   }
 
-  const closeHandlerFunction = (pictureArr: string[], inputData: string) => {
-    console.log(pictureArr, inputData, '123');
+  const closeHandlerFunction = (tweetSendArr:tweetSend) => {
+    console.log(tweetSendArr, '123');
   }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -97,7 +98,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
           <div className="w-[2px] bg-[#cfd9de] mt-2 ml-5 h-24 relative">
             <div className="mt-4 text-base absolute top-[1.2rem] left-[2rem] w-[15rem] max-w-[15rem] truncate">Replying to @{name + ""}</div>
           </div>
-          <DialogueInput closeHandler={closeHandlerFunction} rowCss={{ padding: '0' }} isSolid={true} />
+          <DialogueInput isSuccess={false} closeHandler={closeHandlerFunction} rowCss={{ padding: '0' }} isSolid={true} />
         </Modal.Body>
       </Modal>
     </>

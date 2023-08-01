@@ -1,3 +1,4 @@
+'use client'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { createGroup, createProfile, sendMessage, tweetComment, tweetFollow, tweetLike, tweetSend, updareProfile, updateGroupAdd, updateGroupDel } from './InterfaceType'
 
@@ -106,10 +107,9 @@ export const cochainUpdateGroupDel = (chainData: updateGroupDel) => {
  * @param {tweetSend} chainData 包含要更新的组添加数据的对象。
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
-export const cochainTweetSend = (chainData: tweetSend) => { 
-  const { data: walletClient } = useWalletClient()
+export const cochainTweetSend = (address:`0x${string}` | undefined,chainData: tweetSend) => { 
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
+    to: address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
   });
   return { sendTransaction, data, isLoading, isSuccess };

@@ -1,5 +1,5 @@
 'use client'
-import React, { CSSProperties, ReactNode, useRef, useState } from 'react'
+import React, { CSSProperties, ReactNode, useEffect, useRef, useState } from 'react'
 import Solid from './Solid'
 import { Button, Row, Textarea, User } from '@nextui-org/react'
 import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '@/components/pages/Chat/Icons'
@@ -7,7 +7,7 @@ import Pictures from './Pictures'
 import { useTheme } from 'next-themes'
 import { FillColor } from '@/type/Moment'
 import { EmojiDialog } from '../../Chat/EmojiDialog'
-import { MessageOnChain } from '@/utils/sendMessageOnChain'
+import { tweetSend } from '@/utils/InterfaceType'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -16,7 +16,8 @@ import { MessageOnChain } from '@/utils/sendMessageOnChain'
  * 
  * @param {string} props.rowCss - 传进来tailwind css 写法 控制顶部对话框的顶部盒子
  * @param {boolean} props.isSolid - 控制上下的线条是否出现
- * @param {(pictureArr,inputData)=>vido} props.closeHandler - 点击提交 接收图片数据 和 输入框数据
+ * @param {({image,text}:tweetSend) => void;} props.closeHandler - 点击提交 接收图片数据 和 输入框数据
+ * @param {boolean} props.isSuccess - 判断是否提交成功了
  * 
  * 
  * @Send 点击Send事件 外层传进来 
@@ -24,12 +25,13 @@ import { MessageOnChain } from '@/utils/sendMessageOnChain'
 
 interface Props {
   isSolid?: boolean;
-  closeHandler: (pictureArr: string[], inputData: string) => void;
+  closeHandler: ({ image, text }: tweetSend) => void;
   rowCss?: CSSProperties
+  isSuccess: boolean;
 }
 
 
-function DialogueInput({ isSolid, closeHandler, rowCss }: Props) {
+function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
 
   const { theme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
@@ -37,6 +39,13 @@ function DialogueInput({ isSolid, closeHandler, rowCss }: Props) {
   const [pictureArr, setPictureArr] = useState<string[]>([])
   const chatInputRef = useRef<HTMLInputElement>(null)
   const [inputData, setInputData] = useState('')
+
+  useEffect(() => {
+    if (isSuccess) {
+      setPictureArr(['']);
+      setInputData('');
+    }
+  }, [isSuccess]);
 
 
   function removeSpaces(inputString: string): string {
@@ -95,7 +104,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss }: Props) {
               {/* <SpeechIcon fill={handleFillColor()} /> */}
               {/* <CloudIcon fill={handleFillColor()} /> */}
             </Row>
-            <Button disabled={!removeSpaces(inputData)} auto onClick={() => closeHandler(pictureArr, inputData)}>
+            <Button disabled={!removeSpaces(inputData)} auto onClick={() => closeHandler({ image: pictureArr, text: inputData })}>
               Send</Button>
           </Row>
         </Row>

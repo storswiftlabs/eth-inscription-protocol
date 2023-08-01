@@ -2,13 +2,13 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { Col, Grid, Image, Row, Text, Container, User, Spacer, Textarea, useModal, Modal, Button } from '@nextui-org/react'
+import { Col, Grid, Image, Row, Text, User, Spacer,Dropdown} from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
 import { FillColor } from '@/type/Chat'
-import { BackIcon, GreaterIcon, KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
+import { BackIcon, GreaterIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
 import DialogueInput from './DialogueInput'
+import { tweetSend } from '@/utils/InterfaceType'
 
 
 interface Props {
@@ -20,8 +20,8 @@ function FindInformation({ type }: Props) {
   const router = useRouter();
   const { theme } = useTheme()
 
-  const closeHandler = (pictureArr: string[], inputData: string) => {
-
+  const closeHandler = (tweetSendArr:tweetSend) => {
+    console.log(tweetSendArr, '123');
   }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -47,7 +47,37 @@ function FindInformation({ type }: Props) {
             </Col>
           </Col>
           <div>
-            <GreaterIcon fill={handleFillColor()} />
+            <Dropdown placement="bottom-left">
+              <Dropdown.Trigger>
+                <div> <GreaterIcon fill={handleFillColor()} /></div>
+              </Dropdown.Trigger>
+              <Dropdown.Menu color="secondary" aria-label="Avatar Actions">
+                <Dropdown.Item key="profile" css={{ height: "$18" }}>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    Signed in as
+                  </Text>
+                  <Text b color="inherit" css={{ d: "flex" }}>
+                    zoey@example.com
+                  </Text>
+                </Dropdown.Item>
+                <Dropdown.Item key="settings" withDivider>
+                  My Settings
+                </Dropdown.Item>
+                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+                <Dropdown.Item key="analytics" withDivider>
+                  Analytics
+                </Dropdown.Item>
+                <Dropdown.Item key="system">System</Dropdown.Item>
+                <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
+                <Dropdown.Item key="help_and_feedback" withDivider>
+                  Help & Feedback
+                </Dropdown.Item>
+                <Dropdown.Item key="logout" color="error" withDivider>
+                  Log Out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
           </div>
         </Row>
         <Row>
@@ -73,7 +103,7 @@ function FindInformation({ type }: Props) {
           <Col>221 Bookmarks</Col>
         </Row>
 
-        <DialogueInput closeHandler={closeHandler} />
+        <DialogueInput isSuccess={false} closeHandler={closeHandler} />
 
         <Spacer y={1} />
         {
