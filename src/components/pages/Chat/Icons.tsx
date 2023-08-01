@@ -20,8 +20,8 @@ export function CloudIcon({ fill }: { fill: FillColor }) {
     <path fill-rule="evenodd" clip-rule="evenodd" d="M19.4606 11.7249C20.9474 11.1415 22 9.69369 22 8C22 5.79086 20.2091 4 18 4C15.8913 4 14.1638 5.63165 14.011 7.70128C14.776 8.42868 15.3971 9.30566 15.8272 10.2848C15.8695 10.381 15.9279 10.4467 15.9721 10.4798C15.989 10.4924 15.9999 10.4979 16.0054 10.5C17.3146 10.5013 18.5168 10.96 19.4606 11.7249ZM16.0094 10.5012C16.0094 10.5013 16.0085 10.5011 16.0066 10.5005C16.0084 10.5007 16.0094 10.5011 16.0094 10.5012Z" fill={fill} />
   </svg>
 }
-export function EmojiIcon({ fill }: { fill: FillColor }) {
-  return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+export function EmojiIcon({ fill, onClick }: { fill: FillColor; onClick: () => void }) {
+  return <svg className='cursor-pointer' onClick={onClick} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="10" stroke={fill} strokeWidth="2" strokeLinecap="round" />
     <path d="M7.88124 15.7559C8.37391 16.1826 9.02309 16.4909 9.72265 16.6928C10.4301 16.897 11.2142 17 12 17C12.7858 17 13.5699 16.897 14.2774 16.6928C14.9769 16.4909 15.6261 16.1826 16.1188 15.7559" stroke={fill} strokeWidth="2" strokeLinecap="round" />
     <circle cx="9" cy="10" r="1.25" fill={fill} stroke="white" strokeWidth="0.5" strokeLinecap="round" />

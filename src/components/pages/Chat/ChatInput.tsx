@@ -2,47 +2,81 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
-import { useSendTransaction, useWalletClient } from 'wagmi'
+import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
 import { Loading } from '@nextui-org/react'
 import Image from 'next/image'
 import { EmojiIcon, PictureIcon, SendIcon } from './Icons'
+import { EmojiDialog } from './EmojiDialog'
 import { FillColor } from '@/type/Chat'
 import { Notifications } from '@/components/Notifications'
+import type { MessageOnChain } from '@/utils/sendMessageOnChain'
+import { sendMessageOnChain } from '@/utils/sendMessageOnChain'
 
-export function ChatInput() {
+interface Props {
+  type: string
+}
+export function ChatInput({ type }: Props) {
   const { theme } = useTheme()
   const [inputData, setInputData] = useState('')
   const [themeColor, setThemeColor] = useState('')
   const [pictureArr, setPictureArr] = useState<string[]>([])
   const { data: walletClient } = useWalletClient()
   const fileRef = useRef<HTMLInputElement>(null)
+  const chatInputRef = useRef<HTMLInputElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const { address, isConnected } = useAccount()
+  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type })
+
+  function closeModal() {
+    setIsOpen(false)
+  }
+
+  function openModal() {
+    setIsOpen(true)
+  }
+  const onChainData = () => {
+    return `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`
+  }
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
-    data: `0x${Buffer.from(inputData, 'utf-8').toString('hex')}` || undefined,
+    data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
   })
+  const handleSend = () => {
+    !isConnected && alert('Please connect your wallet first')
+    sendTransaction()
+  }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter')
-      sendTransaction()
+      handleSend()
   }
+
   useEffect(() => {
     isSuccess && setInputData('')
   }, [isSuccess])
 
-  const handleSend = () => {
-    sendTransaction()
-  }
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
+    setSendDataOnChain({ ...sendDataOnChain, title: type, type: 'im' })
   }, [])
-
+  function selectedOK(selected: string) {
+    closeModal()
+    const newValue = chatInputRef.current?.value.substring(0, chatInputRef.current?.selectionStart as number | undefined)
+      + selected
+      + chatInputRef.current?.value.substring(chatInputRef.current?.selectionEnd as number)
+    setInputData(newValue)
+    setSendDataOnChain({ ...sendDataOnChain, text: newValue })
+  }
   return <div className='p-4  w-full  min-h-[130px] '>
+    <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} />
+
     {isSuccess ? <Notifications data={data?.hash} /> : null}
     <div className='bg-neutral-200/40 dark:bg-neutral-500/30 h-full rounded-xl flex justify-between flex-col p-2 '>
       {isLoading
         ? <div className='h-full w-full mx-4'> <Loading /></div>
         : <input
+          ref={chatInputRef}
           className="w-full mx-4 h-full bg-transparent outline-none"
           onKeyDown={handleKeyDown}
           value={inputData}
@@ -76,7 +110,7 @@ export function ChatInput() {
       <div className="h-full mx-3 flex items-center justify-between">
         <div className="h-full  flex items-center gap-4">
           {themeColor && <>
-            <EmojiIcon fill={handleFillColor()}></EmojiIcon>
+            <EmojiIcon onClick={() => openModal()} fill={handleFillColor()}></EmojiIcon>
             {/* <LockIcon fill={handleFillColor()}></LockIcon> */}
             <PictureIcon onClick={() => fileRef.current?.click()} fill={handleFillColor()}></PictureIcon>
             {/* <SpeechIcon fill={status === 'recording' ? FillColor.Orange : handleFillColor()}></SpeechIcon> */}
