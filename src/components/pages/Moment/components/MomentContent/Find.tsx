@@ -4,6 +4,8 @@ import DynamicCard from '../DynamicCard/DynamicCard'
 import { FillColor } from '@/type/Moment'
 import { useTheme } from 'next-themes'
 import DialogueInput from '../DialogueInput'
+import { cochainTweetSend } from '@/utils/request'
+import { ItemType } from '@/utils/InterfaceType'
 
 interface Props {
   isUpper: string //判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -21,10 +23,21 @@ function Find({ isUpper }: Props) {
     }
   }, [isUpper])
 
+  const closeHandler = (pictureArr: string[], inputData: string) => {
+    const { sendTransaction, data, isLoading, isSuccess } = cochainTweetSend({
+      type: ItemType.tweet_send,
+      title: '123',
+      text: '456',
+      image: ['1'],
+      at: ['12'],
+      with: '123'
+    })
+  }
+
   const image = 'https://pbs.twimg.com/semantic_core_img/1376695792417693699/hpBiuH-q?format=jpg&name=360x360'
   return (
     <div style={{ width: '100%', overflow: 'hidden' }}>
-      <DialogueInput />
+      <DialogueInput closeHandler={closeHandler} />
       {data.map((i, index) => (
         <DynamicCard
           key={index}

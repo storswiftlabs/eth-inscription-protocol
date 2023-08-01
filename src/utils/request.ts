@@ -2,7 +2,6 @@ import { useSendTransaction, useWalletClient } from 'wagmi'
 import { createGroup, createProfile, sendMessage, tweetComment, tweetFollow, tweetLike, tweetSend, updareProfile, updateGroupAdd, updateGroupDel } from './InterfaceType'
 
 
-const { data: walletClient } = useWalletClient()
 
 
 /**
@@ -24,6 +23,7 @@ const { data: walletClient } = useWalletClient()
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainCreateProfile = (chainData: createProfile) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -37,6 +37,7 @@ export const cochainCreateProfile = (chainData: createProfile) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainUpdareProfile = (chainData: updareProfile) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -50,6 +51,7 @@ export const cochainUpdareProfile = (chainData: updareProfile) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainSendMessage = (chainData: sendMessage) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -63,6 +65,7 @@ export const cochainSendMessage = (chainData: sendMessage) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainCreateGroup = (chainData: createGroup) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -76,6 +79,7 @@ export const cochainCreateGroup = (chainData: createGroup) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainUpdateGroupAdd = (chainData: updateGroupAdd) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -89,6 +93,7 @@ export const cochainUpdateGroupAdd = (chainData: updateGroupAdd) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainUpdateGroupDel = (chainData: updateGroupDel) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -102,6 +107,7 @@ export const cochainUpdateGroupDel = (chainData: updateGroupDel) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainTweetSend = (chainData: tweetSend) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -115,6 +121,7 @@ export const cochainTweetSend = (chainData: tweetSend) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainTweetComment = (chainData: tweetComment) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -128,6 +135,7 @@ export const cochainTweetComment = (chainData: tweetComment) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainTweetLike = (chainData: tweetLike) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
@@ -141,6 +149,7 @@ export const cochainTweetLike = (chainData: tweetLike) => {
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
 export const cochainTweetFollow = (chainData: tweetFollow) => { 
+  const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,

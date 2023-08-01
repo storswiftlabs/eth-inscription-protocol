@@ -20,18 +20,10 @@ function FindInformation({ type }: Props) {
   const router = useRouter();
   const { theme } = useTheme()
 
-  useEffect(() => { //  隐藏吸顶tab
-    const currentElement = document.querySelector('#yourElementId')
-    if (!currentElement) {
-      return
-    }
-    const parentElement = currentElement.parentNode as Element as any
-    const previousSiblingElement = parentElement.previousElementSibling
-    if (!previousSiblingElement) {
-      return
-    }
-    previousSiblingElement.style.display = 'none'
-  }, [type])
+  const closeHandler = (pictureArr: string[], inputData: string) => {
+
+  }
+
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <Grid.Container css={{ minHeight: "100vh", padding: "1rem" }} id="yourElementId" className="FindInformation-container h-full text-[#000] dark:text-[#fff]">
@@ -81,7 +73,7 @@ function FindInformation({ type }: Props) {
           <Col>221 Bookmarks</Col>
         </Row>
 
-        <DialogueInput />
+        <DialogueInput closeHandler={closeHandler} />
 
         <Spacer y={1} />
         {

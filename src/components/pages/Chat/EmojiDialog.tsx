@@ -1,15 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { CSSProperties, Fragment, useState } from 'react'
 
 interface Props {
   isOpen: boolean
+  dialogCss?:CSSProperties
   closeModal: () => void
   selectedOK: (x: string) => void
 }
-export function EmojiDialog({ isOpen, closeModal, selectedOK }: Props) {
+export function EmojiDialog({ isOpen, closeModal, selectedOK,dialogCss }: Props) {
   const [selected, setSelected] = useState('')
   return <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal} style={{...dialogCss}}>
             <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
