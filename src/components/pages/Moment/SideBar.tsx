@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@nextui-org/react'
+import { Button, Dropdown, Text } from '@nextui-org/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -67,15 +67,54 @@ export default function MomentSideBar({ type = 'find' }) {
   ) => {
     const isSelected = type.toLowerCase() === text.toLowerCase() || isa(type, text);
     const classNames = `icon-div hover:bg-[#edecf3] dark:hover:bg-[#262626] flex p-2 pr-4 pl-4 ${isSelected ? 'navSelected bg-[#edecf3] dark:bg-[#262626]' : ''}`;
+    if (text === 'More') {
+      return <div className={classNames}>
+        <Dropdown placement="bottom">
+          <Dropdown.Trigger>
+            <span className="mr-4 flex  w-full" style={{ marginRight: '1rem' }}>
+              <MoreIcon fill={handleFillColor()} />
+              <span className='ml-4'>{'More'}</span>
+            </span>
+          </Dropdown.Trigger>
+          <Dropdown.Menu color="secondary" aria-label="Avatar Actions">
+            <Dropdown.Item key="profile" css={{ height: '$18' }}>
+              <Text b color="inherit" css={{ d: 'flex' }}>
+                Signed in as
+              </Text>
+              <Text b color="inherit" css={{ d: 'flex' }}>
+                zoey@example.com
+              </Text>
+            </Dropdown.Item>
+            <Dropdown.Item key="settings" withDivider>
+              My Settings
+            </Dropdown.Item>
+            <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+            <Dropdown.Item key="analytics" withDivider>
+              Analytics
+            </Dropdown.Item>
+            <Dropdown.Item key="system">System</Dropdown.Item>
+            <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
+            <Dropdown.Item key="help_and_feedback" withDivider>
+              Help & Feedback
+            </Dropdown.Item>
+            <Dropdown.Item key="logout" color="error" withDivider>
+              Log Out
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
 
-    return (
-      <Link href={link} className={classNames}>
-        <span className="mr-4" style={{ marginRight: '1rem' }}>
-          {svg}
-        </span>
-        <span>{text}</span>
-      </Link>
-    );
+      </div>
+    } else {
+      return (
+        <Link href={link} className={classNames}>
+          <span className="mr-4" style={{ marginRight: '1rem' }}>
+            {svg}
+          </span>
+          <span>{text}</span>
+        </Link>
+      );
+    }
+
   }
 
   return (

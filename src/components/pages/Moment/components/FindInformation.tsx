@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { useTheme } from 'next-themes'
-import { Col, Dropdown, Grid, Image, Row, Spacer, Text, User } from '@nextui-org/react'
+import { Col, Dropdown, Grid, Image, Popover, Row, Spacer, Text, User } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { BackIcon, GreaterIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
@@ -50,7 +50,7 @@ function FindInformation({ type }: Props) {
             </Col>
           </Col>
           <div>
-            <Dropdown placement="bottom-left">
+            <Dropdown placement="right-top">
               <Dropdown.Trigger>
                 <div> <GreaterIcon fill={handleFillColor()} /></div>
               </Dropdown.Trigger>
@@ -80,7 +80,6 @@ function FindInformation({ type }: Props) {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-
           </div>
         </Row>
         <Row>
