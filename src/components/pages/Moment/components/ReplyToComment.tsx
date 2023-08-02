@@ -1,12 +1,12 @@
 'use client'
-import { Button, Modal, Row, Spacer, Textarea, User } from '@nextui-org/react'
+import { Modal, Row, Spacer, User } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
-import React, { ReactNode, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+import React, { useState } from 'react'
 import { KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
-import { FillColor } from '@/type/Moment'
-import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
-import Pictures from './Pictures'
 import DialogueInput from './DialogueInput'
+import { FillColor } from '@/type/Moment'
+import type { tweetSend } from '@/utils/InterfaceType'
 
 /**
  * @用户信息评论组件
@@ -35,16 +35,20 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
   const [pictureArr, setPictureArr] = useState<string[]>([])
   const [dz, setDz] = useState(false) // 点赞和取消点赞
   const [ca, setCa] = useState(false) // 踩和取消踩
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = React.useState(false)
   const [value, setValue] = useState('') // 弹框的值
   const { theme } = useTheme()
-  const handler = () => setVisible(true);
+  const handler = () => setVisible(true)
   const closeHandler = () => {
-    setVisible(false);
-    console.log("value", value);
-  };
+    setVisible(false)
+    // console.log('value', value)
+  }
   function removeSpaces(inputString: string): string {
-    return inputString.replace(/\s/g, "");
+    return inputString.replace(/\s/g, '')
+  }
+
+  const closeHandlerFunction = (tweetSendArr: tweetSend) => {
+    // console.log(tweetSendArr, '123')
   }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -52,12 +56,12 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
     <>
       <div>
         <Row wrap='wrap'>
-          <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: theme === 'dark' ? "#fff" : "#000" }, padding: "0" }}>
+          <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: theme === 'dark' ? '#fff' : '#000' }, 'padding': '0' }}>
             <p className='commentaries text-[#000] dark:text-[#fff]'>
               {evaluation}
             </p>
             <p className='flex items-center gap-4 mt-1 s-'>
-              <span style={{ fontSize: "14px" }}> {releaseTime} </span>
+              <span style={{ fontSize: '14px' }}> {releaseTime} </span>
               <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>
                 {dz ? <PedalIcon fill={handleFillColor()} /> : <RemoveIcon fill={handleFillColor()} />}
                 <span>{agree}</span>
@@ -66,7 +70,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
                 {ca ? <RemovePedalIcon fill={handleFillColor()} /> : <KudosIcon fill={handleFillColor()} />}
                 <span>{noAgree}</span>
               </span>
-              <span style={{ fontSize: "14px", cursor: "pointer" }} onClick={() => handler()}>
+              <span style={{ fontSize: '14px', cursor: 'pointer' }} onClick={() => handler()}>
                 reply
               </span>
             </p>
@@ -85,20 +89,19 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
         onClose={closeHandler}
       >
         <Modal.Body >
-          <User css={{ padding: "0", alignItems: 'flex-start ', '.nextui-c-eGlVTL': { color: "#000" } }} zoomed src={aimsAvatar} name={name}>
+          <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: '#000' }, 'padding': '0', 'alignItems': 'flex-start' }}>
             <p className='commentaries'>
               {evaluation}
             </p>
           </User>
           <div className="w-[2px] bg-[#cfd9de] mt-2 ml-5 h-24 relative">
-            <div className="mt-4 text-base absolute top-[1.2rem] left-[2rem] w-[15rem] max-w-[15rem] truncate">Replying to @{name + ""}</div>
+            <div className="mt-4 text-base absolute top-[1.2rem] left-[2rem] w-[15rem] max-w-[15rem] truncate">Replying to @{`${name}`}</div>
           </div>
-          <DialogueInput rowCss={'p-0'} isSolid={true} />
+          <DialogueInput isSuccess={false} closeHandler={closeHandlerFunction} rowCss={{ padding: '0' }} isSolid={true} />
         </Modal.Body>
       </Modal>
     </>
-  );
-
+  )
 }
 
 export default ReplyToComment

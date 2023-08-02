@@ -1,42 +1,37 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 import { useTheme } from 'next-themes'
-import { Col, Grid, Image, Row, Text, Container, User, Spacer, Textarea, useModal, Modal, Button } from '@nextui-org/react'
+import { Col, Dropdown, Grid, Image, Row, Spacer, Text, User } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { CloudIcon, EmojiIcon, LockIcon, PictureIcon, SpeechIcon } from '../../Chat/Icons'
-import { FillColor } from '@/type/Chat'
-import { BackIcon, GreaterIcon, KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
+import { BackIcon, GreaterIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
 import DialogueInput from './DialogueInput'
-
+import { FillColor } from '@/type/Chat'
+import type { tweetSend } from '@/utils/InterfaceType'
 
 interface Props {
   type: string | number
 }
 
 function FindInformation({ type }: Props) {
-
-  const router = useRouter();
+  const router = useRouter()
   const { theme } = useTheme()
 
-  useEffect(() => { //  隐藏吸顶tab
-    const currentElement = document.querySelector('#yourElementId')
-    if (!currentElement) {
-      return
-    }
-    const parentElement = currentElement.parentNode as Element as any
-    const previousSiblingElement = parentElement.previousElementSibling
-    if (!previousSiblingElement) {
-      return
-    }
-    previousSiblingElement.style.display = 'none'
-  }, [type])
+  const closeHandler = (tweetSendArr: tweetSend) => {
+    // console.log(tweetSendArr, '123')
+  }
+  const a = 'https://i.pravatar.cc/150?u=a042581f4e29026704d'
+
+  const b = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png'
+
+  const c = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://lh3.googleusercontent.com/8qLJXIOm7S1v66pZGKdWNVB_souZGCAQ5GZHQQ8q0i1wiiILSYrbbhBBEYJ15qYApy2gzMhujkNBgTSBjDY2sQxoS1qoaalzOQ'
+
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
-    <Grid.Container css={{ minHeight: "100vh", padding: "1rem" }} id="yourElementId" className="FindInformation-container h-full text-[#000] dark:text-[#fff]">
+    <Grid.Container css={{ minHeight: '100vh', padding: '1rem' }} id="yourElementId" className="FindInformation-container h-full text-[#000] dark:text-[#fff]">
       <Col >
-        <Row align='center' css={{ height: "3.4rem" }}>
+        <Row align='center' css={{ height: '3.4rem' }}>
           <Grid onClick={() => router.back()} xs={1}>
             <BackIcon fill={handleFillColor()} />
           </Grid>
@@ -44,18 +39,48 @@ function FindInformation({ type }: Props) {
             Tweet
           </div>
         </Row>
-        <Row css={{ marginTop: "2rem", marginBottom: "1rem" }} justify='space-between'>
+        <Row css={{ marginTop: '2rem', marginBottom: '1rem' }} justify='space-between'>
           <Col className='flex items-center gap-4'>
             <Col>
               <User css={{
                 '.nextui-c-eGlVTL': {
-                  color: theme === 'dark' ? "#fff" : "#000"
-                }
+                  color: theme === 'dark' ? '#fff' : '#000',
+                },
               }} zoomed src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="Ariana Wattson" description="UI/UX Designer @Github" />
             </Col>
           </Col>
           <div>
-            <GreaterIcon fill={handleFillColor()} />
+            <Dropdown placement="bottom-left">
+              <Dropdown.Trigger>
+                <div> <GreaterIcon fill={handleFillColor()} /></div>
+              </Dropdown.Trigger>
+              <Dropdown.Menu color="secondary" aria-label="Avatar Actions">
+                <Dropdown.Item key="profile" css={{ height: '$18' }}>
+                  <Text b color="inherit" css={{ d: 'flex' }}>
+                    Signed in as
+                  </Text>
+                  <Text b color="inherit" css={{ d: 'flex' }}>
+                    zoey@example.com
+                  </Text>
+                </Dropdown.Item>
+                <Dropdown.Item key="settings" withDivider>
+                  My Settings
+                </Dropdown.Item>
+                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
+                <Dropdown.Item key="analytics" withDivider>
+                  Analytics
+                </Dropdown.Item>
+                <Dropdown.Item key="system">System</Dropdown.Item>
+                <Dropdown.Item key="configurations">Configurations</Dropdown.Item>
+                <Dropdown.Item key="help_and_feedback" withDivider>
+                  Help & Feedback
+                </Dropdown.Item>
+                <Dropdown.Item key="logout" color="error" withDivider>
+                  Log Out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
           </div>
         </Row>
         <Row>
@@ -67,7 +92,7 @@ function FindInformation({ type }: Props) {
         </Row>
         <Spacer y={1} />
         <Row>
-          <Image css={{ borderRadius: "1rem" }} src={'https://pbs.twimg.com/media/F1yrhJMX0AMqX8p?format=png&name=medium'} />
+          <Image css={{ borderRadius: '1rem' }} src={'https://pbs.twimg.com/media/F1yrhJMX0AMqX8p?format=png&name=medium'} />
         </Row>
         <Spacer y={1} />
         <Row >
@@ -81,7 +106,7 @@ function FindInformation({ type }: Props) {
           <Col>221 Bookmarks</Col>
         </Row>
 
-        <DialogueInput />
+        <DialogueInput isSuccess={false} closeHandler={closeHandler} />
 
         <Spacer y={1} />
         {
@@ -93,21 +118,14 @@ function FindInformation({ type }: Props) {
               noAgree={23}
               releaseTime={'2023-07-24 12:17'}
               aimsAvatar={a}
-              name={"Ariana Wattson"}
+              name={'Ariana Wattson'}
               evaluation={'Xbox Series X logo vs. Twitters new X logo.Who did it better Xbox Series X logo vs. Xbox Series X logo vs. Twitters new X logo.Who did it bette Twitters new X logo.Who did it betteXbox Series X logo vs. Twitters new X logo.Who did it bette ? '} />
           ))
         }
       </Col>
-
 
     </Grid.Container>
   )
 }
 
 export default FindInformation
-
-const a = 'https://i.pravatar.cc/150?u=a042581f4e29026704d'
-
-const b = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png'
-
-const c = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://lh3.googleusercontent.com/8qLJXIOm7S1v66pZGKdWNVB_souZGCAQ5GZHQQ8q0i1wiiILSYrbbhBBEYJ15qYApy2gzMhujkNBgTSBjDY2sQxoS1qoaalzOQ'

@@ -1,14 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Checkbox } from '@nextui-org/react'
+import { Input } from '@nextui-org/react'
+import type { CSSProperties } from 'react'
 import { Fragment, useState } from 'react'
 
 interface Props {
   isOpen: boolean
-  type: string
+  type?: string
+  dialogCss?: CSSProperties
   closeModal: () => void
   selectedOK: (x: string) => void
 }
-export function EmojiDialog({ isOpen, closeModal, selectedOK, type }: Props) {
+export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }: Props) {
   const [selected, setSelected] = useState('')
   const [selectedGroupMember, setSelectedGroupMember] = useState(['buenos-aires', 'sydney'])
 
@@ -22,18 +24,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, type }: Props) {
                     Add Group
                 </Dialog.Title >
                     <br />
-                    <Checkbox.Group
-                        color="secondary"
-                        defaultValue={['buenos-aires']}
-                        label="Select cities"
-                        value={selectedGroupMember}
-                        onChange={setSelectedGroupMember}
-                    >
-                        <Checkbox value="buenos-aires">Buenos Aires</Checkbox>
-                        <Checkbox value="sydney">Sydney</Checkbox>
-                        <Checkbox value="london">London</Checkbox>
-                        <Checkbox value="tokyo">Tokyo</Checkbox>
-                    </Checkbox.Group>
+                    <Input></Input>
                 </>
       case 'emoji':
         return <> < Dialog.Title
@@ -51,7 +42,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, type }: Props) {
     }
   }
   return <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal} style={{ ...dialogCss }}>
             <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
@@ -83,7 +74,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, type }: Props) {
                                 <button
                                     type="button"
                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    onClick={() => selectedOK(type === 'emoji' ? selected : selectedGroupMember)}
+                                    onClick={() => selectedOK(selected)}
                                 >
                                     OK!
                                 </button>
