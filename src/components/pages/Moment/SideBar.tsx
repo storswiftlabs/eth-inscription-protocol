@@ -1,18 +1,17 @@
 'use client'
 import { Button, Dropdown, Text } from '@nextui-org/react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import Follower from './components/Follower'
-import { FindIcon, MessageIcom, BookmarkIcon, VerifyIcon, MoreIcon } from './components/Icons'
 import { useTheme } from 'next-themes'
+import Follower from './components/Follower'
+import { BookmarkIcon, FindIcon, MessageIcom, MoreIcon, VerifyIcon } from './components/Icons'
 import { FillColor } from '@/type/Moment'
 
 export default function MomentSideBar({ type = 'find' }) {
-
   const { theme } = useTheme()
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
+  const [iconData, setIcon] = useState([] as any[])
 
   useEffect(() => {
     const data = [
@@ -45,8 +44,6 @@ export default function MomentSideBar({ type = 'find' }) {
     setIcon(data)
   }, [theme])
 
-  const [iconData, setIcon] = useState([] as any[])
-
   /**
    * 判断给定的类型和文本是否符合条件
    * @param type 类型
@@ -55,18 +52,17 @@ export default function MomentSideBar({ type = 'find' }) {
    */
   const isa = (type: string, text: string) => {
     // 定义有效类型的集合
-    const validTypes = new Set(['message', 'bookmark', 'verify', 'more']);
-    return !validTypes.has(type) && text === 'Find';
+    const validTypes = new Set(['message', 'bookmark', 'verify', 'more'])
+    return !validTypes.has(type) && text === 'Find'
   }
-
 
   const iconComponent = (
     svg: React.JSX.Element,
     text: string,
-    link: string
+    link: string,
   ) => {
-    const isSelected = type.toLowerCase() === text.toLowerCase() || isa(type, text);
-    const classNames = `icon-div hover:bg-[#edecf3] dark:hover:bg-[#262626] flex p-2 pr-4 pl-4 ${isSelected ? 'navSelected bg-[#edecf3] dark:bg-[#262626]' : ''}`;
+    const isSelected = type.toLowerCase() === text.toLowerCase() || isa(type, text)
+    const classNames = `icon-div hover:bg-[#edecf3] dark:hover:bg-[#262626] flex p-2 pr-4 pl-4 ${isSelected ? 'navSelected bg-[#edecf3] dark:bg-[#262626]' : ''}`
     if (text === 'More') {
       return <div className={classNames}>
         <Dropdown placement="bottom">
@@ -104,7 +100,8 @@ export default function MomentSideBar({ type = 'find' }) {
         </Dropdown>
 
       </div>
-    } else {
+    }
+    else {
       return (
         <Link href={link} className={classNames}>
           <span className="mr-4" style={{ marginRight: '1rem' }}>
@@ -112,15 +109,14 @@ export default function MomentSideBar({ type = 'find' }) {
           </span>
           <span>{text}</span>
         </Link>
-      );
+      )
     }
-
   }
 
   return (
     <div className="nav flex flex-col justify-start items-center w-[300px] h-full p-4 border-x border-x-[#edecf3] dark:bg-[#121212] dark:border-x-[#262626]">
       <div>
-        <h1 className="font-bold text-2xl mb-5 mt-10 text-center">Tweet</h1>
+        <h1 className="font-bold text-2xl mb-5 mt-10 text-center">Moments</h1>
         <div className="w-full flex justify-center flex-col">
           <Follower />
           {iconData.map((i, j) => (
@@ -132,8 +128,5 @@ export default function MomentSideBar({ type = 'find' }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
-
-
-

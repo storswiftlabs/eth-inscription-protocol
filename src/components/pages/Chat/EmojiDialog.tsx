@@ -26,6 +26,16 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                     <br />
                     <Input></Input>
                 </>
+      case 'at':
+        return <> < Dialog.Title
+                    as="h2"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                >
+                    @member
+                </Dialog.Title >
+                    <br />
+                    @&nbsp;<Input onChange={e => setSelected(e.target.value)}></Input>
+                </>
       case 'emoji':
         return <> < Dialog.Title
                     as="h2"

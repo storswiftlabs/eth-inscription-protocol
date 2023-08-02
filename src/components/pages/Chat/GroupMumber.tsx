@@ -90,8 +90,8 @@ export default function GroupMember() {
                         >
                             <div className='flex items-center m-4 bg-slate-300/20 rounded-xl pr-2 cursor-pointer'>
                                 <div className="flex items-center justify-between w-12 relative">
-                                    <div className="relative z-30 w-6 h-6 rounded-full bg-blue-500"></div>
-                                    <div className="relative z-20 w-6 h-6 rounded-full bg-green-500 -ml-6"></div>
+                                    <div className="relative z-20 w-6 h-6 rounded-full bg-blue-500"></div>
+                                    <div className="relative z-10 w-6 h-6 rounded-full bg-green-500 -ml-6"></div>
                                     <div className="relative z-1 w-6 h-6 rounded-full bg-red-500 -ml-6"></div>
                                 </div>
 

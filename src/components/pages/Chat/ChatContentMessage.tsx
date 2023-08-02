@@ -1,13 +1,18 @@
 'use client'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useTheme } from 'next-themes'
 import { EmojiDialog } from './EmojiDialog'
-import type { ChatContentMessageType } from '@/type/Chat'
+import { ReplyIcon } from './Icons'
+import { type ChatContentMessageType, FillColor } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
 
 export function ChatContentMessage({ data, me }: { data: ChatContentMessageType; me: number }) {
   const [isOpen, setIsOpen] = useState(false)
+  const { theme } = useTheme()
+
   const setReplyMessage = useChatMessageReply(state => state.setReplyMessage)
+  const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   function closeModal() {
     setIsOpen(false)
@@ -42,7 +47,9 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
         </div>
 
         <Image onClick={openModal} className={`w-10 h-10 cursor-pointer absolute top-0 ${me % 2 === 1 ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/emoji.svg' alt='' width={20} height={20}></Image>
-        <Image onClick={() => { setReplyMessage({ text: data.text, txHash: '0x00002' }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${me % 2 === 1 ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/reply.svg' alt='' width={20} height={20}></Image>
+        <div onClick={() => { setReplyMessage({ text: data.text, txHash: '0x00002' }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${me % 2 === 1 ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+          <ReplyIcon fill={handleFillColor()}></ReplyIcon>
+        </div>
 
       </div>
 

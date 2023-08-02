@@ -5,10 +5,10 @@ export function Card2() {
         <Card.Header css={{ position: 'absolute', zIndex: 1, top: 5 }}>
             <Col>
                 <Text size={12} weight="bold" transform="uppercase" color="#ffffffAA">
-                    Plant a tree
+                    Moments
                 </Text>
                 <Text h4 color="white">
-                    Contribute to the planet
+                    Moment Swap
                 </Text>
             </Col>
         </Card.Header>
