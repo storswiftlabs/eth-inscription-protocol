@@ -5,13 +5,15 @@ interface Store {
     text: string
     txHash: string
   }
-  inc: (reply: {
+  setReplyMessage: (reply: {
     text: string
     txHash: string
   }) => void
+  clearReplyMessage: () => void
 }
 
-const useChatMessageReply = create<Store>()(set => ({
+export const useChatMessageReply = create<Store>()(set => ({
   reply: { text: '', txHash: '' },
-  inc: content => set({ reply: content }),
+  setReplyMessage: content => set({ reply: content }),
+  clearReplyMessage: () => set({ reply: { text: '', txHash: '' } }),
 }))

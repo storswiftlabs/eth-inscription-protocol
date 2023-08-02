@@ -11,6 +11,7 @@ import { FillColor } from '@/type/Chat'
 import { Notifications } from '@/components/Notifications'
 import type { MessageOnChain } from '@/utils/sendMessageOnChain'
 import { sendMessageOnChain } from '@/utils/sendMessageOnChain'
+import { useChatMessageReply } from '@/store/useChatMessage'
 
 interface Props {
   type: string
@@ -26,6 +27,8 @@ export function ChatInput({ type }: Props) {
   const [isOpen, setIsOpen] = useState(false)
   const { address, isConnected } = useAccount()
   const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
+  const replyMessage = useChatMessageReply(state => state.reply)
+  const clearReplyMessage = useChatMessageReply(state => state.clearReplyMessage)
 
   function closeModal() {
     setIsOpen(false)
@@ -48,7 +51,15 @@ export function ChatInput({ type }: Props) {
   }
 
   useEffect(() => {
-    isSuccess && setInputData('')
+    setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
+  }, [replyMessage])
+
+  useEffect(() => {
+    const clearData = () => {
+      setInputData('')
+      clearReplyMessage()
+    }
+    isSuccess && clearData()
   }, [isSuccess])
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -57,6 +68,7 @@ export function ChatInput({ type }: Props) {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
     setSendDataOnChain({ ...sendDataOnChain, title: type, type: 'im' })
   }, [])
+
   function selectedOK(selected: string) {
     closeModal()
     const newValue = chatInputRef.current?.value.substring(0, chatInputRef.current?.selectionStart as number | undefined)
@@ -65,6 +77,7 @@ export function ChatInput({ type }: Props) {
     setInputData(newValue)
     setSendDataOnChain({ ...sendDataOnChain, text: newValue })
   }
+
   return <div className='p-4  w-full  min-h-[130px] '>
     <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
 
@@ -80,7 +93,10 @@ export function ChatInput({ type }: Props) {
           onChange={(e) => { setInputData(e.target.value) }}
           type="text"
         />}
-      {pictureArr.length > 0
+      {replyMessage.txHash.length > 0 && <>
+        <div className='bg-neutral-700/70 text-sm rounded-md p-1 mx-2 mt-2'>{replyMessage.text}</div>
+      </>}
+      {pictureArr.length > 0 && replyMessage.txHash.length === 0
         && <>
           <br />
           <div className='flex gap-4 px-4'>
