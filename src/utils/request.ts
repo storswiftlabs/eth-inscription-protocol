@@ -16,136 +16,20 @@ import type { createGroup, createProfile, sendMessage, tweetComment, tweetFollow
  */
 
 /**
- * @description 创建 profile 的钩子函数。
- * @param {createProfile} chainData 包含要创建的 profile 数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainCreateProfile(chainData: createProfile) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 更新 profile 的钩子函数。
- * @param {updareProfile} chainData 包含要更新的 profile 数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainUpdareProfile(chainData: updareProfile) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 发送消息的钩子函数。
- * @param {sendMessage} chainData 包含要发送的消息数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainSendMessage(chainData: sendMessage) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 创建群聊的钩子函数。
- * @param {createGroup} chainData 包含要发送的消息数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainCreateGroup(chainData: createGroup) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 更新组添加的钩子函数。
- * @param {updateGroupAdd} chainData 包含要更新的组添加数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainUpdateGroupAdd(chainData: updateGroupAdd) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 更新组删除的钩子函数。
- * @param {updateGroupDel} chainData 包含要更新的组添加数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainUpdateGroupDel(chainData: updateGroupDel) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 发送推文的钩子函数。
- * @param {tweetSend} chainData 包含要更新的组添加数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainTweetSend(address: `0x${string}` | undefined, chainData: tweetSend) {
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 评论推文的钩子函数。
- * @param {tweetComment} chainData 包含要更新的组添加数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainTweetComment(chainData: tweetComment) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
  * @description 点赞推文的钩子函数。
  * @param {tweetLike} chainData 包含要更新的组添加数据的对象。
- * @returns {object} 包含发送交易状态、数据和加载状态的对象。
- */
-export function cochainTweetLike(chainData: tweetLike) {
-  const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
-  })
-  return { sendTransaction, data, isLoading, isSuccess }
-}
-
-/**
- * @description 关注的钩子函数。
  * @param {tweetFollow} chainData 包含要更新的组添加数据的对象。
+ * @param {tweetComment} chainData 包含要更新的组添加数据的对象。
+ * @param {updateGroupDel} chainData 包含要更新的组添加数据的对象。
+ * @param {createGroup} chainData 包含要发送的消息数据的对象。
+ * @param {sendMessage} chainData 包含要发送的消息数据的对象。
+ * @param {updareProfile} chainData 包含要更新的 profile 数据的对象。
+ * @param {createProfile} chainData 包含要创建的 profile 数据的对象。
+ * @param {tweetSend} chainData 包含要更新的组添加数据的对象。
+ *
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
-export function cochainTweetFollow(chainData: tweetFollow) {
+export function SendMessageToChain(chainData: tweetLike | tweetSend | tweetComment | tweetFollow | updateGroupDel | updateGroupAdd | createGroup | sendMessage | updareProfile | createProfile) {
   const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
