@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useAccount, useWalletClient } from 'wagmi'
 import DynamicCard from '../DynamicCard/DynamicCard'
 import DialogueInput from '../DialogueInput'
-import { cochainTweetSend } from '@/utils/request'
+import { SendMessageToChain } from '@/utils/useRequest'
 import type { tweetSend } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
 
@@ -33,7 +33,7 @@ function Find({ isUpper }: Props) {
       setData([4, 5, 6])
   }, [isUpper])
 
-  const { data, isLoading, isSuccess, sendTransaction } = cochainTweetSend(walletClient?.account.address, uploadData)
+  const { data, isLoading, isSuccess, sendTransaction } = SendMessageToChain(uploadData)
 
   if (!isConnected)
     alert('Please connect your wallet first')

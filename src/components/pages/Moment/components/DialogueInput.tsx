@@ -68,6 +68,9 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
+  // console.log(pictureArr, 'pictureArr')
+  // console.log(chatInputRef, 'pictureArr')
+
   const customTextareaStyles = {
     '.nextui-c-eXOOPO:hover': {
       border: 'none',
@@ -78,6 +81,21 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
     '.nextui-c-jeuecp': { color: theme === 'dark' ? '#fff' : '#000' },
     '.nextui-c-eXOOPO-gWufxv-underlined-true::after': { display: 'none' },
   }
+  const svg = <svg
+    className="icon"
+    viewBox="0 0 1024 1024"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    p-id="2338"
+    width="50"
+    height="50"
+  >
+    <path
+      d="M827.392 195.584q65.536 65.536 97.792 147.456t32.256 167.936-32.256 167.936-97.792 147.456-147.456 98.304-167.936 32.768-168.448-32.768-147.968-98.304-98.304-147.456-32.768-167.936 32.768-167.936 98.304-147.456 147.968-97.792 168.448-32.256 167.936 32.256 147.456 97.792zM720.896 715.776q21.504-21.504 18.944-49.152t-24.064-49.152l-107.52-107.52 107.52-107.52q21.504-21.504 24.064-49.152t-18.944-49.152-51.712-21.504-51.712 21.504l-107.52 106.496-104.448-104.448q-21.504-20.48-49.152-23.04t-49.152 17.92q-21.504 21.504-21.504 52.224t21.504 52.224l104.448 104.448-104.448 104.448q-21.504 21.504-21.504 51.712t21.504 51.712 49.152 18.944 49.152-24.064l104.448-104.448 107.52 107.52q21.504 21.504 51.712 21.504t51.712-21.504z"
+      p-id="2339"
+    >
+    </path>
+  </svg>
   return (
     <>
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
@@ -87,8 +105,13 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
         <Row wrap='wrap'>
           <div style={{ width: '100%' }}>
             <Textarea ref={chatInputRef} css={customTextareaStyles} size='xl' value={inputData} onChange={(e) => { setInputData(e.target.value) }} fullWidth placeholder="Default Textarea!" />
-            {pictureArr.map((src, index) => (
-              <img key={index} className='my-2' src={src} alt={`image-${index}`} />
+            {pictureArr.map((t, index) => (
+              <div className=' relative'>
+                <img key={index} className='my-2' src={t} alt={`image-${index}`} />
+                <div className='absolute w-5 h-5 bg-neutral-400/90 cursor-pointer top-[-10px] right-[-10px] z-10 rounded-full flex items-center justify-center' onClick={() => setPictureArr([...pictureArr.filter(s => s !== t)])} >
+                  {svg}
+                </div>
+              </div>
             ))}
             <Solid foll={'y'} />
           </div>

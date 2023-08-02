@@ -5,7 +5,7 @@ function RightSidebar() {
   const cardData = () => {
     return (
       <Card.Body>
-        <Row className="right-sidebar-row flex pt-0 mb-0" align="center">
+        <Row className="right-sidebar-row flex pt-0 mb-0 truncate" align="center">
           <img
             style={{ width: '28px', height: '28px', borderRadius: '0.2rem' }}
             src="https://api.dicebear.com/5.x/lorelei/svg?seed=SPGQaaaZ8YMlightMint100&backgroundColor=1AE0A5&mouth=happy01,happy02,happy03,happy04,happy05,happy12,happy17,sad02"
@@ -44,7 +44,7 @@ function RightSidebar() {
         </Dropdown>
       </div>
       <h2 className="text-2xl mb-4">Whats happening</h2>
-      <Card className="sidebar-card bg-[#f7f9f9] dark:bg-[#121212] dark:border-[#696969] dark:border-[1px] text-[#000] dark:text-[#fff]" variant="bordered" css={{ padding: '1rem', borderRadius: '1.5rem' }} >
+      <Card className="sidebar-card bg-[#f7f9f9] dark:bg-[#121212] dark:border-[#696969] dark:border-[1px] text-[#000] dark:text-[#fff]" variant="bordered" css={{ padding: '1rem 1rem 1rem 0.2rem', borderRadius: '1.5rem' }} >
         {[1, 2, 3, 4, 5, 6].map((t, j) => cardData())}
       </Card>
     </div>

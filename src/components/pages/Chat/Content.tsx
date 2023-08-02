@@ -27,7 +27,7 @@ export function ChatContent({ type }: ContentData) {
   }, [])
   return (
     <div className='w-full h-screen flex flex-col'>
-      <ChatHeader />
+      <ChatHeader title={type} />
       <div ref={messageRef as React.MutableRefObject<HTMLDivElement>} className="border border-neutral-200 dark:border-neutral-700 content-border m-2 rounded-xl flex-1 overflow-auto ">
         {messageData.map((t, index) => {
           return <ChatContentMessage data={t} me={index} />
