@@ -1,0 +1,3 @@
+generate.sh - 2023年 7月31日 星期一 14时37分38秒 CST - zt
+streamingfast/proto revision:
+streamingfast/firehose-starknet/proto revision:

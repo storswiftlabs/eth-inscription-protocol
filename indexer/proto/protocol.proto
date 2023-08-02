@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package starknet.protocol.v1;
+
+message Needs {}

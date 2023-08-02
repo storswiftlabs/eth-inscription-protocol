@@ -1,0 +1,11 @@
+start:
+  args:
+    - firehose
+    - merger
+    - reader-node
+    - relayer
+  flags:
+    # Specifies the path to the binary
+    reader-node-path: "/mnt/nfs/code/eth-inscription-protocol/pathfinder/target/debug/pathfinder"
+    # Flags that will be added to the dummy chain process command
+    reader-node-arguments: --data-directory /mnt/nfs/tmp/data --ethereum.url http://127.0.0.1:8545 --poll-pending true
