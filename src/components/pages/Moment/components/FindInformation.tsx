@@ -1,26 +1,66 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useTheme } from 'next-themes'
-import { Col, Dropdown, Grid, Image, Popover, Row, Spacer, Text, User } from '@nextui-org/react'
+import { Col, Dropdown, Grid, Image, Row, Spacer, Text, User } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
-import { BackIcon, GreaterIcon } from './Icons'
+import { useAccount } from 'wagmi'
+import { BackIcon, FocusIcon, GreaterIcon, UnfollowIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
 import DialogueInput from './DialogueInput'
 import { FillColor } from '@/type/Chat'
-import type { tweetSend } from '@/utils/InterfaceType'
+import { ItemType, type tweetComment } from '@/utils/InterfaceType'
+import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 
 interface Props {
   type: string | number
 }
 
 function FindInformation({ type }: Props) {
+  const [tweetCommentData, setTweetCommentData] = useState<tweetComment>({
+    type: ItemType.tweet_comment,
+    text: '',
+    image: [''],
+    at: [''],
+    with: '',
+  })
+  const { address, isConnected } = useAccount()
   const router = useRouter()
   const { theme } = useTheme()
 
-  const closeHandler = (tweetSendArr: tweetSend) => {
-    // console.log(tweetSendArr, '123')
+  const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(tweetCommentData)
+
+  if (!isConnected)
+    alert('Please connect your wallet first')
+
+  const closeHandler = (tweetSendArr: { image: string[]; text: string }) => { //  直接评论
+    setTweetCommentData({
+      type: ItemType.tweet_comment,
+      text: tweetSendArr.text,
+      image: tweetSendArr.image,
+      at: [''],
+      with: '',
+    })
+    sendTransaction()
   }
+
+  /**
+   * 关注用户
+   * @param withi - 要关注的用户
+   */
+  const followFunction = (withi: string) => {
+    // TODO: 实现关注逻辑
+
+  }
+
+  /**
+     * 取消关注用户
+     * @param withi - 要取消关注的用户
+     */
+  const unfollowFunction = (withi: string) => {
+
+  }
+
   const a = 'https://i.pravatar.cc/150?u=a042581f4e29026704d'
 
   const b = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png'
@@ -50,23 +90,26 @@ function FindInformation({ type }: Props) {
             </Col>
           </Col>
           <div>
-            <Dropdown placement="right-top">
+            <Dropdown placement="right">
               <Dropdown.Trigger>
                 <div> <GreaterIcon fill={handleFillColor()} /></div>
               </Dropdown.Trigger>
               <Dropdown.Menu color="secondary" aria-label="Avatar Actions">
-                <Dropdown.Item key="profile" css={{ height: '$18' }}>
-                  <Text b color="inherit" css={{ d: 'flex' }}>
-                    Signed in as
-                  </Text>
-                  <Text b color="inherit" css={{ d: 'flex' }}>
-                    zoey@example.com
-                  </Text>
+                {/* <Dropdown.Item key="profile" css={{ height: '$18', display: "flex" }}>
+
+                </Dropdown.Item> */}
+                <Dropdown.Item key="settings" >
+                  <div className='flex gap-4' onClick={() => followFunction('')}>
+                    <FocusIcon />
+                    <span>Follow this user</span>
+                  </div>
                 </Dropdown.Item>
-                <Dropdown.Item key="settings" withDivider>
-                  My Settings
+                <Dropdown.Item key="team_settings">
+                  <div className=' flex gap-4' onClick={() => unfollowFunction('')}>
+                    <UnfollowIcon />
+                    <span>Unfollow this user</span>
+                  </div>
                 </Dropdown.Item>
-                <Dropdown.Item key="team_settings">Team Settings</Dropdown.Item>
                 <Dropdown.Item key="analytics" withDivider>
                   Analytics
                 </Dropdown.Item>
@@ -111,7 +154,7 @@ function FindInformation({ type }: Props) {
         {
           [1, 2, 3, 4, 5, 6, 7, 8, 9].map((i, j) => (
             <ReplyToComment
-              children={i === 1 || i === 3 ? <ReplyToComment aimsAvatar={b} avatar={c} name={'djksh dwjk'} evaluation={'hahahha'} releaseTime={'2023-09-50 34:55'} agree={11} noAgree={33} /> : <></>}
+              // children={i === 1 || i === 3 ? <ReplyToComment aimsAvatar={b} avatar={c} name={'djksh dwjk'} evaluation={'hahahha'} releaseTime={'2023-09-50 34:55'} agree={11} noAgree={33} /> : <></>}
               avatar={a}
               agree={123}
               noAgree={23}

@@ -38,8 +38,8 @@ function Find({ isUpper }: Props) {
   if (!isConnected)
     alert('Please connect your wallet first')
 
-  const closeHandler = (tweetSendArr: tweetSend) => {
-    setUploadData({ ...uploadData, ...tweetSendArr })
+  const closeHandler = (tweetSendArr: { image: string[]; text: string }) => {
+    setUploadData({ ...uploadData, image: tweetSendArr.image, text: tweetSendArr.text })
     sendTransaction()
   }
 

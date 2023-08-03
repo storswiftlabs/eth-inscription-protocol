@@ -1,8 +1,6 @@
 import type { FillColor } from '@/type/Chat'
 
-
-export const FindIcon = ({ fill }: { fill: FillColor }) => {
-
+export function FindIcon({ fill }: { fill: FillColor }) {
   return <svg
     className='r-18jsvk2 fill-opacity-50'
     aria-hidden="true"
@@ -13,7 +11,7 @@ export const FindIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const MessageIcom = ({ fill }: { fill: FillColor }) => {
+export function MessageIcom({ fill }: { fill: FillColor }) {
   return <svg
     aria-hidden="true"
     className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-lwhw9o r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-cnnz9e"
@@ -24,7 +22,7 @@ export const MessageIcom = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const BookmarkIcon = ({ fill }: { fill: FillColor }) => {
+export function BookmarkIcon({ fill }: { fill: FillColor }) {
   return <svg
     aria-hidden="true"
     className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-lwhw9o r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-cnnz9e"
@@ -35,7 +33,7 @@ export const BookmarkIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const VerifyIcon = ({ fill }: { fill: FillColor }) => {
+export function VerifyIcon({ fill }: { fill: FillColor }) {
   return <svg
     aria-hidden="true"
     className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-lwhw9o r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-cnnz9e"
@@ -46,7 +44,7 @@ export const VerifyIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const MoreIcon = ({ fill }: { fill: FillColor }) => {
+export function MoreIcon({ fill }: { fill: FillColor }) {
   return <svg
     aria-hidden="true"
     className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-lwhw9o r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-cnnz9e"
@@ -57,7 +55,7 @@ export const MoreIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const ShareIcon = ({ fill }: { fill: FillColor }) => {
+export function ShareIcon({ fill }: { fill: FillColor }) {
   return <svg
     className="iconhudong"
     viewBox="0 0 1024 1024"
@@ -77,7 +75,7 @@ export const ShareIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const MessagesIcon = ({ fill }: { fill: FillColor }) => {
+export function MessagesIcon({ fill }: { fill: FillColor }) {
   return <svg
     className="iconhudong xihuan"
     viewBox="0 0 1024 1024"
@@ -114,7 +112,7 @@ export const MessagesIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const LoveIcon = ({ fill }: { fill: FillColor }) => {
+export function LoveIcon({ fill }: { fill: FillColor }) {
   return <svg
     className="iconhudong"
     viewBox="0 0 1024 1024"
@@ -133,7 +131,7 @@ export const LoveIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const ILoveIcon = ({ fill }: { fill: FillColor }) => {
+export function ILoveIcon({ fill }: { fill: FillColor }) {
   return <svg
     className="icon"
     viewBox="0 0 1024 1024"
@@ -153,7 +151,7 @@ export const ILoveIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const BackIcon = ({ fill }: { fill: FillColor }) => {
+export function BackIcon({ fill }: { fill: FillColor }) {
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path fill={fill} d="M7.414 13l5.043 5.04-1.414 1.42L3.586 12l7.457-7.46 1.414 1.42L7.414 11H21v2H7.414z">
@@ -162,27 +160,25 @@ export const BackIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const GreaterIcon = ({ fill }: { fill: FillColor }) => {
+export function GreaterIcon({ fill }: { fill: FillColor }) {
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-4qtqp9 r-yyyyoo r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-1hdv0qi"><g><path fill={fill} d="M3 12c0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2-2-.9-2-2zm9 2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm7 0c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"></path></g></svg>
 }
 // TODO:名称有问题 KudosIcon : 不喜欢这条评论 RemovePedalIcon : 可以添加不喜欢 PedalIcon:点赞 RemoveIcon:已点赞
-export const KudosIcon = ({ fill }: { fill: FillColor }) => {
+export function KudosIcon({ fill }: { fill: FillColor }) {
   return <svg width={16} height={16} className="r-4" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6644" ><path fill={fill} d="M294.4 645.12H122.88c-55.296 0-99.84-44.544-99.84-99.84v-394.24C23.04 95.744 67.584 51.2 122.88 51.2h171.52v593.92zM122.88 128c-12.8 0-23.04 10.24-23.04 23.04v394.24c0 12.8 10.24 23.04 23.04 23.04h94.72V128H122.88z" p-id="6645" data-spm-anchor-id="a313x.7781069.0.i4" className="selected"></path><path fill={fill} d="M571.392 1018.88c-60.416 0-110.08-44.544-117.248-103.424-0.512-2.048-1.024-4.096-1.536-5.632-12.288-76.8-40.96-141.824-86.016-193.024-41.472-47.616-79.872-72.704-110.592-72.704-20.992 0-38.4-17.408-38.4-38.4V89.6c0-10.24 4.096-19.968 11.264-27.136C236.032 55.296 245.76 51.2 256 51.2h511.488c58.368 0 109.568 38.912 125.44 95.232l108.032 380.928c3.072 11.776 5.12 23.552 5.12 35.328 0 72.192-58.368 130.56-130.56 130.56h-185.856v207.36c-0.512 65.536-53.248 118.272-118.272 118.272z m-44.544-130.048c1.536 4.096 2.56 8.704 3.072 13.312 1.024 22.528 18.944 39.936 41.472 39.936 22.528 0 41.472-18.432 41.472-41.472v-245.76c0-20.992 17.408-38.4 38.4-38.4H875.52c29.696 0 53.76-24.064 53.76-53.76 0-5.12-0.512-9.728-2.048-14.848L819.2 166.912a53.76 53.76 0 0 0-51.712-38.912H294.4v444.416c42.496 11.776 84.992 42.496 130.048 93.184 52.736 60.416 87.04 135.68 102.4 223.232z" p-id="6646" data-spm-anchor-id="a313x.7781069.0.i3" className="selected"></path></svg>
 }
-export const RemoveIcon = ({ fill }: { fill: FillColor }) => {
+export function RemoveIcon({ fill }: { fill: FillColor }) {
   return <svg width={16} height={16} className="r-4" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7772" data-spm-anchor-id="a313x.7781069.0.i7" ><path fill={fill} d="M857.28 344.992h-264.832c12.576-44.256 18.944-83.584 18.944-118.208 0-78.56-71.808-153.792-140.544-143.808-60.608 8.8-89.536 59.904-89.536 125.536v59.296c0 76.064-58.208 140.928-132.224 148.064l-117.728-0.192A67.36 67.36 0 0 0 64 483.04V872c0 37.216 30.144 67.36 67.36 67.36h652.192a102.72 102.72 0 0 0 100.928-83.584l73.728-388.96a102.72 102.72 0 0 0-100.928-121.824zM128 872V483.04c0-1.856 1.504-3.36 3.36-3.36H208v395.68H131.36A3.36 3.36 0 0 1 128 872z m767.328-417.088l-73.728 388.96a38.72 38.72 0 0 1-38.048 31.488H272V476.864a213.312 213.312 0 0 0 173.312-209.088V208.512c0-37.568 12.064-58.912 34.72-62.176 27.04-3.936 67.36 38.336 67.36 80.48 0 37.312-9.504 84-28.864 139.712a32 32 0 0 0 30.24 42.496h308.512a38.72 38.72 0 0 1 38.048 45.888z" p-id="7773" data-spm-anchor-id="a313x.7781069.0.i6" className="selected" ></path></svg>
 }
-export const PedalIcon = ({ fill }: { fill: FillColor }) => {
+export function PedalIcon({ fill }: { fill: FillColor }) {
   return <svg width={18} height={18} className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8119" ><path fill={fill} d="M64 483.04V872c0 37.216 30.144 67.36 67.36 67.36H192V416.32l-60.64-0.64A67.36 67.36 0 0 0 64 483.04zM857.28 344.992l-267.808 1.696c12.576-44.256 18.944-83.584 18.944-118.208 0-78.56-68.832-155.488-137.568-145.504-60.608 8.8-67.264 61.184-67.264 126.816v59.264c0 76.064-63.84 140.864-137.856 148L256 416.96v522.4h527.552a102.72 102.72 0 0 0 100.928-83.584l73.728-388.96a102.72 102.72 0 0 0-100.928-121.824z" p-id="8120" ></path></svg>
 }
 
-export const RemovePedalIcon = ({ fill }: { fill: FillColor }) => {
+export function RemovePedalIcon({ fill }: { fill: FillColor }) {
   return <svg width={18} height={18} className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9516" ><path d="M322.4 107.2v529.4c67.7 24.7 120.3 96 139.7 203.4 8.1 45.7 48.6 76.9 95.3 76.9 52.7 0 95.3-43.7 95.3-97.7V668.6h184.5c66.9 0 115.5-64.5 97.3-131l-91.4-338.9c-14.1-54-62.8-91.5-117.5-91.5H322.4z m-51.2 0H166.1c-44.6 0-81.1 37.5-81.1 83.2v351.4c0 45.7 36.5 85.2 81.1 85.2H271.2V107.2z" p-id="9517" fill={fill}></path></svg>
 }
 
-
-
-export const ShezhiIcon = ({ fill }: { fill: FillColor }) => {
+export function ShezhiIcon({ fill }: { fill: FillColor }) {
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path
@@ -193,7 +189,7 @@ export const ShezhiIcon = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const EmailIcom = ({ fill }: { fill: FillColor }) => {
+export function EmailIcom({ fill }: { fill: FillColor }) {
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path
@@ -204,7 +200,7 @@ export const EmailIcom = ({ fill }: { fill: FillColor }) => {
   </svg>
 }
 
-export const NewListIcon = ({ fill }: { fill: FillColor }) => {
+export function NewListIcon({ fill }: { fill: FillColor }) {
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path
@@ -214,7 +210,7 @@ export const NewListIcon = ({ fill }: { fill: FillColor }) => {
     </g>
   </svg>
 }
-export const AddIcon = ({ fill }: { fill: FillColor }) => {
+export function AddIcon({ fill }: { fill: FillColor }) {
   return <svg width={30} height={30} className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12357" >
     <path
       fill={fill}
@@ -222,7 +218,7 @@ export const AddIcon = ({ fill }: { fill: FillColor }) => {
     </path>
   </svg>
 }
-export const ChooseIcon = ({ fill, fill1 }: any) => { // list 选中icon
+export function ChooseIcon({ fill, fill1 }: any) { // list 选中icon
   return <svg className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13380" width={30} height={30}>
     <path
       fill={fill}
@@ -235,7 +231,7 @@ export const ChooseIcon = ({ fill, fill1 }: any) => { // list 选中icon
   </svg>
 }
 
-export const Focus = () => { // 置顶关注
+export function Focus() { // 置顶关注
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-label="Unpin List" role="img" className="r-1cvl2hr r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path
@@ -246,7 +242,7 @@ export const Focus = () => { // 置顶关注
   </svg>
 }
 
-export const UnFollow = ({ fill }: { fill: FillColor }) => { // 取消置顶关注
+export function UnFollow({ fill }: { fill: FillColor }) { // 取消置顶关注
   return <svg width={24} height={24} viewBox="0 0 24 24" aria-label="Unpin List" role="img" className="r-1cvl2hr r-4qtqp9 r-yyyyoo r-z80fyv r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-19wmn03">
     <g>
       <path
@@ -254,5 +250,90 @@ export const UnFollow = ({ fill }: { fill: FillColor }) => { // 取消置顶关�
         d="M7 4.5C7 3.12 8.12 2 9.5 2h5C15.88 2 17 3.12 17 4.5v5.26L20.12 16H13v5l-1 2-1-2v-5H3.88L7 9.76V4.5z">
       </path>
     </g>
+  </svg>
+}
+
+export function FocusIcon() {
+  return <svg
+    width={24} height={24}
+    viewBox="0 0 24 24" aria-hidden="true" className="r-18jsvk2 r-4qtqp9 r-yyyyoo r-1q142lx r-1xvli5t r-dnmrzs r-bnwqim r-1plcrui r-lrvibr">
+    <g>
+      <path
+        fill={'#000'}
+        d="M10 4c-1.105 0-2 .9-2 2s.895 2 2 2 2-.9 2-2-.895-2-2-2zM6 6c0-2.21 1.791-4 4-4s4 1.79 4 4-1.791 4-4 4-4-1.79-4-4zm13 4v3h2v-3h3V8h-3V5h-2v3h-3v2h3zM3.651 19h12.698c-.337-1.8-1.023-3.21-1.945-4.19C13.318 13.65 11.838 13 10 13s-3.317.65-4.404 1.81c-.922.98-1.608 2.39-1.945 4.19zm.486-5.56C5.627 11.85 7.648 11 10 11s4.373.85 5.863 2.44c1.477 1.58 2.366 3.8 2.632 6.46l.11 1.1H1.395l.11-1.1c.266-2.66 1.155-4.88 2.632-6.46z">
+      </path>
+    </g>
+  </svg>
+}
+
+export function UnfollowIcon() {
+  return <svg
+    width={24} height={24}
+    className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1523" >
+    <path
+      fill="#2c2c2c"
+      p-id="1524"
+      d="M597.504 893.90592H193.65888a47.52896 47.52896 0 0 1-37.64224-18.28864 48.34304 48.34304 0 0 1-8.84736-41.82528 391.71072 391.71072 0 0 1 558.99648-252.01664 34.34496 34.34496 0 1 0 31.66208-60.95872 455.8592 455.8592 0 0 0-73.05728-29.95712 239.85664 239.85664 0 1 0-276.40832-0.07168 457.856 457.856 0 0 0-308.00896 326.43072A116.82304 116.82304 0 0 0 193.65888 962.56H597.504a34.304 34.304 0 1 0 0-68.65408zM355.60448 295.51104a171.008 171.008 0 1 1 171.008 170.53696 170.97216 170.97216 0 0 1-171.008-170.53696z m508.57472 493.12768l72.92928-72.73472a34.37056 34.37056 0 1 0-48.67584-48.5376l-72.92928 72.7296-72.9344-72.7296a34.37056 34.37056 0 1 0-48.67584 48.5376l72.9344 72.73472-72.9344 72.704a34.37056 34.37056 0 0 0 48.67584 48.54272l72.9344-72.73472 72.92928 72.73472a34.37056 34.37056 0 0 0 48.67584-48.54272z" >
+    </path></svg>
+}
+
+export function HotIcon() {
+  return <svg
+    className="icon"
+    viewBox="0 0 1024 1024"
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    p-id="2539"
+    id="mx_n_1690171460912"
+    width="16"
+    height="16"
+  >
+    <path
+      d="M478.540504 23.235761s34.388927 121.987747-74.122079 217.196279c-52.280463 45.890629-134.941684 121.987747-158.409802 253.211709A366.544134 366.544134 0 0 1 174.732925 351.034264S88.818698 574.097572 161.023826 756.498298c42.056728 105.838893 186.699342 250.481507 384.203313 250.481507 123.61425 0 247.112321-71.391877 327.97277-270.928977 0 0 41.766281-143.655094 0-220.739732C840.03086 453.097345 804.01543 383.390061 854.320853 272.206943c0 0-123.498071 68.13887-115.481733 110.892671 0 0.290447 12.256864-166.48423-260.298616-359.863853z"
+      fill="#f94f1d"
+      p-id="2540"
+      data-spm-anchor-id="a313x.7781069.0.i1"
+      className=""
+    ></path>
+    <path
+      d="M873.490356 516.472884l-0.755162-1.452235c0.98752 12.373043 1.684593 24.804175 1.684593 37.467665a445.661902 445.661902 0 0 1-421.670978 444.964829 397.970501 397.970501 0 0 0 92.943045 10.978897c123.61425 0 247.112321-71.391877 327.914681-270.928977-0.116179 0.232358 41.708192-143.597005-0.116179-221.030179z"
+      fill="#F8B62D"
+      p-id="2541"
+    ></path>
+    <path
+      d="M169.795326 580.894032a464.715226 464.715226 0 0 1 28.579986-160.907647 348.013615 348.013615 0 0 1-23.642387-66.802813S88.818698 576.24688 161.023826 758.647606c30.555026 76.968459 115.481734 174.26821 235.436351 221.843431A465.29612 465.29612 0 0 1 169.795326 580.894032z"
+      fill="#FFFFFF"
+      p-id="2542"
+    ></path>
+    <path
+      d="M545.459496 1024c-213.18811 0-355.449058-158.119356-395.007942-257.742682-73.250737-184.491945 9.875199-404.650783 13.418652-413.945087l13.360563-34.853642 8.7715 36.305877a361.838893 361.838893 0 0 0 53.906966 118.095756c30.438847-123.672339 111.822101-195.180395 156.841389-234.681189a224.283186 224.283186 0 0 0 55.126844-71.624234 11.617881 11.617881 0 0 1 20.970274 9.991378 245.776265 245.776265 0 0 1-60.761516 79.059677c-45.832539 40.255956-131.223962 115.249376-154.633991 246.531428l-4.240526 23.642387-15.916497-18.007715A373.74722 373.74722 0 0 1 174.26821 395.356478c-20.157023 68.952122-55.533469 228.117086-2.207398 362.303608 40.081688 100.959383 182.458816 243.104152 373.398684 243.104153 92.943045 0 172.351259-40.662582 236.481961-120.942138A11.617881 11.617881 0 0 1 800.007261 894.57681c-67.674155 84.578171-155.73769 129.42319-254.547765 129.42319zM889.929657 663.613342h-1.161788a11.617881 11.617881 0 0 1-10.398003-12.721579c5.228046-53.55843 0-96.718856-15.161334-124.834127-29.451327-54.48786-65.350579-121.000227-32.18153-220.739733-37.351486 24.107102-76.039029 55.533469-80.511912 75.516225a67.557976 67.557976 0 0 1 0 8.945768l-6.506014 88.992965-16.49739-87.714999a36.712503 36.712503 0 0 1 0-10.107556c-1.742682-32.007261-22.190152-168.459269-232.357613-326.113909a240.025414 240.025414 0 0 1 0 40.662582 11.617881 11.617881 0 1 1-23.235761-1.91695 192.101656 192.101656 0 0 0-4.008169-61.458589L458.44157 0l26.837305 19.053324C679.181302 156.841389 731.694123 281.036533 745.63558 344.760608c30.264579-35.783072 87.831178-68.835943 103.10869-77.316996l30.555027-16.845926-14.406172 31.832992c-48.67892 107.639664-12.837758 173.977763 18.762877 232.357613 17.426821 32.646245 23.642387 79.117767 17.833447 138.136601a11.617881 11.617881 0 0 1-11.559792 10.68845z"
+      fill="#231815"
+      p-id="2543"
+    ></path>
+    <path
+      d="M843.225777 806.571364a695.911051 695.911051 0 0 0 30.20649-65.118221"
+      fill="#FFF100"
+      p-id="2544"
+    ></path>
+    <path
+      d="M843.225777 818.131155a11.617881 11.617881 0 0 1-5.402314-1.336056 11.617881 11.617881 0 0 1-4.821421-15.684139 704.275925 704.275925 0 0 0 29.625596-63.898344 11.617881 11.617881 0 1 1 21.551168 8.7715 718.972544 718.972544 0 0 1-30.671204 66.105741 11.617881 11.617881 0 0 1-10.281825 6.041298z"
+      fill="#231815"
+      p-id="2545"
+    ></path>
+    <path
+      d="M338.661221 839.217608c0-179.031541 153.936919-184.840481 185.88609-324.255048 0 0 200.408441 171.36374 185.88609 324.255048-6.970728 73.483095-92.594509 160.6172-151.729521 167.529839-24.165192 2.788291-44.670751 6.912639-68.255049 0.98752-66.280009-16.613569-151.787611-93.930565-151.78761-168.517359z"
+      fill="#FFFFFF"
+      p-id="2546"
+    ></path>
+    <path
+      d="M524.547311 512.697073v0.638983c60.529158 61.28432 172.525528 191.695031 161.140005 311.53347-7.435444 78.653052-99.158611 171.944634-162.650329 179.321988-8.539142 0.98752-16.671659 2.091219-24.571818 2.962559 20.215112 3.253007 38.687543 0 60.006354-2.730202 59.135012-6.85455 144.758793-93.988654 151.729521-167.471749 14.754708-152.891309-185.653733-324.255049-185.653733-324.255049z"
+      fill="#DCDDDD"
+      p-id="2547"
+    ></path>
+    <path
+      d="M515.950079 1022.373497a113.971409 113.971409 0 0 1-28.347628-3.369186c-35.376447-8.887679-75.109598-33.401407-106.245519-65.699115-34.853642-36.305877-54.313592-76.794191-54.313592-114.087588 0-105.548446 51.060585-153.82074 100.378489-200.46653 37.351486-35.318357 72.611754-68.661675 85.798048-126.344452l4.298616-18.646699 14.580441 12.489222a807.442705 807.442705 0 0 1 100.029952 106.361697c65.931473 84.63626 96.196052 161.256183 89.864307 227.710461-7.725891 81.325165-99.27479 170.666667-161.953257 177.927842l-10.223735 1.277967a266.339914 266.339914 0 0 1-33.866122 2.846381z m14.754709-486.150216c-17.426821 53.384162-52.977536 87.134105-87.134105 119.373724-47.865668 45.309735-92.943045 88.121625-92.943045 183.620603 0 65.408668 78.594963 141.15725 142.958021 157.248015 18.065804 4.530973 34.853642 2.439755 53.674609 0l10.456092-1.277967c52.861357-6.157477 134.999773-88.412072 141.505787-156.841389 11.269344-122.394373-124.311323-260.530973-168.517359-302.122986z"
+      fill="#231815"
+      p-id="2548"
+    ></path>
   </svg>
 }

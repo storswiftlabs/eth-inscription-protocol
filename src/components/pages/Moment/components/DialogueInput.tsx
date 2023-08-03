@@ -8,7 +8,6 @@ import Solid from './Solid'
 import Pictures from './Pictures'
 import { EmojiIcon } from '@/components/pages/Chat/Icons'
 import { FillColor } from '@/type/Moment'
-import type { tweetSend } from '@/utils/InterfaceType'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -24,9 +23,14 @@ import type { tweetSend } from '@/utils/InterfaceType'
  * @Send 点击Send事件 外层传进来
  */
 
+interface content {
+  image: string[]
+  text: string
+}
+
 interface Props {
   isSolid?: boolean
-  closeHandler: ({ image, text }: tweetSend) => void
+  closeHandler: ({ image, text }: content) => void
   rowCss?: CSSProperties
   isSuccess: boolean
 }

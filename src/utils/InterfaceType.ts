@@ -72,7 +72,7 @@ export interface tweetSend { //  发送推文
 }
 
 export interface tweetComment { // 评论推文
-  type: ItemType.tweet_comment
+  type?: ItemType.tweet_comment
   text?: string //   text为评论文本 （ 选填 ) 文本图片二选一
   image?: string[] //   image 为 图片（ 选填 ) 文本图片二选一
   at?: string[] //  @ 为 艾特人物 （ 选填 )
