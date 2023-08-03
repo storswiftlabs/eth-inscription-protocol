@@ -34,7 +34,6 @@ interface Props {
 function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   const { theme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
-  const fileRef = useRef<HTMLInputElement>(null)
   const [pictureArr, setPictureArr] = useState<string[]>([])
   const chatInputRef = useRef<HTMLTextAreaElement>(null)
   const [inputData, setInputData] = useState('')
@@ -67,9 +66,6 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
-
-  // console.log(pictureArr, 'pictureArr')
-  // console.log(chatInputRef, 'pictureArr')
 
   const customTextareaStyles = {
     '.nextui-c-eXOOPO:hover': {
