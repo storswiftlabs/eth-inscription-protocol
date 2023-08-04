@@ -30,7 +30,7 @@ export function ChatContent({ type }: ContentData) {
         setMessageData((await getMessageGroup(type)).messages)
 
       if (window.location.search === '?type=message')
-        setMessageData((await getMessagePerson(address, type)).messages)
+        setMessageData((await getMessagePerson(address!, type)).messages)
     })()
   }, [])
 

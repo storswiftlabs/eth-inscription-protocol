@@ -26,8 +26,8 @@ export function ChatSideBar({ path = 'general' }) {
   const [messageGroupList, setMessageGroupList] = useState<SwiftChatResponse[]>([])
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
-    getMessageList(address).then(e => setMessageList(e.profiles))
-    getMessageGroupList(address).then(e => setMessageGroupList(e.groups))
+    getMessageList(address!).then(e => setMessageList(e.profiles))
+    getMessageGroupList(address!).then(e => setMessageGroupList(e.groups))
   }, [])
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
