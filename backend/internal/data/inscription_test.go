@@ -53,9 +53,9 @@ func newInscriptionRepo() (biz.InscriptionRepo, error) {
 
 func TestInscriptionRepo_InsertProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "ddd",
+		Address: "0x1335703c944A6d2C132816578e60299F0F33BD88",
 		Image:   "ipfs://test",
-		Text:    "ddd",
+		Text:    "eth_one",
 		Height:  100005,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b5",
 		TrxTime: time.Now(),
@@ -69,9 +69,9 @@ func TestInscriptionRepo_InsertProfile(t *testing.T) {
 
 func TestInscriptionRepo_UpdateProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "0x9d4841ad749878456c9d65",
+		Address: "0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5",
 		Image:   "",
-		Text:    "aptos5",
+		Text:    "eth_two",
 		Height:  20000,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b",
 		TrxTime: time.Now(),
@@ -149,14 +149,14 @@ func TestInscriptionRepo_InsertGroupMessage(t *testing.T) {
 
 func TestInscriptionRepo_InsertTweet(t *testing.T) {
 	tweet := &module.Tweet{
-		TrxHash: "0x11113",
-		Sender:  "0x13",
-		Title:   "sui3",
-		Text:    "this is inscription3",
-		Image:   []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		TrxHash: "0x3f13cc8730e56f0e1c78a7f9d9c6094b43780aa5d59e10584dc3eea5c7abc107",
+		Sender:  "0x58cb2a37B5c5A0029437baC495C7eb1f326B9754",
+		Title:   "",
+		Text:    "Base: 34.425728458 Gwei",
+		//Image:   []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		At:      nil,
-		//With:    "0x9d4841ad7498784563",
-		Height:  200000,
+		With:    "0x06936b39399db6d224acdda0f7faff11e7df3c7f3a5c2da08691c0e603508d35",
+		Height:  17838678,
 		TrxTime: time.Now(),
 	}
 
@@ -168,9 +168,9 @@ func TestInscriptionRepo_InsertTweet(t *testing.T) {
 
 func TestInscriptionRepo_InsertComment(t *testing.T) {
 	comment := &module.Comment{
-		With:    "0x9d4841ad749878456132",
-		Sender:  "0x1",
-		Text:    "0x1 commnet",
+		With:    "0x8af14ba1df0305e0b57239ab97cc3503a8044358a554db1e2667efba36311f89",
+		Sender:  "0x123",
+		Text:    "0x1 commnet23",
 		Image:   nil,
 		At:      []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		Height:  20000,
@@ -185,8 +185,8 @@ func TestInscriptionRepo_InsertComment(t *testing.T) {
 
 func TestInscriptionRepo_InsertLike(t *testing.T) {
 	like := &module.Like{
-		With:    "0x1111",
-		Sender:  "aaac",
+		With:    "0x8af14ba1df0305e0b57239ab97cc3503a8044358a554db1e2667efba36311f89",
+		Sender:  "aaae",
 		Height:  1000,
 		TrxHash: "0x9d4841ad7498784563",
 		TrxTime: time.Now(),
@@ -199,8 +199,8 @@ func TestInscriptionRepo_InsertLike(t *testing.T) {
 
 func TestInscriptionRepo_InsertFollow(t *testing.T) {
 	follow := &module.Follow{
-		Address:  "1112",
-		Follower: "0x2141111",
+		Address:  "0xC1b634853Cb333D3aD8663715b08f41A3Aec47cc",
+		Follower: "0x58cb2a37B5c5A0029437baC495C7eb1f326B9754",
 	}
 	err := aRepo.InsertFollow(context.Background(), follow)
 	if err != nil {

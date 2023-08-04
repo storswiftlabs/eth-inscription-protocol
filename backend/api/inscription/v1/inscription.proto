@@ -118,6 +118,8 @@ message GetFollowTweetReq{
 message GetTweetByAddressReq{
   string owner = 1;
   string address = 2;
+  int64 limit = 3;
+  int64 offset = 4;
 }
 
 message SwiftResponse{

@@ -4,7 +4,6 @@ import (
 	"backend/internal/biz"
 	"backend/module"
 	"context"
-
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -134,22 +133,19 @@ func (r *inscriptionRepo) FindGroupMessageByTitle(ctx context.Context, req *modu
 }
 
 func (r *inscriptionRepo) FindFollowTweet(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error) {
-	tweets := make([]*module.Tweets, 0)
-	profiles, err := r.FindFollowerByAddress(ctx, req.Owner)
+	var follower []*string
+	err := r.data.postgre.Table("follow").Cols("follower").Where("address = ?", req.Owner).Find(&follower)
 	if err != nil {
 		r.log.Warn(err)
-	}
-
-	follower := make([]string, len(profiles))
-	for k, v := range profiles {
-		follower[k] = v.Address
 	}
 	tweet := make([]*module.Tweet, 0)
 	err = r.data.postgre.In("sender", follower).Limit(int(req.Limit), int(req.Offset)).Desc("id").Find(&tweet)
 	if err != nil {
 		r.log.Warn(err)
 	}
+	tweets := make([]*module.Tweets, len(tweet))
 	for k, v := range tweet {
+		tmpTweets := new(module.Tweets)
 		likeNum, b, err := r.GetLikeByTrxHash(ctx, v.TrxHash, req.Owner)
 		if err != nil {
 			r.log.Warn(err)
@@ -160,16 +156,17 @@ func (r *inscriptionRepo) FindFollowTweet(ctx context.Context, req *module.GetMT
 			if err != nil {
 				r.log.Warn(err)
 			}
-			tweets[k].With = *withTweet
+			tmpTweets.With = *withTweet
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
-		tweets[k].Twt = *v
-		tweets[k].LikeNum = likeNum
-		tweets[k].LikeBool = b
-		tweets[k].Comments = comments
+		tmpTweets.Twt = *v
+		tmpTweets.LikeNum = likeNum
+		tmpTweets.LikeBool = b
+		tmpTweets.Comments = comments
+		tweets[k] = tmpTweets
 	}
 
 	return tweets, err
@@ -209,16 +206,16 @@ func (r *inscriptionRepo) FindTweet(ctx context.Context, req *module.GetMTReq) (
 	return tweets, err
 }
 
-func (r *inscriptionRepo) FindTweetByAddress(ctx context.Context, address, owner string) ([]*module.Tweets, error) {
-	tweets := make([]*module.Tweets, 0)
+func (r *inscriptionRepo) FindTweetByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error) {
 	tweet := make([]*module.Tweet, 0)
-	err := r.data.postgre.Where("sender = ?", address).Find(&tweet)
+	err := r.data.postgre.Desc("id").Where("sender = ?", req.Address).Limit(int(req.Limit), int(req.Offset)).Find(&tweet)
 	if err != nil {
 		return nil, err
 	}
-
+	tweets := make([]*module.Tweets, len(tweet))
 	for k, v := range tweet {
-		likeNum, b, err := r.GetLikeByTrxHash(ctx, v.TrxHash, owner)
+		tmpTweets := new(module.Tweets)
+		likeNum, b, err := r.GetLikeByTrxHash(ctx, v.TrxHash, req.Owner)
 		if err != nil {
 			r.log.Warn(err)
 		}
@@ -228,17 +225,19 @@ func (r *inscriptionRepo) FindTweetByAddress(ctx context.Context, address, owner
 			if err != nil {
 				r.log.Warn(err)
 			}
-			tweets[k].With = *withTweet
+			tmpTweets.With = *withTweet
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
-		tweets[k].Twt = *v
-		tweets[k].LikeNum = likeNum
-		tweets[k].LikeBool = b
-		tweets[k].Comments = comments
+		tmpTweets.Twt = *v
+		tmpTweets.LikeNum = likeNum
+		tmpTweets.LikeBool = b
+		tmpTweets.Comments = comments
+		tweets[k] = tmpTweets
 	}
+
 	return tweets, err
 }
 
@@ -253,7 +252,7 @@ func (r *inscriptionRepo) GetTweetByTrxHash(ctx context.Context, hash string) (*
 
 func (r *inscriptionRepo) FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comment, error) {
 	comments := make([]*module.Comment, 0)
-	err := r.data.postgre.Where("with = ?", hash).Find(&comments)
+	err := r.data.postgre.Where("\"with\" = ?", hash).Find(&comments)
 	if err != nil {
 		return nil, err
 	}
@@ -261,14 +260,15 @@ func (r *inscriptionRepo) FindCommentByTrxHash(ctx context.Context, hash string)
 }
 
 func (r *inscriptionRepo) GetLikeByTrxHash(ctx context.Context, hash string, owner string) (int64, bool, error) {
-	like := new(module.Like)
-	count, err := r.data.postgre.Where("with = ?", hash).Count(like)
+	likes := new(module.Like)
+	count, err := r.data.postgre.Where("\"with\" = ?", hash).Count(likes)
 	if err != nil {
-		r.log.Info(count, err)
+		return 0, false, err
 	}
-	has, err := r.data.postgre.Where("with = ? AND sender = ?", hash, owner).Exist(new(module.Like))
+
+	has, err := r.data.postgre.Where("\"with\" = ? AND sender = ?", hash, owner).Exist(new(module.Like))
 	if err != nil {
-		r.log.Info(err)
+		return 0, false, err
 	}
 	return count, has, nil
 }

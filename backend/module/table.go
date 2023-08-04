@@ -81,7 +81,8 @@ type Tweet struct {
 }
 
 type Comment struct {
-	With    string `xorm:"pk"`
+	Id      int64
+	With    string `xorm:"notnull"`
 	Sender  string `xorm:"notnull index"`
 	Text    string `xorm:"notnull"`
 	Image   []string

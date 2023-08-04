@@ -207,7 +207,12 @@ func (s *InscriptionService) GetFollowTweet(ctx context.Context, req *pb.GetFoll
 }
 
 func (s *InscriptionService) GetTweetByAddress(ctx context.Context, req *pb.GetTweetByAddressReq) (*pb.TweetResponse, error) {
-	tweets, err := s.uc.GetTweetByAddressHandler(ctx, req.Address, req.Owner)
+	tweets, err := s.uc.GetTweetByAddressHandler(ctx, &module.GetMTReq{
+		Owner:   req.Owner,
+		Address: req.Address,
+		Limit:   req.Limit,
+		Offset:  req.Offset,
+	})
 
 	tweetResponse := make([]*pb.Tweets, len(tweets))
 	for k, v := range tweets {

@@ -32,7 +32,7 @@ type InscriptionRepo interface {
 	FindFollowerByAddress(ctx context.Context, address string) ([]*module.Profile, error)
 	FindFollowTweet(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error)
 	FindTweet(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error)
-	FindTweetByAddress(ctx context.Context, address, owner string) ([]*module.Tweets, error)
+	FindTweetByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error)
 	GetTweetByTrxHash(ctx context.Context, hash string) (*module.Tweet, error)
 	FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comment, error)
 	GetLikeByTrxHash(ctx context.Context, hash string, owner string) (int64, bool, error)
@@ -86,8 +86,8 @@ func (uc *InscriptionUsecase) GetFollowTweetHandle(ctx context.Context, req *mod
 	return uc.repo.FindFollowTweet(ctx, req)
 }
 
-func (uc *InscriptionUsecase) GetTweetByAddressHandler(ctx context.Context, address, owner string) ([]*module.Tweets, error) {
-	return uc.repo.FindTweetByAddress(ctx, address, owner)
+func (uc *InscriptionUsecase) GetTweetByAddressHandler(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error) {
+	return uc.repo.FindTweetByAddress(ctx, req)
 }
 
 func (uc *InscriptionUsecase) GetFollowerHandler(ctx context.Context, address string) ([]*module.Profile, error) {
