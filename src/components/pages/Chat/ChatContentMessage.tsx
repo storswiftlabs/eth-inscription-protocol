@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { EmojiDialog } from './EmojiDialog'
 import { ReplyIcon } from './Icons'
@@ -10,6 +10,7 @@ import { useChatMessageReply } from '@/store/useChatMessage'
 export function ChatContentMessage({ data, me }: { data: ChatContentMessageType; me: number }) {
   const [isOpen, setIsOpen] = useState(false)
   const { theme } = useTheme()
+  const [messageData, setMessageData] = useState<ChatContentMessageType[]>()
 
   const setReplyMessage = useChatMessageReply(state => state.setReplyMessage)
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -24,6 +25,9 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
   function selectedOK(selected: string) {
     closeModal()
   }
+  useEffect(() => {
+
+  }, [])
 
   return <div className={`min-h-[100px] w-full flex ${me % 2 === 1 ? 'justify-start' : 'justify-end'}`} >
     <div className={`flex m-4  ${me % 2 === 1 ? '' : 'flex-row-reverse'}`}>
@@ -38,7 +42,7 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
             <br />
             <div className='flex gap-2 flex-wrap'>
               {data.image.map((t, index) => {
-                return <Image src={t} alt='' className='rounded-xl' width={150} height={150}></Image>
+                return <Image src={'https://i.pravatar.cc/150?u=a042581f4e29026704d'} alt='' className='rounded-xl' width={150} height={150}></Image>
               })}
             </div>
           </div>
