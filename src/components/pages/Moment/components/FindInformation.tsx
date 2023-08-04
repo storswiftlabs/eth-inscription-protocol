@@ -9,7 +9,9 @@ import { BackIcon, FocusIcon, GreaterIcon, UnfollowIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
 import DialogueInput from './DialogueInput'
 import { FillColor } from '@/type/Chat'
-import { ItemType, type tweetComment } from '@/utils/InterfaceType'
+import { ItemType } from '@/utils/InterfaceType'
+import type { type tweetComment, tweetFollow } from '@/utils/InterfaceType'
+
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 
 interface Props {
@@ -24,6 +26,12 @@ function FindInformation({ type }: Props) {
     at: [''],
     with: '',
   })
+
+  const [followUn, setFollowUn] = useState<tweetFollow>({
+    type: ItemType.tweet_follow,
+    with: '',
+  })
+
   const { address, isConnected } = useAccount()
   const router = useRouter()
   const { theme } = useTheme()
@@ -50,7 +58,8 @@ function FindInformation({ type }: Props) {
    */
   const followFunction = (withi: string) => {
     // TODO: 实现关注逻辑
-
+    setFollowUn({ ...followUn, with: withi })
+    sendTransaction()
   }
 
   /**
@@ -58,7 +67,8 @@ function FindInformation({ type }: Props) {
      * @param withi - 要取消关注的用户
      */
   const unfollowFunction = (withi: string) => {
-
+    setFollowUn({ type: ItemType.follow_unfollow, with: withi })
+    sendTransaction()
   }
 
   const a = 'https://i.pravatar.cc/150?u=a042581f4e29026704d'

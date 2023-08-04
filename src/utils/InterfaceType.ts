@@ -9,6 +9,7 @@ export enum ItemType {
   tweet_comment = 'tweet-comment', //   评论推文
   tweet_like = 'tweet-like', //     点赞
   tweet_follow = 'tweet-follow', //      关注用户
+  follow_unfollow = 'un-follow', // 取消关注或取消收藏
 }
 
 export interface createProfile { // 创建profile
@@ -85,6 +86,6 @@ export interface tweetLike { // 点赞
 }
 
 export interface tweetFollow {
-  type: ItemType.tweet_follow
+  type: ItemType.tweet_follow | ItemType.follow_unfollow
   with: string // with 为要关注用户的钱包地址,代表关注该用户
 }

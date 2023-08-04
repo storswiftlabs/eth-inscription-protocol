@@ -5,10 +5,10 @@ export function Card1() {
         <Card.Header css={{ position: 'absolute', zIndex: 1, top: 5 }}>
             <Col>
                 <Text size={12} weight="bold" transform="uppercase" color="#ffffffAA">
-                    What to watch
+                    CHAT
                 </Text>
                 <Text h4 color="white">
-                    Stream the Acme event
+                    Chat Message
                 </Text>
             </Col>
         </Card.Header>

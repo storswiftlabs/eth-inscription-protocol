@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes'
 import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
 import { Loading } from '@nextui-org/react'
 import Image from 'next/image'
-import { EmojiIcon, PictureIcon, SendIcon } from './Icons'
+import { AtIcon, EmojiIcon, PictureIcon, SendIcon } from './Icons'
 import { EmojiDialog } from './EmojiDialog'
 import { FillColor } from '@/type/Chat'
 import { Notifications } from '@/components/Notifications'
@@ -25,6 +25,8 @@ export function ChatInput({ type }: Props) {
   const fileRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+  const [isOpen2, setIsOpen2] = useState(false)
+  const [atMember, setAtMember] = useState<string[]>([])
   const { address, isConnected } = useAccount()
   const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
   const replyMessage = useChatMessageReply(state => state.reply)
@@ -33,9 +35,14 @@ export function ChatInput({ type }: Props) {
   function closeModal() {
     setIsOpen(false)
   }
-
+  function closeModal2() {
+    setIsOpen2(false)
+  }
   function openModal() {
     setIsOpen(true)
+  }
+  function openModal2() {
+    setIsOpen2(true)
   }
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
@@ -51,8 +58,9 @@ export function ChatInput({ type }: Props) {
   }
 
   useEffect(() => {
-    setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
-  }, [replyMessage])
+    replyMessage.txHash && setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
+    pictureArr.length > 0 && setSendDataOnChain({ ...sendDataOnChain, image: pictureArr })
+  }, [replyMessage, pictureArr])
 
   useEffect(() => {
     const clearData = () => {
@@ -77,9 +85,14 @@ export function ChatInput({ type }: Props) {
     setInputData(newValue)
     setSendDataOnChain({ ...sendDataOnChain, text: newValue })
   }
+  function selectedOK2(selected: string) {
+    closeModal2()
+    setAtMember([...atMember, selected])
+  }
 
   return <div className='p-4  w-full  min-h-[130px] '>
     <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
+    <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x)} type='at' />
 
     {isSuccess ? <Notifications data={data?.hash} /> : null}
     <div className='bg-neutral-200/40 dark:bg-neutral-500/30 h-full rounded-xl flex justify-between flex-col p-2 '>
@@ -100,6 +113,10 @@ export function ChatInput({ type }: Props) {
 
         </div>
       </div>}
+      {atMember.length > 0 && <div className='px-2'>
+
+        {atMember.map(t => <span className='bg-slate-300 rounded-md p-1 mx-1'>@{t}</span>)}
+      </div>}
       {pictureArr.length > 0 && replyMessage.txHash.length === 0
         && <>
           <br />
@@ -117,7 +134,7 @@ export function ChatInput({ type }: Props) {
       <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target?.files && e.target?.files[0]
         const reader = new FileReader()
-        reader.onload = function (e) {
+        reader.onload = function () {
           const dataURL = reader.result as string
           setPictureArr([...pictureArr, dataURL])
         }
@@ -130,6 +147,7 @@ export function ChatInput({ type }: Props) {
             <EmojiIcon onClick={() => openModal()} fill={handleFillColor()}></EmojiIcon>
             {/* <LockIcon fill={handleFillColor()}></LockIcon> */}
             <PictureIcon onClick={() => fileRef.current?.click()} fill={handleFillColor()}></PictureIcon>
+            <AtIcon onClick={() => openModal2()} fill={handleFillColor()} />
             {/* <SpeechIcon fill={status === 'recording' ? FillColor.Orange : handleFillColor()}></SpeechIcon> */}
             {/* <CloudIcon fill={handleFillColor()}></CloudIcon> */}
           </>}
