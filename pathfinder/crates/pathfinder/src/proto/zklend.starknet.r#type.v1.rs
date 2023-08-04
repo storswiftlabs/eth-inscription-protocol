@@ -5,12 +5,12 @@ pub struct BlockData {
     pub block_hash: ::prost::alloc::string::String,
     #[prost(uint64, tag = "2")]
     pub block_number: u64,
-    #[prost(string, tag = "3")]
-    pub gas_price: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "3")]
+    pub gas_price: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, tag = "4")]
     pub parent_block_hash: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub sequencer_address: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "5")]
+    pub sequencer_address: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, tag = "6")]
     pub state_commitment: ::prost::alloc::string::String,
     #[prost(string, tag = "7")]
@@ -29,8 +29,8 @@ pub mod block_data {
     #[allow(clippy::derive_partial_eq_without_eq)]
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct TransactionReceipt {
-        #[prost(string, tag = "1")]
-        pub actual_fee: ::prost::alloc::string::String,
+        #[prost(string, optional, tag = "1")]
+        pub actual_fee: ::core::option::Option<::prost::alloc::string::String>,
         #[prost(message, repeated, tag = "2")]
         pub events: ::prost::alloc::vec::Vec<transaction_receipt::Event>,
         #[prost(message, optional, tag = "3")]
@@ -51,8 +51,8 @@ pub mod block_data {
         pub transaction_index: u64,
         #[prost(string, tag = "8")]
         pub execution_status: ::prost::alloc::string::String,
-        #[prost(string, tag = "9")]
-        pub revert_error: ::prost::alloc::string::String,
+        #[prost(string, optional, tag = "9")]
+        pub revert_error: ::core::option::Option<::prost::alloc::string::String>,
     }
     /// Nested message and enum types in `TransactionReceipt`.
     pub mod transaction_receipt {
@@ -114,8 +114,8 @@ pub mod block_data {
             pub selector: ::prost::alloc::string::String,
             #[prost(string, tag = "4")]
             pub to_address: ::prost::alloc::string::String,
-            #[prost(string, tag = "5")]
-            pub nonce: ::prost::alloc::string::String,
+            #[prost(string, optional, tag = "5")]
+            pub nonce: ::core::option::Option<::prost::alloc::string::String>,
         }
         #[allow(clippy::derive_partial_eq_without_eq)]
         #[derive(Clone, PartialEq, ::prost::Message)]
@@ -171,8 +171,8 @@ pub struct DeclareTransaction {
     pub signature: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "8")]
     pub transaction_hash: ::prost::alloc::string::String,
-    #[prost(string, tag = "9")]
-    pub compiled_class_hash: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "9")]
+    pub compiled_class_hash: ::core::option::Option<::prost::alloc::string::String>,
 }
 #[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -227,16 +227,16 @@ pub struct InvokeTransaction {
     pub calldata: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
     #[prost(string, tag = "4")]
     pub sender_address: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
-    pub entry_point_selector: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
-    pub entry_point_type: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "5")]
+    pub entry_point_selector: ::core::option::Option<::prost::alloc::string::String>,
+    #[prost(string, optional, tag = "6")]
+    pub entry_point_type: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, tag = "7")]
     pub max_fee: ::prost::alloc::string::String,
     #[prost(string, repeated, tag = "8")]
     pub signature: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(string, tag = "9")]
-    pub nonce: ::prost::alloc::string::String,
+    #[prost(string, optional, tag = "9")]
+    pub nonce: ::core::option::Option<::prost::alloc::string::String>,
     #[prost(string, tag = "10")]
     pub transaction_hash: ::prost::alloc::string::String,
 }

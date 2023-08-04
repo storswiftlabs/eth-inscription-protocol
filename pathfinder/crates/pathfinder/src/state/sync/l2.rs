@@ -4,17 +4,15 @@ use crate::state::sync::{pending, SyncEvent};
 use anyhow::{anyhow, Context};
 use pathfinder_common::state_update::ContractClassUpdate;
 use pathfinder_common::{
-    BlockHash, BlockNumber, Chain, ChainId, ClassHash, ContractAddress, EntryPoint,
-    EthereumAddress, EventCommitment, Fee, GasPrice, L1ToL2MessageNonce, L1ToL2MessagePayloadElem,
-    SequencerAddress, StarknetVersion, StateCommitment, StateUpdate, TransactionCommitment,
+    BlockHash, BlockNumber, Chain, ChainId, ClassHash, EventCommitment, StarknetVersion,
+    StateCommitment, StateUpdate, TransactionCommitment,
 };
 use pathfinder_rpc::websocket::types::{BlockHeader, WebsocketSenders};
+use pathfinder_serde::bytes_as_hex_str;
 use pathfinder_storage::Storage;
 use prost::Message;
 use starknet_gateway_client::GatewayApi;
-use starknet_gateway_types::reply::transaction::{
-    ExecutionResources, ExecutionStatus, L1ToL2Message,
-};
+use starknet_gateway_types::reply::transaction::ExecutionStatus;
 use starknet_gateway_types::{
     error::SequencerError,
     reply::{Block, Status},
@@ -306,79 +304,93 @@ fn fire_print_block_data(block: &Block) {
         .transaction_receipts
         .iter()
         .map(|tr| {
-            let ExecutionResources {
-                builtin_instance_counter,
-                n_steps,
-                n_memory_holes,
-            } = tr.execution_resources.unwrap_or_default();
+            let execution_resources = match tr.execution_resources {
+                Some(er) => Some(PbExecutionResources {
+                    builtin_instance_counter: Some(PbBuiltinInstanceCounter {
+                        output_builtin: er.builtin_instance_counter.output_builtin,
+                        pedersen_builtin: er.builtin_instance_counter.pedersen_builtin,
+                        range_check_builtin: er.builtin_instance_counter.range_check_builtin,
+                        ecdsa_builtin: er.builtin_instance_counter.ecdsa_builtin,
+                        bitwise_builtin: er.builtin_instance_counter.bitwise_builtin,
+                        ec_op_builtin: er.builtin_instance_counter.ec_op_builtin,
+                        keccak_builtin: er.builtin_instance_counter.keccak_builtin,
+                        poseidon_builtin: er.builtin_instance_counter.poseidon_builtin,
+                        segment_arena_builtin: er.builtin_instance_counter.segment_arena_builtin,
+                    }),
+                    n_steps: er.n_steps,
+                    n_memory_holes: er.n_memory_holes,
+                }),
+                _ => None,
+            };
 
-            let l1_to_l2_consumed_message =
-                tr.l1_to_l2_consumed_message
-                    .clone()
-                    .unwrap_or(L1ToL2Message {
-                        from_address: EthereumAddress(primitive_types::H160::zero()),
-                        payload: vec![],
-                        selector: EntryPoint::ZERO,
-                        to_address: ContractAddress::ZERO,
-                        nonce: None,
-                    });
+            let l1_to_l2_consumed_message = match tr.l1_to_l2_consumed_message.clone() {
+                Some(m) => Some(PbL1ToL2Message {
+                    from_address: {
+                        let mut buf = [0u8; 2 + 40];
+                        bytes_as_hex_str(m.from_address.0.as_bytes(), &mut buf).to_string()
+                    },
+                    payload: m
+                        .payload
+                        .iter()
+                        .map(|e| e.0.to_hex_str().to_string())
+                        .collect(),
+                    selector: m.selector.0.to_hex_str().to_string(),
+                    to_address: m.to_address.0.to_hex_str().to_string(),
+                    nonce: match m.nonce {
+                        Some(n) => Some(n.0.to_hex_str().to_string()),
+                        _ => None,
+                    },
+                }),
+                _ => None,
+            };
 
             PbTransactionReceipt {
-                actual_fee: tr.actual_fee.unwrap_or(Fee::ZERO).to_string(),
+                actual_fee: match tr.actual_fee {
+                    Some(af) => Some(af.0.to_hex_str().to_string()),
+                    _ => None,
+                },
                 events: tr
                     .events
                     .iter()
                     .map(|e| PbEvent {
-                        data: e.data.iter().map(|d| d.to_string()).collect(),
-                        from_address: e.from_address.to_string(),
-                        keys: e.keys.iter().map(|k| k.to_string()).collect(),
+                        data: e
+                            .data
+                            .iter()
+                            .map(|d| d.0.to_hex_str().to_string())
+                            .collect(),
+                        from_address: e.from_address.0.to_hex_str().to_string(),
+                        keys: e
+                            .keys
+                            .iter()
+                            .map(|k| k.0.to_hex_str().to_string())
+                            .collect(),
                     })
                     .collect(),
-                execution_resources: Some(PbExecutionResources {
-                    builtin_instance_counter: Some(PbBuiltinInstanceCounter {
-                        output_builtin: builtin_instance_counter.output_builtin,
-                        pedersen_builtin: builtin_instance_counter.pedersen_builtin,
-                        range_check_builtin: builtin_instance_counter.range_check_builtin,
-                        ecdsa_builtin: builtin_instance_counter.ecdsa_builtin,
-                        bitwise_builtin: builtin_instance_counter.bitwise_builtin,
-                        ec_op_builtin: builtin_instance_counter.ec_op_builtin,
-                        keccak_builtin: builtin_instance_counter.keccak_builtin,
-                        poseidon_builtin: builtin_instance_counter.poseidon_builtin,
-                        segment_arena_builtin: builtin_instance_counter.segment_arena_builtin,
-                    }),
-                    n_steps,
-                    n_memory_holes,
-                }),
-                l1_to_l2_consumed_message: Some(PbL1ToL2Message {
-                    from_address: l1_to_l2_consumed_message.from_address.0.to_string(),
-                    payload: l1_to_l2_consumed_message
-                        .payload
-                        .iter()
-                        .map(|e| e.to_string())
-                        .collect(),
-                    selector: l1_to_l2_consumed_message.selector.to_string(),
-                    to_address: l1_to_l2_consumed_message.to_address.to_string(),
-                    nonce: l1_to_l2_consumed_message
-                        .nonce
-                        .unwrap_or_default()
-                        .to_string(),
-                }),
+                execution_resources: execution_resources,
+                l1_to_l2_consumed_message: l1_to_l2_consumed_message,
                 l2_to_l1_messages: tr
                     .l2_to_l1_messages
                     .iter()
                     .map(|m| PbL2ToL1Message {
-                        from_address: m.from_address.to_string(),
-                        payload: m.payload.iter().map(|e| e.to_string()).collect(),
-                        to_address: m.to_address.0.to_string(),
+                        from_address: m.from_address.0.to_hex_str().to_string(),
+                        payload: m
+                            .payload
+                            .iter()
+                            .map(|e| e.0.to_hex_str().to_string())
+                            .collect(),
+                        to_address: {
+                            let mut buf = [0u8; 2 + 40];
+                            bytes_as_hex_str(m.to_address.0.as_bytes(), &mut buf).to_string()
+                        },
                     })
                     .collect(),
-                transaction_hash: tr.transaction_hash.to_string(),
+                transaction_hash: tr.transaction_hash.0.to_hex_str().to_string(),
                 transaction_index: tr.transaction_index.get(),
                 execution_status: match tr.execution_status {
                     ExecutionStatus::Succeeded => "SUCCEEDED".to_string(),
                     ExecutionStatus::Reverted => "REVERTED".to_string(),
                 },
-                revert_error: tr.revert_error.clone().unwrap_or_default(),
+                revert_error: tr.revert_error.clone(),
             }
         })
         .collect();
@@ -393,13 +405,17 @@ fn fire_print_block_data(block: &Block) {
                         crate::proto::DeclareTransaction {
                             r#type: PbTransactionType::Declare.into(),
                             version: "0x0".to_string(),
-                            class_hash: tx.class_hash.to_string(),
-                            max_fee: tx.max_fee.to_string(),
-                            nonce: tx.nonce.to_string(),
-                            sender_address: tx.sender_address.to_string(),
-                            signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                            transaction_hash: tx.transaction_hash.to_string(),
-                            compiled_class_hash: "".to_string(),
+                            class_hash: tx.class_hash.0.to_hex_str().to_string(),
+                            max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                            nonce: tx.nonce.0.to_hex_str().to_string(),
+                            sender_address: tx.sender_address.0.to_hex_str().to_string(),
+                            signature: tx
+                                .signature
+                                .iter()
+                                .map(|s| s.clone().0.to_hex_str().to_string())
+                                .collect(),
+                            transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
+                            compiled_class_hash: None,
                         },
                     )),
                 },
@@ -408,13 +424,17 @@ fn fire_print_block_data(block: &Block) {
                         crate::proto::DeclareTransaction {
                             r#type: PbTransactionType::Declare.into(),
                             version: "0x1".to_string(),
-                            class_hash: tx.class_hash.to_string(),
-                            max_fee: tx.max_fee.to_string(),
-                            nonce: tx.nonce.to_string(),
-                            sender_address: tx.sender_address.to_string(),
-                            signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                            transaction_hash: tx.transaction_hash.to_string(),
-                            compiled_class_hash: "".to_string(),
+                            class_hash: tx.class_hash.0.to_hex_str().to_string(),
+                            max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                            nonce: tx.nonce.0.to_hex_str().to_string(),
+                            sender_address: tx.sender_address.0.to_hex_str().to_string(),
+                            signature: tx
+                                .signature
+                                .iter()
+                                .map(|s| s.clone().0.to_hex_str().to_string())
+                                .collect(),
+                            transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
+                            compiled_class_hash: None,
                         },
                     )),
                 },
@@ -423,13 +443,19 @@ fn fire_print_block_data(block: &Block) {
                         crate::proto::DeclareTransaction {
                             r#type: PbTransactionType::Declare.into(),
                             version: "0x2".to_string(),
-                            class_hash: tx.class_hash.to_string(),
-                            max_fee: tx.max_fee.to_string(),
-                            nonce: tx.nonce.to_string(),
-                            sender_address: tx.sender_address.to_string(),
-                            signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                            transaction_hash: tx.transaction_hash.to_string(),
-                            compiled_class_hash: tx.compiled_class_hash.to_string(),
+                            class_hash: tx.class_hash.0.to_hex_str().to_string(),
+                            max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                            nonce: tx.nonce.0.to_hex_str().to_string(),
+                            sender_address: tx.sender_address.0.to_hex_str().to_string(),
+                            signature: tx
+                                .signature
+                                .iter()
+                                .map(|s| s.clone().0.to_hex_str().to_string())
+                                .collect(),
+                            transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
+                            compiled_class_hash: Some(
+                                tx.compiled_class_hash.0.to_hex_str().to_string(),
+                            ),
                         },
                     )),
                 },
@@ -438,16 +464,19 @@ fn fire_print_block_data(block: &Block) {
                 transaction: Some(PbEnumTransaction::DeployTransaction(
                     crate::proto::DeployTransaction {
                         r#type: PbTransactionType::Deploy.into(),
-                        version: tx.version.0.to_string(),
-                        contract_address: tx.contract_address.to_string(),
-                        contract_address_salt: tx.contract_address_salt.to_string(),
-                        class_hash: tx.class_hash.to_string(),
+                        version: {
+                            let mut buf = [0u8; 2 + 64];
+                            bytes_as_hex_str(tx.version.0.as_bytes(), &mut buf).to_string()
+                        },
+                        contract_address: tx.contract_address.0.to_hex_str().to_string(),
+                        contract_address_salt: tx.contract_address_salt.0.to_hex_str().to_string(),
+                        class_hash: tx.class_hash.0.to_hex_str().to_string(),
                         constructor_calldata: tx
                             .constructor_calldata
                             .iter()
-                            .map(|c| c.to_string())
+                            .map(|c| c.0.to_hex_str().to_string())
                             .collect(),
-                        transaction_hash: tx.transaction_hash.to_string(),
+                        transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
                     },
                 )),
             },
@@ -455,19 +484,26 @@ fn fire_print_block_data(block: &Block) {
                 transaction: Some(PbEnumTransaction::DeployAccountTransaction(
                     crate::proto::DeployAccountTransaction {
                         r#type: PbTransactionType::DeployAccount.into(),
-                        version: tx.version.0.to_string(),
-                        contract_address: tx.contract_address.to_string(),
-                        contract_address_salt: tx.contract_address_salt.to_string(),
-                        class_hash: tx.class_hash.to_string(),
+                        version: {
+                            let mut buf = [0u8; 2 + 64];
+                            bytes_as_hex_str(tx.version.0.as_bytes(), &mut buf).to_string()
+                        },
+                        contract_address: tx.contract_address.0.to_hex_str().to_string(),
+                        contract_address_salt: tx.contract_address_salt.0.to_hex_str().to_string(),
+                        class_hash: tx.class_hash.0.to_hex_str().to_string(),
                         constructor_calldata: tx
                             .constructor_calldata
                             .iter()
-                            .map(|c| c.to_string())
+                            .map(|c| c.0.to_hex_str().to_string())
                             .collect(),
-                        transaction_hash: tx.transaction_hash.to_string(),
-                        max_fee: tx.max_fee.to_string(),
-                        signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                        nonce: tx.nonce.to_string(),
+                        transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
+                        max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                        signature: tx
+                            .signature
+                            .iter()
+                            .map(|s| s.clone().0.to_hex_str().to_string())
+                            .collect(),
+                        nonce: tx.nonce.0.to_hex_str().to_string(),
                     },
                 )),
             },
@@ -476,30 +512,48 @@ fn fire_print_block_data(block: &Block) {
                     InvokeTransaction::V0(tx) => crate::proto::InvokeTransaction {
                         r#type: PbTransactionType::InvokeFunction.into(),
                         version: "0x0".to_string(),
-                        calldata: tx.calldata.iter().map(|c| c.to_string()).collect(),
-                        sender_address: tx.sender_address.to_string(),
-                        entry_point_selector: tx.entry_point_selector.to_string(),
+                        calldata: tx
+                            .calldata
+                            .iter()
+                            .map(|c| c.0.to_hex_str().to_string())
+                            .collect(),
+                        sender_address: tx.sender_address.0.to_hex_str().to_string(),
+                        entry_point_selector: Some(
+                            tx.entry_point_selector.0.to_hex_str().to_string(),
+                        ),
                         entry_point_type: match tx.entry_point_type {
-                            Some(EntryPointType::External) => "EXTERNAL".to_string(),
-                            Some(EntryPointType::L1Handler) => "L1_HANDLER".to_string(),
-                            None => "".to_string(),
+                            Some(EntryPointType::External) => Some("EXTERNAL".to_string()),
+                            Some(EntryPointType::L1Handler) => Some("L1_HANDLER".to_string()),
+                            _ => None,
                         },
-                        max_fee: tx.max_fee.to_string(),
-                        signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                        nonce: "".to_string(),
-                        transaction_hash: tx.transaction_hash.to_string(),
+                        max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                        signature: tx
+                            .signature
+                            .iter()
+                            .map(|s| s.clone().0.to_hex_str().to_string())
+                            .collect(),
+                        nonce: None,
+                        transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
                     },
                     InvokeTransaction::V1(tx) => crate::proto::InvokeTransaction {
                         r#type: PbTransactionType::InvokeFunction.into(),
                         version: "0x0".to_string(),
-                        calldata: tx.calldata.iter().map(|c| c.to_string()).collect(),
-                        sender_address: tx.sender_address.to_string(),
-                        entry_point_selector: "".to_string(),
-                        entry_point_type: "".to_string(),
-                        max_fee: tx.max_fee.to_string(),
-                        signature: tx.signature.iter().map(|s| s.clone().to_string()).collect(),
-                        nonce: tx.nonce.to_string(),
-                        transaction_hash: tx.transaction_hash.to_string(),
+                        calldata: tx
+                            .calldata
+                            .iter()
+                            .map(|c| c.0.to_hex_str().to_string())
+                            .collect(),
+                        sender_address: tx.sender_address.0.to_hex_str().to_string(),
+                        entry_point_selector: None,
+                        entry_point_type: None,
+                        max_fee: tx.max_fee.0.to_hex_str().to_string(),
+                        signature: tx
+                            .signature
+                            .iter()
+                            .map(|s| s.clone().0.to_hex_str().to_string())
+                            .collect(),
+                        nonce: Some(tx.nonce.0.to_hex_str().to_string()),
+                        transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
                     },
                 })),
             },
@@ -507,12 +561,19 @@ fn fire_print_block_data(block: &Block) {
                 transaction: Some(PbEnumTransaction::L1HandlerTransaction(
                     crate::proto::L1HandlerTransaction {
                         r#type: PbTransactionType::L1Handler.into(),
-                        version: tx.version.0.to_string(),
-                        contract_address: tx.contract_address.to_string(),
-                        entry_point_selector: tx.entry_point_selector.to_string(),
-                        nonce: tx.nonce.to_string(),
-                        calldata: tx.calldata.iter().map(|c| c.to_string()).collect(),
-                        transaction_hash: tx.transaction_hash.to_string(),
+                        version: {
+                            let mut buf = [0u8; 2 + 64];
+                            bytes_as_hex_str(tx.version.0.as_bytes(), &mut buf).to_string()
+                        },
+                        contract_address: tx.contract_address.0.to_hex_str().to_string(),
+                        entry_point_selector: tx.entry_point_selector.0.to_hex_str().to_string(),
+                        nonce: tx.nonce.0.to_hex_str().to_string(),
+                        calldata: tx
+                            .calldata
+                            .iter()
+                            .map(|c| c.0.to_hex_str().to_string())
+                            .collect(),
+                        transaction_hash: tx.transaction_hash.0.to_hex_str().to_string(),
                     },
                 )),
             },
@@ -520,15 +581,21 @@ fn fire_print_block_data(block: &Block) {
         .collect();
 
     let pb_block = crate::proto::BlockData {
-        block_hash: block.block_hash.to_string(),
+        block_hash: block.block_hash.0.to_hex_str().to_string(),
         block_number: block.block_number.get(),
-        gas_price: block.gas_price.unwrap_or(GasPrice::ZERO).0.to_string(),
-        parent_block_hash: block.parent_block_hash.to_string(),
-        sequencer_address: block
-            .sequencer_address
-            .unwrap_or(SequencerAddress::ZERO)
-            .to_string(),
-        state_commitment: block.state_commitment.to_string(),
+        gas_price: match block.gas_price {
+            Some(gp) => {
+                let mut buf = [0u8; 2 + 32];
+                Some(bytes_as_hex_str(&gp.to_be_bytes(), &mut buf).to_string())
+            }
+            _ => None,
+        },
+        parent_block_hash: block.parent_block_hash.0.to_hex_str().to_string(),
+        sequencer_address: match block.sequencer_address {
+            Some(sa) => Some(sa.0.to_hex_str().to_string()),
+            _ => None,
+        },
+        state_commitment: block.state_commitment.0.to_hex_str().to_string(),
         status: block.status.to_string(),
         timestamp: block.timestamp.get(),
         transaction_receipts: pb_transaction_receipts,
