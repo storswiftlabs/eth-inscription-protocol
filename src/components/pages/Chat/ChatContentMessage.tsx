@@ -2,17 +2,22 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
+import { useAccount } from 'wagmi'
 import { EmojiDialog } from './EmojiDialog'
 import { ReplyIcon } from './Icons'
-import { type ChatContentMessageType, FillColor } from '@/type/Chat'
+import { FillColor } from '@/type/Chat'
+import type { ChatContentMessageType, ProfileResponse } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
+import { getProfile } from '@/utils/requestApi'
 
 export function ChatContentMessage({ data, me }: { data: ChatContentMessageType; me: number }) {
   const [isOpen, setIsOpen] = useState(false)
   const { theme } = useTheme()
+  const { address, isConnected } = useAccount()
   const [messageData, setMessageData] = useState<ChatContentMessageType[]>()
-
+  const [profileData, setProfileData] = useState<ProfileResponse>()
   const setReplyMessage = useChatMessageReply(state => state.setReplyMessage)
+
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   function closeModal() {
@@ -26,16 +31,18 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
     closeModal()
   }
   useEffect(() => {
-
+    (async () => {
+      setProfileData(await getProfile(data.sender))
+    })()
   }, [])
 
-  return <div className={`min-h-[100px] w-full flex ${me % 2 === 1 ? 'justify-start' : 'justify-end'}`} >
-    <div className={`flex m-4  ${me % 2 === 1 ? '' : 'flex-row-reverse'}`}>
+  return <div className={`min-h-[100px] w-full flex ${data.sender !== address ? 'justify-start' : 'justify-end'}`} >
+    <div className={`flex m-4  ${data.sender !== address ? '' : 'flex-row-reverse'}`}>
       <div className="relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500" />
-      <div className={`flex flex-col ${me % 2 === 1 ? '' : 'items-end'} group relative`}>
-        Nick
+      <div className={`flex flex-col ${data.sender !== address ? '' : 'items-end'} group relative`}>
+        {profileData?.text}
         <div className='max-w-[800px] text-sm'>
-          <div className={`rounded-xl p-2   ${me % 2 === 1 ? 'bg-neutral-200 dark:bg-neutral-700' : 'bg-green-300 dark:bg-[#48BD67]'}`}>
+          <div className={`rounded-xl p-2   ${data.sender !== address ? 'bg-neutral-200 dark:bg-neutral-700' : 'bg-green-300 dark:bg-[#48BD67]'}`}>
             <div>
               {data.text}
             </div>
@@ -50,8 +57,8 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
 
         </div>
 
-        <Image onClick={openModal} className={`w-10 h-10 cursor-pointer absolute top-0 ${me % 2 === 1 ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/emoji.svg' alt='' width={20} height={20}></Image>
-        <div onClick={() => { setReplyMessage({ text: data.text, txHash: '0x00002' }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${me % 2 === 1 ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+        <Image onClick={openModal} className={`w-10 h-10 cursor-pointer absolute top-0 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/emoji.svg' alt='' width={20} height={20}></Image>
+        <div onClick={() => { setReplyMessage({ text: data.text, txHash: '0x00002' }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
           <ReplyIcon fill={handleFillColor()}></ReplyIcon>
         </div>
 
