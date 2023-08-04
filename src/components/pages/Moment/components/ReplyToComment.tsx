@@ -1,15 +1,13 @@
 'use client'
-import { Modal, Row, Spacer, User } from '@nextui-org/react'
+import { Row, Spacer, User } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import type { ReactNode } from 'react'
 import React, { useState } from 'react'
 import { KudosIcon, PedalIcon, RemoveIcon, RemovePedalIcon } from './Icons'
-import DialogueInput from './DialogueInput'
 import { FillColor } from '@/type/Moment'
-import type { tweetSend } from '@/utils/InterfaceType'
 
 /**
- * @用户信息评论组件
+ * @ReplyToComment 用户信息评论组件
  * @param {string} props.aimsAvatar - 评论用户头像图片路径
  * @param {string} props.avatar - 用户头像图片路径
  * @param {string} props.name - 用户名称
@@ -32,24 +30,24 @@ interface Props {
 }
 
 function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, agree, noAgree, avatar }: Props) {
-  const [pictureArr, setPictureArr] = useState<string[]>([])
+  // const [pictureArr, setPictureArr] = useState<string[]>([])
   const [dz, setDz] = useState(false) // 点赞和取消点赞
   const [ca, setCa] = useState(false) // 踩和取消踩
-  const [visible, setVisible] = React.useState(false)
-  const [value, setValue] = useState('') // 弹框的值
+  // const [visible, setVisible] = React.useState(false)
+  // const [value, setValue] = useState('') // 弹框的值
   const { theme } = useTheme()
-  const handler = () => setVisible(true)
-  const closeHandler = () => {
-    setVisible(false)
-    // console.log('value', value)
-  }
-  function removeSpaces(inputString: string): string {
-    return inputString.replace(/\s/g, '')
-  }
+  // const handler = () => setVisible(true)
+  // const closeHandler = () => {
+  // setVisible(false)
+  // console.log('value', value)
+  // }
+  // function removeSpaces(inputString: string): string {
+  // return inputString.replace(/\s/g, '')
+  // }
 
-  const closeHandlerFunction = (tweetSendArr: tweetSend) => {
-    // console.log(tweetSendArr, '123')
-  }
+  // const closeHandlerFunction = (tweetSendArr: { image: string[]; text: string }) => {
+  // console.log(tweetSendArr, '123')
+  // }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
@@ -70,9 +68,9 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
                 {ca ? <RemovePedalIcon fill={handleFillColor()} /> : <KudosIcon fill={handleFillColor()} />}
                 <span>{noAgree}</span>
               </span>
-              <span style={{ fontSize: '14px', cursor: 'pointer' }} onClick={() => handler()}>
+              {/* <span style={{ fontSize: '14px', cursor: 'pointer' }} onClick={() => handler()}>
                 reply
-              </span>
+              </span> */}
             </p>
             <Spacer y={0.4} />
             {children}
@@ -80,7 +78,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
         </Row>
       </div>
       <Spacer y={1} />
-      <Modal
+      {/* <Modal
         className='ijHtNE'
         closeButton
         width="50%"
@@ -99,7 +97,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
           </div>
           <DialogueInput isSuccess={false} closeHandler={closeHandlerFunction} rowCss={{ padding: '0' }} isSolid={true} />
         </Modal.Body>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

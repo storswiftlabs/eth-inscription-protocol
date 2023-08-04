@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useAccount, useWalletClient } from 'wagmi'
 import DynamicCard from '../DynamicCard/DynamicCard'
 import DialogueInput from '../DialogueInput'
-import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import type { tweetSend } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
+import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -38,8 +38,8 @@ function Find({ isUpper }: Props) {
   if (!isConnected)
     alert('Please connect your wallet first')
 
-  const closeHandler = (tweetSendArr: tweetSend) => {
-    setUploadData({ ...uploadData, ...tweetSendArr })
+  const closeHandler = (tweetSendArr: { image: string[]; text: string }) => {
+    setUploadData({ ...uploadData, image: tweetSendArr.image, text: tweetSendArr.text })
     sendTransaction()
   }
 
