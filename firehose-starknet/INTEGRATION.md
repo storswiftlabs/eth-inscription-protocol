@@ -75,13 +75,13 @@ modify the flag `reader-node-path: "dchain"` to point to the path of your `dchai
 
 _all subsequent commands are run from the `devel/standard/` directory_
 
-Start `firestarknet`
+Start `firestark`
 
 ```bash
 ./start.sh
 ```
 
-This will launch `firestarknet` application. Behind the scenes we are starting 3 sub processes: `reader-node`, `relayer`, `firehose`
+This will launch `firestark` application. Behind the scenes we are starting 3 sub processes: `reader-node`, `relayer`, `firehose`
 
 _reader-node_
 
@@ -110,7 +110,7 @@ ls -las ./firehose-data/storage/merged-blocks
 We have also built tools that allow you to introspect block files:
 
 ```bash
-go install ../../cmd/firestarknet && firestarknet tools print blocks --store ./firehose-data/storage/merged-blocks 100
+go install ../../cmd/firestark && firestark tools print blocks --store ./firehose-data/storage/merged-blocks 100
 ```
 
 At this point we have `reader-node` process running as well a `relayer` & `firehose` process. Both of these processes work together to provide the Firehose data stream.
@@ -181,15 +181,15 @@ Perform a **case-sensitive** search/replace for the following terms:
 ### Files
 
 ```
-git mv ./devel/firestarknet ./devel/fireaptos
-git mv ./cmd/firestarknet ./cmd/fireaptos
-git mv ./tools/firestarknet/scripts/starknet-is-running ./tools/firestarknet/scripts/aptos-is-running
-git mv ./tools/firestarknet/scripts/starknet-rpc-head-block ./tools/firestarknet/scripts/aptos-rpc-head-block
-git mv ./tools/firestarknet/scripts/starknet-resume ./tools/firestarknet/scripts/aptos-resume
-git mv ./tools/firestarknet/scripts/starknet-command ./tools/firestarknet/scripts/aptos-command
-git mv ./tools/firestarknet/scripts/starknet-debug-firehose-logs-30s ./tools/firestarknet/scripts/aptos-debug-deep-mind-30s
-git mv ./tools/firestarknet/scripts/starknet-maintenance ./tools/firestarknet/scripts/aptos-maintenance
-git mv ./tools/firestarknet ./tools/fireaptos
+git mv ./devel/firestark ./devel/fireaptos
+git mv ./cmd/firestark ./cmd/fireaptos
+git mv ./tools/firestark/scripts/starknet-is-running ./tools/firestark/scripts/aptos-is-running
+git mv ./tools/firestark/scripts/starknet-rpc-head-block ./tools/firestark/scripts/aptos-rpc-head-block
+git mv ./tools/firestark/scripts/starknet-resume ./tools/firestark/scripts/aptos-resume
+git mv ./tools/firestark/scripts/starknet-command ./tools/firestark/scripts/aptos-command
+git mv ./tools/firestark/scripts/starknet-debug-firehose-logs-30s ./tools/firestark/scripts/aptos-debug-deep-mind-30s
+git mv ./tools/firestark/scripts/starknet-maintenance ./tools/firestark/scripts/aptos-maintenance
+git mv ./tools/firestark ./tools/fireaptos
 git mv ./types/pb/sf/starknet ./types/pb/sf/aptos
 ```
 
@@ -197,7 +197,7 @@ git mv ./types/pb/sf/starknet ./types/pb/sf/aptos
 
 Doing a Firehose integration means there is an instrumented node that emits Firehose logs (or if not a node directly, definitely a process that reads and emits Firehose logs).
 
-#### [cmd/firestarknet/cli/constants.go](cmd/firestarknet/cli/constants.go)
+#### [cmd/firestark/cli/constants.go](cmd/firestark/cli/constants.go)
 
 - Replace `ChainExecutableName = "dummy-blockchain"` by the `ChainExecutableName = "<binary>"` where `<binary>` is the node's binary name that should be launched.
 
@@ -208,7 +208,7 @@ Doing a Firehose integration means there is an instrumented node that emits Fire
 
 ### Dockerfile(s) & GitHub Actions
 
-There is two Docker image created by a build of `firehose-starknet`. First, a version described as _vanilla_ where only `firestarknet` Golang binary is included and another one described as _bundle_ which includes both the `firstarknet` binary and the chain's binary that `reader-node` launches.
+There is two Docker image created by a build of `firehose-starknet`. First, a version described as _vanilla_ where only `firestark` Golang binary is included and another one described as _bundle_ which includes both the `firstarknet` binary and the chain's binary that `reader-node` launches.
 
 Here the files that needs to be modified for this. The Dockerfile are all built on Ubuntu 20.04 images.
 

@@ -1,8 +1,8 @@
 package types
 
 import (
+	"encoding/base64"
 	"fmt"
-	"time"
 
 	pbstarknet "github.com/starknet-graph/firehose-starknet/types/pb/zklend/starknet/type/v1"
 	"github.com/streamingfast/bstream"
@@ -16,23 +16,39 @@ func BlockFromProto(b *pbstarknet.BlockData) (*bstream.Block, error) {
 		return nil, fmt.Errorf("unable to marshal to binary form: %s", err)
 	}
 
-	blockNumber := b.BlockNumber
+	blockNumber := b.Number()
 
 	block := &bstream.Block{
-		Id:             b.BlockHash,
+		Id:             b.ID(),
 		Number:         blockNumber,
-		PreviousId:     b.ParentBlockHash,
-		Timestamp:      time.Unix(int64(b.Timestamp), 0),
+		PreviousId:     b.PreviousID(),
+		Timestamp:      b.Time(),
 		PayloadKind:    pbbstream.Protocol_UNKNOWN,
 		PayloadVersion: 1,
 	}
 
-	// For simpliciy's sake we're pretending StarkNet cannot re-org for more than 100 blocks
-	if blockNumber <= 100 {
-		block.LibNum = 0
-	} else {
+	return bstream.GetBlockPayloadSetter(block, content)
+}
 
-		block.LibNum = blockNumber - 100
+func BlockFromProtoBase64(protoBase64 string) (*bstream.Block, error) {
+	content, err := base64.StdEncoding.DecodeString(protoBase64)
+	if err != nil {
+		return nil, fmt.Errorf("unable to decode to binary form: %s", err)
+	}
+
+	pbBlock := new(pbstarknet.BlockData)
+	err = proto.Unmarshal(content, pbBlock)
+	if err != nil {
+		return nil, fmt.Errorf("unable to decode payload: %w", err)
+	}
+
+	block := &bstream.Block{
+		Id:             pbBlock.ID(),
+		Number:         pbBlock.Number(),
+		PreviousId:     pbBlock.PreviousID(),
+		Timestamp:      pbBlock.Time(),
+		PayloadKind:    pbbstream.Protocol_UNKNOWN,
+		PayloadVersion: 1,
 	}
 
 	return bstream.GetBlockPayloadSetter(block, content)

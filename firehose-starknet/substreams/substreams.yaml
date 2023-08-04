@@ -10,6 +10,6 @@ package:
 
 protobuf:
   files:
-    - sf/starknet/type/v1/type.proto
+    - zklend/starknet/type/v1/type.proto
   importPaths:
     - ../proto

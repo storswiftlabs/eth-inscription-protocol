@@ -11,20 +11,20 @@ option go_package = "github.com/starknet-graph/firehose-starknet/types/pb/zklend
 message BlockData {
     string block_hash = 1;
     uint64 block_number = 2;
-    string gas_price = 3;
+    optional string gas_price = 3;
     string parent_block_hash = 4;
-    string sequencer_address = 5;
+    optional string sequencer_address = 5;
     string state_commitment = 6;
     string status = 7;
     uint64 timestamp = 8;
     message TransactionReceipt {
-        string actual_fee = 1;
+        optional string actual_fee = 1;
         message Event {
             repeated string data = 1;
             string from_address = 2;
             repeated string keys = 3;
         }
-        repeated string events = 2;
+        repeated Event events = 2;
         message ExecutionResources {
             message BuiltinInstanceCounter {
                 uint64 output_builtin = 1;
@@ -47,7 +47,7 @@ message BlockData {
             repeated string payload = 2;
             string selector = 3;
             string to_address = 4;
-            string nonce = 5;
+            optional string nonce = 5;
         }
         L1ToL2Message l1_to_l2_consumed_message = 4;
         message L2ToL1Message {
@@ -59,7 +59,7 @@ message BlockData {
         string transaction_hash = 6;
         uint64 transaction_index = 7;
         string execution_status = 8;
-        string revert_error = 9;
+        optional string revert_error = 9;
     }
     repeated TransactionReceipt transaction_receipts = 9;
     repeated Transaction transactions = 10;
@@ -93,7 +93,7 @@ message DeclareTransaction {
     string sender_address = 6;
     repeated string signature = 7;
     string transaction_hash = 8;
-    string compiled_class_hash = 9;
+    optional string compiled_class_hash = 9;
 }
 
 message DeployTransaction {
@@ -124,11 +124,11 @@ message InvokeTransaction {
     string version = 2;
     repeated string calldata = 3;
     string sender_address = 4;
-    string entry_point_selector = 5;
-    string entry_point_type = 6;
+    optional string entry_point_selector = 5;
+    optional string entry_point_type = 6;
     string max_fee = 7;
     repeated string signature = 8;
-    string nonce = 9;
+    optional string nonce = 9;
     string transaction_hash = 10;
 }
 
