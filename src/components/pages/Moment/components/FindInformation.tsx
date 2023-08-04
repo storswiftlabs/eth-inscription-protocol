@@ -9,8 +9,8 @@ import { BackIcon, FocusIcon, GreaterIcon, UnfollowIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
 import DialogueInput from './DialogueInput'
 import { FillColor } from '@/type/Chat'
+import type { tweetComment, tweetFollow } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
-import type { type tweetComment, tweetFollow } from '@/utils/InterfaceType'
 
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 
