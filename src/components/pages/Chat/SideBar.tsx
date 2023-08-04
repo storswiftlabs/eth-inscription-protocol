@@ -12,6 +12,7 @@ import { type MessageOnChain, sendMessageOnChain } from '@/utils/sendMessageOnCh
 import { FillColor } from '@/type/Chat'
 import { getMessageGroupList, getMessageList } from '@/utils/requestApi'
 import type { SwiftChatResponse } from '@/utils/InterfaceType'
+import { AbbreviatedText } from '@/utils/AbbreviatedText'
 
 export function ChatSideBar({ path = 'general' }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,8 +26,8 @@ export function ChatSideBar({ path = 'general' }) {
   const [messageGroupList, setMessageGroupList] = useState<SwiftChatResponse[]>([])
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
-    getMessageList().then(e => setMessageList(e.profiles))
-    getMessageGroupList().then(e => setMessageGroupList(e.groups))
+    getMessageList(address).then(e => setMessageList(e.profiles))
+    getMessageGroupList(address).then(e => setMessageGroupList(e.groups))
   }, [])
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
@@ -85,7 +86,7 @@ export function ChatSideBar({ path = 'general' }) {
         Messages
       </h1>
       <div className='w-full flex justify-center flex-col'>
-        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-2 rounded-lg m-1`}>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; {t.sender}</div></Link>)}
+        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-2 rounded-lg m-1`}>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; {AbbreviatedText(t.sender)}</div></Link>)}
 
         {/* <div className='flex'>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; 0xEa...B65c</div> */}
 

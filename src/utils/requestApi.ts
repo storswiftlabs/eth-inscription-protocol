@@ -1,19 +1,23 @@
 /* eslint unicorn/prefer-node-protocol: 0 */
 import process from 'process'
 
-export async function getChatGeneral() {
-  return await fetch(`${process.env.NEXT_PUBLIC_FETCH_API}/api/chat`).then(e => e.json())
-}
+const ApiUrl = process.env.NEXT_PUBLIC_FETCH_API
 
-export async function getMessageList() {
-  return await fetch(`${process.env.NEXT_PUBLIC_FETCH_API}/api/message_window?owner=111`).then(e => e.json())
+export async function getChatGeneral() {
+  return await fetch(`${ApiUrl}/api/chat`).then(e => e.json())
 }
-export async function getMessageGroupList() {
-  return await fetch(`${process.env.NEXT_PUBLIC_FETCH_API}/api/group?address=0x123456789`).then(e => e.json())
+export async function getMessageList(owner: string) {
+  return await fetch(`${ApiUrl}/api/message_window?owner=${owner}`).then(e => e.json())
 }
-export async function getMessageGroup() {
-  return await fetch(`${process.env.NEXT_PUBLIC_FETCH_API}/api/group_message?title=sui&limit=10&offset=1`).then(e => e.json())
+export async function getMessageGroupList(owner: string) {
+  return await fetch(`${ApiUrl}/api/group?address=${owner}`).then(e => e.json())
 }
-export async function getMessagePerson() {
-  return await fetch(`${process.env.NEXT_PUBLIC_FETCH_API}/api/message?owner=1116&to=eth2&limit=10&offset=1`).then(e => e.json())
+export async function getMessageGroup(group: string) {
+  return await fetch(`${ApiUrl}/api/group_message?title=${group}&limit=10&offset=1`).then(e => e.json())
+}
+export async function getMessagePerson(owner: string, to: string) {
+  return await fetch(`${ApiUrl}/api/message?owner=${owner}&to=${to}&limit=10&offset=1`).then(e => e.json())
+}
+export async function getProfile(owner: string) {
+  return await fetch(`${ApiUrl}/api/profile?address=${owner}`).then(e => e.json())
 }
