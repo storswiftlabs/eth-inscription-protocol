@@ -231,3 +231,19 @@ func TestInscriptionRepo_GetLikeByTrxHash(t *testing.T) {
 	hash, b, err := aRepo.GetLikeByTrxHash(context.Background(), "0x1111", "aaac")
 	t.Log(hash, "\n", b, "\n", err)
 }
+
+func TestInscriptionRepo_DeleteFollow(t *testing.T) {
+	err := aRepo.DeleteLike(context.Background(), &module.Like{
+		With:   "0x1703601c661deea6720ecdd9b6d3fba5dadfa9d255f08764ae7346a491b2657d",
+		Sender: "aaac",
+	})
+	t.Log(err)
+}
+
+func TestInscriptionRepo_DeleteFollow2(t *testing.T) {
+	err := aRepo.DeleteFollow(context.Background(), &module.Follow{
+		Address:  "0xC1b634853Cb333D3aD8663715b08f41A3Aec47cc",
+		Follower: "0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5",
+	})
+	t.Log(err)
+}

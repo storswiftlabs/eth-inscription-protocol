@@ -61,6 +61,16 @@ func (r *inscriptionRepo) InsertLike(ctx context.Context, like *module.Like) err
 	return err
 }
 
+func (r *inscriptionRepo) DeleteLike(ctx context.Context, like *module.Like) error  {
+	_, err := r.data.postgre.Where("\"with\" = ? AND sender = ?", like.With, like.Sender).Delete(like)
+	return err
+}
+
+func (r *inscriptionRepo) DeleteFollow(ctx context.Context, follow *module.Follow) error  {
+	_, err := r.data.postgre.Where("address = ? AND follower = ?", follow.Address, follow.Follower).Delete(follow)
+	return err
+}
+
 // TODO 每产生一条message 插入两条记录
 func (r *inscriptionRepo) InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error {
 	exist, _ := r.ExistMessageWindow(ctx, messageWindow)

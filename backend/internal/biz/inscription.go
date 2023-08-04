@@ -39,6 +39,8 @@ type InscriptionRepo interface {
 	InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error
 	ExistMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) (bool, error)
 	GetMessageWindowByOwner(ctx context.Context, owner string) ([]*module.Profile, error)
+	DeleteFollow(ctx context.Context, follow *module.Follow) error
+	DeleteLike(ctx context.Context, like *module.Like) error
 }
 
 // InscriptionUsecase is a inscription usecase.
