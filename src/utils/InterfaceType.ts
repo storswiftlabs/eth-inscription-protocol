@@ -89,3 +89,17 @@ export interface tweetFollow {
   type: ItemType.tweet_follow | ItemType.follow_unfollow
   with: string // with 为要关注用户的钱包地址,代表关注该用户
 }
+
+export interface SwiftChatResponse {
+  type: string
+  title: string
+  text: string
+  image: string[]
+  receiver: string[]
+  at: string[]
+  with: string
+  height: number
+  trx_hash: string
+  trx_time: string
+  sender: string
+}
