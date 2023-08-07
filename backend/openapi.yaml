@@ -125,6 +125,28 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/api.inscription.v1.GetMessageResponse'
+    /api/message/{hash}:
+        get:
+            tags:
+                - Inscription
+            operationId: Inscription_GetMessageByHash
+            parameters:
+                - name: hash
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: type
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
     /api/message_window:
         get:
             tags:

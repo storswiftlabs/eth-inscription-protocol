@@ -30,6 +30,12 @@ service Inscription {
     };
   }
 
+  rpc GetMessageByHash(GetMessageByHashReq) returns (SwiftResponse) {
+    option (google.api.http) = {
+      get: "/api/message/{hash}"
+    };
+  }
+
   rpc GetGroupMessage(GetGroupMessageReq) returns (GetMessageResponse) {
     option (google.api.http) = {
       get: "/api/group_message"
@@ -72,6 +78,11 @@ message  ByAddress{
 
 message SwiftResponses{
   repeated SwiftResponse groups = 1;
+}
+
+message GetMessageByHashReq{
+  string hash = 1;
+  string type = 2;
 }
 
 message GetMessageResponse{

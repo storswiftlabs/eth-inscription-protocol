@@ -53,9 +53,9 @@ func newInscriptionRepo() (biz.InscriptionRepo, error) {
 
 func TestInscriptionRepo_InsertProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "0x1335703c944A6d2C132816578e60299F0F33BD88",
+		Address: "0xE7DD1247361709132a6741B893bA11021CB0a49f",
 		Image:   "ipfs://test",
-		Text:    "eth_one",
+		Text:    "test9",
 		Height:  100005,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b5",
 		TrxTime: time.Now(),
@@ -85,8 +85,8 @@ func TestInscriptionRepo_UpdateProfile(t *testing.T) {
 
 func TestInscriptionRepo_InsertGroup(t *testing.T) {
 	group := &module.Group{
-		Address: "0x123456789r4",
-		Title:   "eth2",
+		Address: "0xDE2C8959BBCE26dD27E956B7b5ea9bB2d6eeB591",
+		Title:   "eth",
 		Height:  1000001,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3q",
 		TrxTime: time.Now(),
@@ -112,9 +112,9 @@ func TestInscriptionRepo_DeleteGroupByAddressAndTitle(t *testing.T) {
 
 func TestInscriptionRepo_InsertMessage(t *testing.T) {
 	message := &module.Message{
-		Receiver: "bbb",
-		Sender:   "aaa",
-		Text:     "test9",
+		Receiver: "0x28C6c06298d514Db089934071355E5743bf21d60",
+		Sender:   "0xDE2C8959BBCE26dD27E956B7b5ea9bB2d6eeB591",
+		Text:     "NFT的未来会基于更多元化的标准产生更多的落地应用，下一轮牛市大概会有类似于比特币后诞生以太坊那样的传奇赛道，暂且称之为 ：",
 		//Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		//At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		//With:     "0x9d4841ad74987845612",
@@ -131,12 +131,12 @@ func TestInscriptionRepo_InsertMessage(t *testing.T) {
 
 func TestInscriptionRepo_InsertGroupMessage(t *testing.T) {
 	groupMessage := &module.GroupMessage{
-		Title:    "group2",
-		Sender:   "0x2",
-		Text:     "test2",
+		Title:    "sui",
+		Sender:   "0x53cC0282d57BFCF6d621Eab6674FB58Ef0562f17",
+		Text:     "<40 歲單身/新婚/養娃，補助金還能乘以 1.2-1.8 倍！",
 		//Image:    []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
 		//At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
-		With:     "0x1112",
+		//With:     "0x1112",
 		Height:   3000000,
 		TrxHash:  "0x9d4841ad7498784562",
 		TrxTime:  time.Now(),
@@ -210,8 +210,8 @@ func TestInscriptionRepo_InsertFollow(t *testing.T) {
 
 func TestInscriptionRepo_InsertMessageWindow(t *testing.T) {
 	mw := &module.MessageWindow{
-		Owner: "qwe",
-		Link:  "ddd",
+		Owner: "0xDE2C8959BBCE26dD27E956B7b5ea9bB2d6eeB591",
+		Link:  "0x28C6c06298d514Db089934071355E5743bf21d60",
 	}
 	err := aRepo.InsertMessageWindow(context.Background(), mw)
 	if err != nil {

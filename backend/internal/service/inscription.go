@@ -120,6 +120,24 @@ func (s *InscriptionService) GetMessage(ctx context.Context, req *pb.GetMessageR
 	return &pb.GetMessageResponse{Messages: swiftResponses}, nil
 }
 
+func (s *InscriptionService) GetMessageByHash(ctx context.Context, req *pb.GetMessageByHashReq) (*pb.SwiftResponse, error){
+	switch req.Type {
+	case "message":
+		message, err := s.uc.GetMessageByHashHandle(ctx, req.Hash)
+		if err != nil {
+			s.log.Warn(err)
+		}
+		return messageChangeSwiftResponse(message), nil
+	case "group_message":
+		groupMessage, err := s.uc.GetGroupMessageByHashHandle(ctx, req.Hash)
+		if err != nil {
+			s.log.Warn(err)
+		}
+		return groupMessageChangeSwiftResponse(groupMessage), nil
+	}
+	return nil, nil
+}
+
 func (s *InscriptionService) GetGroupMessage(ctx context.Context, req *pb.GetGroupMessageReq) (*pb.GetMessageResponse, error) {
 	groupMessages, err := s.uc.GetGroupMessageHandle(ctx, &module.GetMTReq{
 		Owner:   req.Title,
@@ -285,5 +303,37 @@ func commentChangeSwiftResponse(comment module.Comment) *pb.SwiftResponse {
 		TrxHash:  comment.TrxHash,
 		TrxTime:  comment.TrxTime.String(),
 		Sender:   comment.Sender,
+	}
+}
+
+func messageChangeSwiftResponse(message *module.Message) *pb.SwiftResponse {
+	return &pb.SwiftResponse{
+		Type:     "message",
+		Title:    "",
+		Text:     message.Text,
+		Image:    message.Image,
+		Receiver: []string{message.Receiver},
+		At:       message.At,
+		With:     message.With,
+		Height:   message.Height,
+		TrxHash:  message.TrxHash,
+		TrxTime:  message.TrxTime.String(),
+		Sender:   message.Sender,
+	}
+}
+
+func groupMessageChangeSwiftResponse(message *module.GroupMessage) *pb.SwiftResponse {
+	return &pb.SwiftResponse{
+		Type:     "group_message",
+		Title:    message.Title,
+		Text:     message.Text,
+		Image:    message.Image,
+		Receiver: message.Receiver,
+		At:       message.At,
+		With:     message.With,
+		Height:   message.Height,
+		TrxHash:  message.TrxHash,
+		TrxTime:  message.TrxTime.String(),
+		Sender:   message.Sender,
 	}
 }

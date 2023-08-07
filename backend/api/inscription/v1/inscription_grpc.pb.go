@@ -23,6 +23,7 @@ const (
 	Inscription_GetGroup_FullMethodName          = "/api.inscription.v1.Inscription/GetGroup"
 	Inscription_GetMessageWindow_FullMethodName  = "/api.inscription.v1.Inscription/GetMessageWindow"
 	Inscription_GetMessage_FullMethodName        = "/api.inscription.v1.Inscription/GetMessage"
+	Inscription_GetMessageByHash_FullMethodName  = "/api.inscription.v1.Inscription/GetMessageByHash"
 	Inscription_GetGroupMessage_FullMethodName   = "/api.inscription.v1.Inscription/GetGroupMessage"
 	Inscription_GetTweet_FullMethodName          = "/api.inscription.v1.Inscription/GetTweet"
 	Inscription_GetFollowTweet_FullMethodName    = "/api.inscription.v1.Inscription/GetFollowTweet"
@@ -38,6 +39,7 @@ type InscriptionClient interface {
 	GetGroup(ctx context.Context, in *ByAddress, opts ...grpc.CallOption) (*SwiftResponses, error)
 	GetMessageWindow(ctx context.Context, in *GetMessageWindowReq, opts ...grpc.CallOption) (*MessageWindow, error)
 	GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error)
+	GetMessageByHash(ctx context.Context, in *GetMessageByHashReq, opts ...grpc.CallOption) (*SwiftResponse, error)
 	GetGroupMessage(ctx context.Context, in *GetGroupMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error)
 	GetTweet(ctx context.Context, in *GetTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
 	GetFollowTweet(ctx context.Context, in *GetFollowTweetReq, opts ...grpc.CallOption) (*TweetResponse, error)
@@ -83,6 +85,15 @@ func (c *inscriptionClient) GetMessageWindow(ctx context.Context, in *GetMessage
 func (c *inscriptionClient) GetMessage(ctx context.Context, in *GetMessageReq, opts ...grpc.CallOption) (*GetMessageResponse, error) {
 	out := new(GetMessageResponse)
 	err := c.cc.Invoke(ctx, Inscription_GetMessage_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *inscriptionClient) GetMessageByHash(ctx context.Context, in *GetMessageByHashReq, opts ...grpc.CallOption) (*SwiftResponse, error) {
+	out := new(SwiftResponse)
+	err := c.cc.Invoke(ctx, Inscription_GetMessageByHash_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,6 +153,7 @@ type InscriptionServer interface {
 	GetGroup(context.Context, *ByAddress) (*SwiftResponses, error)
 	GetMessageWindow(context.Context, *GetMessageWindowReq) (*MessageWindow, error)
 	GetMessage(context.Context, *GetMessageReq) (*GetMessageResponse, error)
+	GetMessageByHash(context.Context, *GetMessageByHashReq) (*SwiftResponse, error)
 	GetGroupMessage(context.Context, *GetGroupMessageReq) (*GetMessageResponse, error)
 	GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
 	GetFollowTweet(context.Context, *GetFollowTweetReq) (*TweetResponse, error)
@@ -165,6 +177,9 @@ func (UnimplementedInscriptionServer) GetMessageWindow(context.Context, *GetMess
 }
 func (UnimplementedInscriptionServer) GetMessage(context.Context, *GetMessageReq) (*GetMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMessage not implemented")
+}
+func (UnimplementedInscriptionServer) GetMessageByHash(context.Context, *GetMessageByHashReq) (*SwiftResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMessageByHash not implemented")
 }
 func (UnimplementedInscriptionServer) GetGroupMessage(context.Context, *GetGroupMessageReq) (*GetMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupMessage not implemented")
@@ -262,6 +277,24 @@ func _Inscription_GetMessage_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InscriptionServer).GetMessage(ctx, req.(*GetMessageReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Inscription_GetMessageByHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMessageByHashReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InscriptionServer).GetMessageByHash(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Inscription_GetMessageByHash_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InscriptionServer).GetMessageByHash(ctx, req.(*GetMessageByHashReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -378,6 +411,10 @@ var Inscription_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessage",
 			Handler:    _Inscription_GetMessage_Handler,
+		},
+		{
+			MethodName: "GetMessageByHash",
+			Handler:    _Inscription_GetMessageByHash_Handler,
 		},
 		{
 			MethodName: "GetGroupMessage",

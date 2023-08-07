@@ -136,6 +136,18 @@ func (r *inscriptionRepo) FindMessageByAddress(ctx context.Context, req *module.
 	return message, err
 }
 
+func (r *inscriptionRepo) GetMessageByTrxHash(ctx context.Context, hash string) (*module.Message, error) {
+	message := new(module.Message)
+	err := r.data.postgre.Where("trx_hash = ?", hash).Find(&message)
+	return message, err
+}
+
+func (r *inscriptionRepo) GetGroupMessageByTrxHash(ctx context.Context, hash string) (*module.GroupMessage, error) {
+	message := new(module.GroupMessage)
+	err := r.data.postgre.Where("trx_hash = ?", hash).Find(&message)
+	return message, err
+}
+
 func (r *inscriptionRepo) FindGroupMessageByTitle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error) {
 	groupMessage := make([]*module.GroupMessage, 0)
 	err := r.data.postgre.Where("title = ?", req.Owner).Limit(int(req.Limit), int(req.Offset)).Find(&groupMessage)

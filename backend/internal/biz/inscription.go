@@ -22,6 +22,8 @@ type InscriptionRepo interface {
 	FindGroupByAddress(ctx context.Context, address string) ([]*module.Group, error)
 	FindGroupReceiverByTitle(ctx context.Context, title string) ([]string, error)
 	InsertMessage(ctx context.Context, message *module.Message) error
+	GetMessageByTrxHash(ctx context.Context, hash string) (*module.Message, error)
+	GetGroupMessageByTrxHash(ctx context.Context, hash string) (*module.GroupMessage, error)
 	FindMessageByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error)
 	InsertGroupMessage(ctx context.Context, groupMessage *module.GroupMessage) error
 	FindGroupMessageByTitle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error)
@@ -74,6 +76,14 @@ func (uc *InscriptionUsecase) GetMessageWindowHandle(ctx context.Context, owner 
 
 func (uc *InscriptionUsecase) GetMessageHandle(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error) {
 	return uc.repo.FindMessageByAddress(ctx, req)
+}
+
+func (uc *InscriptionUsecase) GetMessageByHashHandle(ctx context.Context, hash string) (*module.Message, error) {
+	return uc.repo.GetMessageByTrxHash(ctx, hash)
+}
+
+func (uc *InscriptionUsecase) GetGroupMessageByHashHandle(ctx context.Context, hash string) (*module.GroupMessage, error) {
+	return uc.repo.GetGroupMessageByTrxHash(ctx, hash)
 }
 
 func (uc *InscriptionUsecase) GetGroupMessageHandle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error) {

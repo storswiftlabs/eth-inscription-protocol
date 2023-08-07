@@ -24,6 +24,7 @@ const OperationInscriptionGetFollower = "/api.inscription.v1.Inscription/GetFoll
 const OperationInscriptionGetGroup = "/api.inscription.v1.Inscription/GetGroup"
 const OperationInscriptionGetGroupMessage = "/api.inscription.v1.Inscription/GetGroupMessage"
 const OperationInscriptionGetMessage = "/api.inscription.v1.Inscription/GetMessage"
+const OperationInscriptionGetMessageByHash = "/api.inscription.v1.Inscription/GetMessageByHash"
 const OperationInscriptionGetMessageWindow = "/api.inscription.v1.Inscription/GetMessageWindow"
 const OperationInscriptionGetProfile = "/api.inscription.v1.Inscription/GetProfile"
 const OperationInscriptionGetTweet = "/api.inscription.v1.Inscription/GetTweet"
@@ -35,6 +36,7 @@ type InscriptionHTTPServer interface {
 	GetGroup(context.Context, *ByAddress) (*SwiftResponses, error)
 	GetGroupMessage(context.Context, *GetGroupMessageReq) (*GetMessageResponse, error)
 	GetMessage(context.Context, *GetMessageReq) (*GetMessageResponse, error)
+	GetMessageByHash(context.Context, *GetMessageByHashReq) (*SwiftResponse, error)
 	GetMessageWindow(context.Context, *GetMessageWindowReq) (*MessageWindow, error)
 	GetProfile(context.Context, *ByAddress) (*SwiftResponse, error)
 	GetTweet(context.Context, *GetTweetReq) (*TweetResponse, error)
@@ -47,6 +49,7 @@ func RegisterInscriptionHTTPServer(s *http.Server, srv InscriptionHTTPServer) {
 	r.GET("/api/group", _Inscription_GetGroup0_HTTP_Handler(srv))
 	r.GET("/api/message_window", _Inscription_GetMessageWindow0_HTTP_Handler(srv))
 	r.GET("/api/message", _Inscription_GetMessage0_HTTP_Handler(srv))
+	r.GET("/api/message/{hash}", _Inscription_GetMessageByHash0_HTTP_Handler(srv))
 	r.GET("/api/group_message", _Inscription_GetGroupMessage0_HTTP_Handler(srv))
 	r.GET("/api/tweet", _Inscription_GetTweet0_HTTP_Handler(srv))
 	r.GET("/api/follow_tweet", _Inscription_GetFollowTweet0_HTTP_Handler(srv))
@@ -126,6 +129,28 @@ func _Inscription_GetMessage0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx h
 			return err
 		}
 		reply := out.(*GetMessageResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
+func _Inscription_GetMessageByHash0_HTTP_Handler(srv InscriptionHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in GetMessageByHashReq
+		if err := ctx.BindQuery(&in); err != nil {
+			return err
+		}
+		if err := ctx.BindVars(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationInscriptionGetMessageByHash)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.GetMessageByHash(ctx, req.(*GetMessageByHashReq))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*SwiftResponse)
 		return ctx.Result(200, reply)
 	}
 }
@@ -234,6 +259,7 @@ type InscriptionHTTPClient interface {
 	GetGroup(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponses, err error)
 	GetGroupMessage(ctx context.Context, req *GetGroupMessageReq, opts ...http.CallOption) (rsp *GetMessageResponse, err error)
 	GetMessage(ctx context.Context, req *GetMessageReq, opts ...http.CallOption) (rsp *GetMessageResponse, err error)
+	GetMessageByHash(ctx context.Context, req *GetMessageByHashReq, opts ...http.CallOption) (rsp *SwiftResponse, err error)
 	GetMessageWindow(ctx context.Context, req *GetMessageWindowReq, opts ...http.CallOption) (rsp *MessageWindow, err error)
 	GetProfile(ctx context.Context, req *ByAddress, opts ...http.CallOption) (rsp *SwiftResponse, err error)
 	GetTweet(ctx context.Context, req *GetTweetReq, opts ...http.CallOption) (rsp *TweetResponse, err error)
@@ -305,6 +331,19 @@ func (c *InscriptionHTTPClientImpl) GetMessage(ctx context.Context, in *GetMessa
 	pattern := "/api/message"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationInscriptionGetMessage))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *InscriptionHTTPClientImpl) GetMessageByHash(ctx context.Context, in *GetMessageByHashReq, opts ...http.CallOption) (*SwiftResponse, error) {
+	var out SwiftResponse
+	pattern := "/api/message/{hash}"
+	path := binding.EncodeURL(pattern, in, true)
+	opts = append(opts, http.Operation(OperationInscriptionGetMessageByHash))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
 	if err != nil {
