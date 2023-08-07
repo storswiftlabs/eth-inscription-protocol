@@ -8,13 +8,13 @@ import { ReplyIcon } from './Icons'
 import { FillColor } from '@/type/Chat'
 import type { ChatContentMessageType, ProfileResponse } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
-import { getProfile } from '@/utils/requestApi'
+import { getMessageWith, getProfile } from '@/utils/requestApi'
 
 export function ChatContentMessage({ data, me }: { data: ChatContentMessageType; me: number }) {
   const [isOpen, setIsOpen] = useState(false)
   const { theme } = useTheme()
   const { address, isConnected } = useAccount()
-  const [messageData, setMessageData] = useState<ChatContentMessageType[]>()
+  const [withMessageData, setWithMessageData] = useState<ProfileResponse>()
   const [profileData, setProfileData] = useState<ProfileResponse>()
   const setReplyMessage = useChatMessageReply(state => state.setReplyMessage)
 
@@ -34,11 +34,19 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
     (async () => {
       setProfileData(await getProfile(data.sender))
     })()
+    if (data.with) {
+      (async () => {
+        if (window.location.search === '?type=group')
+          setWithMessageData(await getMessageWith(data.with, 'group_message'))
+        if (window.location.search === '?type=message')
+          setWithMessageData(await getMessageWith(data.with, 'message'))
+      })()
+    }
   }, [])
 
   return <div className={`min-h-[100px] w-full flex ${data.sender !== address ? 'justify-start' : 'justify-end'}`} >
     <div className={`flex m-4  ${data.sender !== address ? '' : 'flex-row-reverse'}`}>
-      <div className="relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500" />
+      {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== 'ipfs://test' ? <img src={profileData?.image[0]} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={'relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500'} />}
       <div className={`flex flex-col ${data.sender !== address ? '' : 'items-end'} group relative`}>
         {profileData?.text}
         <div className='max-w-[800px] text-sm'>
@@ -46,14 +54,14 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
             <div>
               {data.text}
             </div>
-            <br />
+            {data?.image?.length > 1 && <br />}
             <div className='flex gap-2 flex-wrap'>
-              {data.image.map((t, index) => {
+              {data?.image?.map((t, index) => {
                 return <Image src={'https://i.pravatar.cc/150?u=a042581f4e29026704d'} alt='' className='rounded-xl' width={150} height={150}></Image>
               })}
             </div>
           </div>
-          <div className='bg-neutral-300/20 text-gray-500/70 dark:text-gray-500 rounded-md p-1 mt-1'>{data.text}</div>
+          {withMessageData?.text && <div className='bg-neutral-300/20 text-gray-500/70 dark:text-gray-500 rounded-md p-1 mt-1'>{withMessageData?.text}</div>}
 
         </div>
 

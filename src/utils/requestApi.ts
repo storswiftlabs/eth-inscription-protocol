@@ -18,6 +18,9 @@ export async function getMessageGroup(group: string) {
 export async function getMessagePerson(owner: string, to: string) {
   return await fetch(`${ApiUrl}/api/message?owner=${owner}&to=${to}&limit=10&offset=1`).then(e => e.json())
 }
+export async function getMessageWith(txhash: string, type: string) {
+  return await fetch(`${ApiUrl}/api/message/${txhash}?type=${type}`).then(e => e.json())
+}
 export async function getProfile(owner: string) {
   return await fetch(`${ApiUrl}/api/profile?address=${owner}`).then(e => e.json())
 }

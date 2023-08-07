@@ -13,6 +13,7 @@ export interface ChatContentMessageType {
   c_at: string[]
   c_with: string
   sender: string
+  with: string
 }
 
 export interface ProfileResponse {
