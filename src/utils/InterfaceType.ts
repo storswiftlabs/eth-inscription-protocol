@@ -12,20 +12,7 @@ export enum ItemType {
   follow_unfollow = 'un-follow', // 取消关注或取消收藏
 }
 
-export interface createProfile { // 创建profile
-  type: ItemType.create_profile
-  image: string // 头像(头像可以为uri，也可以将图片转为16进制)
-  text: string // text为昵称
-}
-
-export interface updareProfile { // 更新profile
-  type: ItemType.updare_profile
-  image: string // 头像(头像可以为uri，也可以将图片转为16进制)
-  text: string // text为昵称
-}
-
-export interface sendMessage { // 发送消息
-  type: ItemType.send_message
+interface defaultBasicType {
   text: string // 消息（ 必填 )
   title?: string // 为群名，有的话代表群聊（ 选填 )
   image?: string[] // 为图片（ 选填 )
@@ -33,51 +20,39 @@ export interface sendMessage { // 发送消息
   at?: string[] // @ 为 艾特人物 （ 选填 )
 }
 
-export interface createGroup { // 创建群聊
+export interface createProfile extends Omit<defaultBasicType, 'title' | 'with' | 'at'> { // 创建profile
+  type: ItemType.create_profile
+}
+
+export interface updareProfile extends Omit<defaultBasicType, 'title' | 'with' | 'at'> { // 更新profile
+  type: ItemType.updare_profile
+}
+
+export interface sendMessage extends defaultBasicType { // 发送消息
+  type: ItemType.send_message
+}
+
+export interface createGroup extends defaultBasicType { // 创建群聊
   type: ItemType.create_group
-  title: string // 为群名, 然后我们会生成一个随机id（ 必填 )
   receiver: string[] // 为群成员，带上自己， 在2个以上（ 必填 )
-  text?: string // 消息（ 选填 )
-  image?: string[] // 为图片（ 选填 )
-  with?: string // 参数为trx hash，在这里为  “转发” （ 选填 )
-  at?: string[] // @ 为 艾特人物 （ 选填 )
 }
 
-export interface updateGroupAdd {
+export interface updateGroupAdd extends defaultBasicType {
   type: ItemType.update_group_add
-  title: string // 为群名, 然后我们会生成一个随机id（ 必填 )
   receiver: string[] // 为要加的人（ 必填 )
-  text?: string // 消息（ 选填 )
-  image?: string[] // 为图片（ 选填 )
-  with?: string // 参数为trx hash，在这里为  “转发” （ 选填 )
-  at?: string[] // @ 为 艾特人物 （ 选填 )
 }
 
-export interface updateGroupDel {
+export interface updateGroupDel extends defaultBasicType {
   type: ItemType.update_group_del
-  title: string // 为群名, 然后我们会生成一个随机id（ 必填 )
   receiver: string[] // 要删除的人（ 必填 )
-  text?: string // 消息（ 选填 )
-  image?: string[] // 为图片（ 选填 )
-  with?: string // 参数为trx hash，在这里为  “转发” （ 选填 )
-  at?: string[] // @ 为 艾特人物 （ 选填 )
 }
 
-export interface tweetSend { //  发送推文
+export interface tweetSend extends defaultBasicType { //  发送推文
   type?: ItemType.tweet_send
-  title?: string // 标题
-  text: string // 文本
-  image?: string[] // 为图片（ 选填 )
-  at?: string[] //  @ 为 艾特人物 （ 选填 )
-  with?: string //   with参数为trx hash， 引用推文 ，只能引用一个，和推特"引用推文"功能一样（ 选填 )
 }
 
-export interface tweetComment { // 评论推文
+export interface tweetComment extends Omit<defaultBasicType, 'title'> { // 评论推文
   type?: ItemType.tweet_comment
-  text?: string //   text为评论文本 （ 选填 ) 文本图片二选一
-  image?: string[] //   image 为 图片（ 选填 ) 文本图片二选一
-  at?: string[] //  @ 为 艾特人物 （ 选填 )
-  with: string //     with 参数为 trx hash ，代表评论改trx hash里面的推文 （ 必填 )
 }
 
 export interface tweetLike { // 点赞

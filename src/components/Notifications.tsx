@@ -15,7 +15,7 @@ export function Notifications({ data }: NotificationsData) {
     toast.classList.add('animate-fadeOut')
 
     setTimeout(() => {
-      toast.remove()
+      toast && toast.remove()
     }, 3000)
   }
   useEffect(() => {
