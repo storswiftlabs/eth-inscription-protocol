@@ -15,6 +15,8 @@ interface MomentContentData {
 }
 
 function MomentContent({ type }: MomentContentData) {
+
+
   const [isUpper, setIsUpper] = useState('Recommendation')
   const router = useRouter();
 
@@ -30,6 +32,8 @@ function MomentContent({ type }: MomentContentData) {
    * @returns 根据类型返回对应的组件
    */
   const compenentsType = (type: string) => {
+
+
     switch (type.toLowerCase()) {
       case 'find':
         return <Find isUpper={isUpper} />

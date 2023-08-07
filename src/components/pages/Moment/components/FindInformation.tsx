@@ -3,7 +3,6 @@
 import React, { useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Col, Dropdown, Grid, Image, Row, Spacer, Text, User } from '@nextui-org/react'
-import { useRouter } from 'next/navigation'
 import { useAccount } from 'wagmi'
 import { BackIcon, FocusIcon, GreaterIcon, UnfollowIcon } from './Icons'
 import ReplyToComment from './ReplyToComment'
@@ -11,14 +10,19 @@ import DialogueInput from './DialogueInput'
 import { FillColor } from '@/type/Chat'
 import type { tweetComment, tweetFollow } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
-
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
+import { Tweet } from '@/constant/Global'
+import { useRouter } from 'next/router'
 
 interface Props {
   type: string | number
 }
 
 function FindInformation({ type }: Props) {
+  const router = useRouter()
+  console.log(router.query);
+
+
   const [tweetCommentData, setTweetCommentData] = useState<tweetComment>({
     type: ItemType.tweet_comment,
     text: '',
@@ -33,7 +37,10 @@ function FindInformation({ type }: Props) {
   })
 
   const { address, isConnected } = useAccount()
-  const router = useRouter()
+
+  
+  
+
   const { theme } = useTheme()
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(tweetCommentData)
@@ -73,9 +80,6 @@ function FindInformation({ type }: Props) {
 
   const a = 'https://i.pravatar.cc/150?u=a042581f4e29026704d'
 
-  const b = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png'
-
-  const c = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://lh3.googleusercontent.com/8qLJXIOm7S1v66pZGKdWNVB_souZGCAQ5GZHQQ8q0i1wiiILSYrbbhBBEYJ15qYApy2gzMhujkNBgTSBjDY2sQxoS1qoaalzOQ'
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (

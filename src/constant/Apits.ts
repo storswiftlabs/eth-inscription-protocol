@@ -30,8 +30,39 @@ export interface GroupMessageType {
 }
 
 export interface TweetType {
-  tweets: any[]
+  tweets: WelcomeTweet[]
 }
+
+export interface WelcomeTweet {
+  profile:     Profile;
+  tweet:       Profile;
+  withProfile: Profile;
+  with:        Profile;
+  comments:    Comment[];
+  likeNum:     string;
+  likeBool:    boolean;
+}
+
+export interface Comment {
+  profile: Profile;
+  comment: Profile;
+}
+
+export interface Profile {
+  type:     string;
+  title:    string;
+  text:     string;
+  image:    string[];
+  receiver: any[];
+  at:       string[];
+  with:     string;
+  height:   string;
+  trxHash:  string;
+  trxTime:  string;
+  sender:   string;
+}
+
+
 
 export interface FollowTweetType {
   tweets: any[]
