@@ -3,11 +3,6 @@
  */
 import axios from 'axios'
 
-const serverConfig = {
-  baseURL: 'http://10.10.1.38:8000',
-  useTokenAuthorization: false, // 是否开启 token 验证
-}
-
 const request = axios.create({
   baseURL: 'http://10.10.1.38:8000',
   timeout: 25000,
