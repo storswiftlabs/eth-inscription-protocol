@@ -138,13 +138,13 @@ func (r *inscriptionRepo) FindMessageByAddress(ctx context.Context, req *module.
 
 func (r *inscriptionRepo) GetMessageByTrxHash(ctx context.Context, hash string) (*module.Message, error) {
 	message := new(module.Message)
-	err := r.data.postgre.Where("trx_hash = ?", hash).Find(&message)
+	_, err := r.data.postgre.Where("trx_hash = ?", hash).Get(message)
 	return message, err
 }
 
 func (r *inscriptionRepo) GetGroupMessageByTrxHash(ctx context.Context, hash string) (*module.GroupMessage, error) {
 	message := new(module.GroupMessage)
-	err := r.data.postgre.Where("trx_hash = ?", hash).Find(&message)
+	_, err := r.data.postgre.Where("trx_hash = ?", hash).Get(message)
 	return message, err
 }
 
@@ -178,12 +178,19 @@ func (r *inscriptionRepo) FindFollowTweet(ctx context.Context, req *module.GetMT
 			if err != nil {
 				r.log.Warn(err)
 			}
+			withProfile, _ := r.GetProfile(ctx, &module.Profile{Address: withTweet.Sender})
 			tmpTweets.With = *withTweet
+			tmpTweets.WithProfile = *withProfile
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
+		profile, err := r.GetProfile(ctx, &module.Profile{Address: v.Sender})
+		if err != nil {
+			r.log.Warn(err)
+		}
+		tmpTweets.Profile = *profile
 		tmpTweets.Twt = *v
 		tmpTweets.LikeNum = likeNum
 		tmpTweets.LikeBool = b
@@ -213,12 +220,19 @@ func (r *inscriptionRepo) FindTweet(ctx context.Context, req *module.GetMTReq) (
 			if err != nil {
 				r.log.Warn(err)
 			}
+			withProfile, _ := r.GetProfile(ctx, &module.Profile{Address: withTweet.Sender})
 			tmpTweets.With = *withTweet
+			tmpTweets.WithProfile = *withProfile
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
+		profile, err := r.GetProfile(ctx, &module.Profile{Address: v.Sender})
+		if err != nil {
+			r.log.Warn(err)
+		}
+		tmpTweets.Profile = *profile
 		tmpTweets.Twt = *v
 		tmpTweets.LikeNum = likeNum
 		tmpTweets.LikeBool = b
@@ -247,12 +261,19 @@ func (r *inscriptionRepo) FindTweetByAddress(ctx context.Context, req *module.Ge
 			if err != nil {
 				r.log.Warn(err)
 			}
+			withProfile, _ := r.GetProfile(ctx, &module.Profile{Address: withTweet.Sender})
 			tmpTweets.With = *withTweet
+			tmpTweets.WithProfile = *withProfile
 		}
 		comments, err := r.FindCommentByTrxHash(ctx, v.TrxHash)
 		if err != nil {
 			r.log.Warn(err)
 		}
+		profile, err := r.GetProfile(ctx, &module.Profile{Address: v.Sender})
+		if err != nil {
+			r.log.Warn(err)
+		}
+		tmpTweets.Profile = *profile
 		tmpTweets.Twt = *v
 		tmpTweets.LikeNum = likeNum
 		tmpTweets.LikeBool = b
@@ -272,11 +293,26 @@ func (r *inscriptionRepo) GetTweetByTrxHash(ctx context.Context, hash string) (*
 	return tweet, nil
 }
 
-func (r *inscriptionRepo) FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comment, error) {
-	comments := make([]*module.Comment, 0)
-	err := r.data.postgre.Where("\"with\" = ?", hash).Find(&comments)
+func (r *inscriptionRepo) FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comments, error) {
+	comment := make([]*module.Comment, 0)
+	err := r.data.postgre.Where("\"with\" = ?", hash).Find(&comment)
 	if err != nil {
 		return nil, err
+	}
+
+	if len(comment) == 0 {
+		return nil, err
+	}
+
+	comments := make([]*module.Comments, len(comment))
+	for k, v := range comment{
+		comments[k] =  new(module.Comments)
+		comments[k].Comment = *v
+		profile, err := r.GetProfile(ctx, &module.Profile{Address: v.Sender})
+		if err != nil {
+			r.log.Warn(err)
+		}
+		comments[k].Profile = *profile
 	}
 	return comments, err
 }

@@ -36,7 +36,7 @@ type InscriptionRepo interface {
 	FindTweet(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error)
 	FindTweetByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Tweets, error)
 	GetTweetByTrxHash(ctx context.Context, hash string) (*module.Tweet, error)
-	FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comment, error)
+	FindCommentByTrxHash(ctx context.Context, hash string) ([]*module.Comments, error)
 	GetLikeByTrxHash(ctx context.Context, hash string, owner string) (int64, bool, error)
 	InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error
 	ExistMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) (bool, error)

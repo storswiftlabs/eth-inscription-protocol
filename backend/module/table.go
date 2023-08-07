@@ -119,11 +119,18 @@ type GetGroupMessageReq struct {
 }
 
 type Tweets struct {
-	Twt      Tweet
-	With     Tweet
-	Comments []*Comment
-	LikeNum  int64
-	LikeBool bool
+	Profile     Profile
+	Twt         Tweet
+	WithProfile Profile
+	With        Tweet
+	Comments    []*Comments
+	LikeNum     int64
+	LikeBool    bool
+}
+
+type Comments struct {
+	Profile Profile
+	Comment Comment
 }
 
 type Record struct {

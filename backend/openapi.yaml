@@ -242,6 +242,13 @@ paths:
                                 $ref: '#/components/schemas/api.inscription.v1.TweetResponse'
 components:
     schemas:
+        api.inscription.v1.Comment:
+            type: object
+            properties:
+                profile:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                comment:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
         api.inscription.v1.GetFollowerResponse:
             type: object
             properties:
@@ -312,14 +319,18 @@ components:
         api.inscription.v1.Tweets:
             type: object
             properties:
+                profile:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
                 tweet:
+                    $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                withProfile:
                     $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
                 with:
                     $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
                 comments:
                     type: array
                     items:
-                        $ref: '#/components/schemas/api.inscription.v1.SwiftResponse'
+                        $ref: '#/components/schemas/api.inscription.v1.Comment'
                 likeNum:
                     type: integer
                     format: int64

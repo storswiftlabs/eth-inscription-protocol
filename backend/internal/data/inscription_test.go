@@ -53,9 +53,9 @@ func newInscriptionRepo() (biz.InscriptionRepo, error) {
 
 func TestInscriptionRepo_InsertProfile(t *testing.T) {
 	profile := &module.Profile{
-		Address: "0xE7DD1247361709132a6741B893bA11021CB0a49f",
+		Address: "0x12",
 		Image:   "ipfs://test",
-		Text:    "test9",
+		Text:    "function",
 		Height:  100005,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b5",
 		TrxTime: time.Now(),

@@ -149,13 +149,20 @@ message SwiftResponse{
 
 
 message Tweets{
-  SwiftResponse tweet = 1;
-  SwiftResponse with = 2;
-  repeated SwiftResponse comments = 3;
-  int64 like_num = 4;
-  bool like_bool = 5;
+  SwiftResponse profile = 1;
+  SwiftResponse tweet = 2;
+  SwiftResponse with_profile = 3;
+  SwiftResponse with = 4;
+  repeated Comment comments = 5;
+  int64 like_num = 6;
+  bool like_bool = 7;
 }
 
 message TweetResponse{
   repeated Tweets tweets = 1;
+}
+
+message Comment{
+    SwiftResponse profile = 1;
+    SwiftResponse comment = 2;
 }
