@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useAccount, useWalletClient } from 'wagmi'
+import { useAccount } from 'wagmi'
 import DynamicCard from '../DynamicCard/DynamicCard'
 import DialogueInput from '../DialogueInput'
 import type { tweetSend } from '@/utils/InterfaceType'
@@ -23,14 +23,20 @@ function Find({ isUpper }: Props) {
     with: '123',
   })
 
-  const { data: walletClient } = useWalletClient()
+  // const { data: walletClient } = useWalletClient()
 
   useEffect(() => {
-    if (isUpper === 'Recommendation')
-      setData([1, 2, 3])
 
-    else
-      setData([4, 5, 6])
+    // getMessageWindow({ owner: '123', to: "123", limit: 0, offset: 10 }).then((res) => {
+    //   console.log(res, 'getMessageWindow');
+
+    // }).catch((err) => { })
+
+    // if (isUpper === 'Recommendation')
+    //   setData([1, 2, 3])
+
+    // else
+    //   setData([4, 5, 6])
   }, [isUpper])
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
