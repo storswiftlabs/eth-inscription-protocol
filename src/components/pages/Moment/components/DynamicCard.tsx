@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
+import { MessagesIcon, ShareIcon } from './Icons'
 import { FillColor } from '@/type/Moment'
-import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from './Icons'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
-import { ItemType, tweetLike } from '@/utils/InterfaceType'
-import {  WelcomeTweet } from '@/constant/Apits'
+import type { tweetLike } from '@/utils/InterfaceType'
+import { ItemType } from '@/utils/InterfaceType'
+import type { WelcomeTweet } from '@/constant/Apits'
 import { getTimeDifference } from '@/utils/timedifference'
 import { imageFormat } from '@/utils/imageFormat'
-import { useRouter } from 'next/navigation'
 
 /**
  * @WhatsHappening - 动态内容卡片组件
@@ -19,7 +20,6 @@ interface Props {
 }
 
 export default function DynamicCard({ item }: Props) {
-
   const router = useRouter()
   const { profile, tweet } = item
   const [likeData, setUpLikeData] = useState<tweetLike>({
@@ -29,29 +29,17 @@ export default function DynamicCard({ item }: Props) {
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(likeData)
 
-
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   const likeFunction = () => {
-    sendTransaction()
-    console.log(data);
+    if (sendTransaction)
+      sendTransaction()
   }
-
-  const aa = () => {
-    // router.push(`$`);
-  };
-
-  console.log(item, 'item');
-
-
-
-
 
   const onFindformation = (item: WelcomeTweet) => {
     router.push(`${tweet.trxHash}`)
   }
-
 
   return (
     <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
@@ -59,7 +47,7 @@ export default function DynamicCard({ item }: Props) {
       <div className="flex ju367v10 w-full">
         <div className=' w-full'>
           <div className="flex mb-1 gap-4">
-            <span className='hover:underline text-[.8rem]' onClick={(e) => e.stopPropagation()}>{profile.text}</span>
+            <span className='hover:underline text-[.8rem]' onClick={e => e.stopPropagation()}>{profile.text}</span>
             <span>·</span>
             <span className=' ml-[-.6rem]'>{getTimeDifference(tweet.trxTime)}</span>
           </div>
@@ -68,26 +56,27 @@ export default function DynamicCard({ item }: Props) {
             {tweet.text}
           </div>
           {
-            tweet.image.map((i, j) => (
-              <div className=' w-full' >
-                <img className='w-full' src={imageFormat(i)} alt="" />
-              </div>
-            ))
+            tweet.image.map((i, j) => {
+              return (
+                <div className=' w-full' >
+                  <img className='w-full' src={imageFormat(i)} alt="" />
+                </div>
+              )
+            })
           }
-          <br></br>
-          <div className="border-[1px] border-[#cfd9de] dark:border-[#404040]"></div>
-          <div className="mt-8 flex justify-between">
+          <br />
+          <div className="border-[1px] mb-4 border-[#cfd9de] dark:border-[#404040]"></div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <ShareIcon fill={handleFillColor()} />
             <MessagesIcon fill={handleFillColor()} />
-            <span onClick={(e) => { likeFunction(), e.stopPropagation() }}>
+            {/* <span onClick={(e) => { likeFunction(); e.stopPropagation() }}>
               {item.likeBool ? <ILoveIcon fill={handleFillColor()} /> : <LoveIcon fill={handleFillColor()} />}
-            </span>
+            </span> */}
           </div>
+
         </div>
       </div>
     </div>
 
   )
 }
-
-

@@ -9,7 +9,6 @@ import Pictures from './Pictures'
 import { EmojiIcon } from '@/components/pages/Chat/Icons'
 import { FillColor } from '@/type/Moment'
 import { useChatMessageReply } from '@/store/useChatMessage'
-import { imageFormat } from '@/utils/imageFormat'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -44,7 +43,6 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   const chatInputRef = useRef<HTMLTextAreaElement>(null)
   const [inputData, setInputData] = useState('')
   const ownerProfile = useChatMessageReply(state => state.ownerProfile) // 存储一下给公共状态
-
 
   useEffect(() => {
     if (isSuccess) {
@@ -100,12 +98,14 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
     >
     </path>
   </svg>
+
   return (
     <>
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
       <EmojiDialog dialogCss={{ position: 'absolute', zIndex: '19999' }} isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
       <Row className={'reply p-4 border-[#edecf3] dark:border-[#262626] '} css={{ ...rowCss }}>
-        <User css={{ padding: '0' }} src={imageFormat(ownerProfile.image)} name="" />
+
+        <User css={{ padding: '0' }} src={ownerProfile.image ? ownerProfile.image : 'https://i.pravatar.cc/150?u=a042581f4e29026704d'} name="" />
         <Row wrap='wrap'>
           <div style={{ width: '100%' }}>
             <Textarea ref={chatInputRef} css={customTextareaStyles} size='xl' value={inputData} onChange={(e) => { setInputData(e.target.value) }} fullWidth placeholder="Default Textarea!" />
