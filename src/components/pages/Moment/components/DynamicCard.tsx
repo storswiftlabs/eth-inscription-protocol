@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
-import { MessagesIcon, ShareIcon } from './Icons'
+import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from './Icons'
 import { FillColor } from '@/type/Moment'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import type { tweetLike } from '@/utils/InterfaceType'
@@ -69,9 +69,12 @@ export default function DynamicCard({ item }: Props) {
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <ShareIcon fill={handleFillColor()} />
             <MessagesIcon fill={handleFillColor()} />
-            {/* <span onClick={(e) => { likeFunction(); e.stopPropagation() }}>
+            <div onClick={(e) => {
+              e.stopPropagation()
+              likeFunction()
+            }}>
               {item.likeBool ? <ILoveIcon fill={handleFillColor()} /> : <LoveIcon fill={handleFillColor()} />}
-            </span> */}
+            </div>
           </div>
 
         </div>
