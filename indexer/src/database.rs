@@ -1,13 +1,8 @@
 use crate::models::NewRecord;
-use crate::proto::Records;
 use crate::schema::balances::dsl::balances;
 use crate::schema::balances::key;
 use crate::{
     models::{
-        AutoIncrement, Balances, Daos, ExtendPledgePeriod, Input, NewAutoIncrement, NewBalances,
-        NewDaos, NewExtendPledgePeriod, NewProfiles, NewProposals, NewStakeAmounts, NewToken,
-        NewTokenInfos, NewVotes, Output, Profiles, Proposals, Record, StakeAmounts, Token,
-        TokenInfos, Votes,
     },
     schema::{self},
 };

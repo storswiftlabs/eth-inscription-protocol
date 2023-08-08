@@ -1441,37 +1441,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nexus-dao-indexer"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-stream",
- "axum 0.6.18",
- "chrono",
- "clap",
- "diesel",
- "futures 0.3.28",
- "http",
- "lazy_static",
- "prost",
- "prost-types",
- "r2d2",
- "r2d2_postgres",
- "regex",
- "serde",
- "serde_json",
- "snarkvm",
- "thiserror",
- "tokio",
- "tokio-retry",
- "tokio-stream",
- "tonic",
- "tonic-build",
- "tower-http",
- "ureq",
-]
-
-[[package]]
 name = "nom"
 version = "7.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2993,6 +2962,37 @@ name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
+
+[[package]]
+name = "starknet-indexer"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-stream",
+ "axum 0.6.18",
+ "chrono",
+ "clap",
+ "diesel",
+ "futures 0.3.28",
+ "http",
+ "lazy_static",
+ "prost",
+ "prost-types",
+ "r2d2",
+ "r2d2_postgres",
+ "regex",
+ "serde",
+ "serde_json",
+ "snarkvm",
+ "thiserror",
+ "tokio",
+ "tokio-retry",
+ "tokio-stream",
+ "tonic",
+ "tonic-build",
+ "tower-http",
+ "ureq",
+]
 
 [[package]]
 name = "stringprep"

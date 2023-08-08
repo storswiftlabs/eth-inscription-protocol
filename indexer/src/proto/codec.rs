@@ -3,10 +3,8 @@
 mod pbsubstreams;
 
 #[rustfmt::skip]
-#[path = "starknet.protocol.v1.rs"]
-mod pbneeds;
+#[path = "swift.inscription.r#type.v1.rs"]
+mod pbinscription;
 
-
-pub use pbmapping::*;
-pub use pbneeds::*;
 pub use pbsubstreams::*;
+pub use pbinscription::*;

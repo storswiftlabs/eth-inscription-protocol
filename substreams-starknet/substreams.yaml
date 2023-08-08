@@ -1,11 +1,12 @@
 specVersion: v0.1.0
 package:
-  name: "substreams_nexus_dao"
+  name: "substreams_starknet"
   version: v0.1.0
 
 protobuf:
   files:
-    - aleo.proto
+    - starknet.proto
+    - inscription.proto
   importPaths:
     - ./proto
 
@@ -15,11 +16,10 @@ binaries:
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 modules:
-  - name: map_records
+  - name: map_transactions
     kind: map
     initialBlock: 0
     inputs:
-      - source: sf.aleo.type.v1
+      - source: zklend.starknet.type.v1
     output:
-      type: proto:aleo.block.v1.Records
-
+      type: proto:inscription.type.v1.Transactions

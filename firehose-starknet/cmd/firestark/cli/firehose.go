@@ -104,6 +104,8 @@ func init() {
 				registerServiceExt = sss.Register
 			}
 
+			rootLog.Info(fmt.Sprintf("common-live-blocks-addr: '%s'",  viper.GetString("common-live-blocks-addr")));
+
 			return firehoseApp.New(appLogger, &firehoseApp.Config{
 				OneBlocksStoreURL:       MustReplaceDataDir(sfDataDir, viper.GetString("common-one-block-store-url")),
 				MergedBlocksStoreURL:    MustReplaceDataDir(sfDataDir, viper.GetString("common-merged-blocks-store-url")),

@@ -11,14 +11,14 @@ This repository show cases consumption of an NexsuDAO Substreams and saving it t
    brew install postgresql libpq
    ```
 
-- `firehose-aleo`
+- `firehose-starknet`
 
 ## Usage
 
-In a first terminal, launch `firehose-aleo` localnet setup:
+In a first terminal, launch `firehose-starknet` localnet setup:
 
 ```
-cd firehose-aleo
+cd firehose-starknet
 ./devel/localnet/start -c
 ```
 
@@ -40,7 +40,7 @@ And then run the script:
 make all
 ```
 
-This will read start a Substreams using `./substreams-nexus-dao-v0.1.0.spkg`, receives all the `map_records` module output (of type `map`), decode the received entities and save them in the database.
+This will read start a Substreams using `./substreams-startnet-v0.1.0.spkg`, receives all the `map_transactions` module output (of type `map`), decode the received entities and save them in the database.
 
 If show case how you can consume a Substreams module of type `map` to insert data in a database.
 

@@ -6,7 +6,7 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use database::{batch_insert_records, POOL};
 use futures03::StreamExt;
-use http::Method;
+use http::Method
 use prost::Message;
 use proto::{module_output::Data as ModuleOutputData, BlockScopedData, Records};
 use std::{env, net::SocketAddr, str::FromStr, sync::Arc};
@@ -17,9 +17,7 @@ use tower_http::cors::{Any, CorsLayer};
 mod cli;
 mod database;
 mod handlers;
-mod mappings;
 mod models;
-mod program_handler;
 mod proto;
 mod routes;
 mod schema;

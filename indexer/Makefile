@@ -1,8 +1,8 @@
 REST_API ?= https://vm.aleo.org/api
 ENDPOINT_URL ?= http://localhost:18015
 START_BLOCK ?= 0
-PACKAGE_FILE ?= ./substreams-nexus-dao-v0.1.0.spkg
-MODULE_NAME ?= map_records
+PACKAGE_FILE ?= ./substreams-starknet-v0.1.0.spkg
+MODULE_NAME ?= map_transactions
 HOST ?= 127.0.0.1
 PORT ?= 8081
 
