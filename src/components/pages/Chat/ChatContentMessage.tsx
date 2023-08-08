@@ -10,7 +10,7 @@ import type { ChatContentMessageType, ProfileResponse } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { getMessageWith, getProfile } from '@/utils/requestApi'
 
-export function ChatContentMessage({ data, me }: { data: ChatContentMessageType; me: number }) {
+export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
   const [isOpen, setIsOpen] = useState(false)
   const { theme } = useTheme()
   const { address, isConnected } = useAccount()
@@ -31,10 +31,13 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
     closeModal()
   }
   useEffect(() => {
+    setWithMessageData(undefined)
+  }, [data])
+  useEffect(() => {
     (async () => {
       setProfileData(await getProfile(data.sender))
     })()
-    if (data.with) {
+    if (data.with !== '') {
       (async () => {
         if (window.location.search === '?type=group')
           setWithMessageData(await getMessageWith(data.with, 'group_message'))
@@ -66,7 +69,7 @@ export function ChatContentMessage({ data, me }: { data: ChatContentMessageType;
         </div>
 
         <Image onClick={openModal} className={`w-10 h-10 cursor-pointer absolute top-0 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/emoji.svg' alt='' width={20} height={20}></Image>
-        <div onClick={() => { setReplyMessage({ text: data.text, txHash: '0x00002' }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
           <ReplyIcon fill={handleFillColor()}></ReplyIcon>
         </div>
 
