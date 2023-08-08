@@ -1,35 +1,34 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
-import DynamicCard from '../DynamicCard/DynamicCard'
+import Image from 'next/image'
+import DynamicCard from '../DynamicCard'
 import DialogueInput from '../DialogueInput'
 import type { tweetSend } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { getTweet } from '@/utils/api'
-import { TweetType, WelcomeTweet } from '@/constant/Apits'
-import Image from 'next/image'
-import { getTimeDifference } from '@/utils/timedifference'
+import type { WelcomeTweet } from '@/constant/Apits'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
 }
 
 interface objtyle {
-  owner: string
+  owner: `0x${string}` | undefined
   limit: number
   offset: number
 }
 
 function Find({ isUpper }: Props) {
-  const [data1, setData] = useState([] as any[])
+  const { address, isConnected } = useAccount()
+
   const [ownerObj, setOwnerObj] = useState<objtyle>({
-    owner: '',
+    owner: address,
     limit: 10,
-    offset: 0
+    offset: 0,
   })
   const [tweetList, setTweetList] = useState([] as WelcomeTweet[])
-  const { address, isConnected } = useAccount()
   const [uploadData, setUploadData] = useState<tweetSend>({
     type: ItemType.tweet_send,
     title: '',
@@ -40,13 +39,10 @@ function Find({ isUpper }: Props) {
   })
 
   useEffect(() => {
-
-    if (isUpper === 'Follow') {
+    if (isUpper === 'Follow')
       setTweetList([])
-    } else {
+    else
       getTweetFunction(ownerObj)
-    }
-
   }, [isUpper])
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
@@ -60,40 +56,35 @@ function Find({ isUpper }: Props) {
   }
 
   const getTweetFunction = async (obj: objtyle) => {
-
     try {
       const tweetData = await getTweet(obj)
-      console.log(tweetData);
-
       setTweetList(tweetData.tweets)
     }
     catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
-
 
   return (
     <div style={{ width: '100%', overflow: 'hidden' }}>
       <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
       {
-        tweetList.length <= 0 ? <div className='w-full h-full flex justify-center items-center flex-col'>
-          <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
-          NO DATA
-        </div> : tweetList.map((i, index) => {
-          return (
-            <DynamicCard
-              item={i}
-              key={index}
-            />
-          )
-        })
+        tweetList.length <= 0
+          ? <div className='w-full h-full flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            NO DATA
+          </div>
+          : tweetList.map((i, index) => {
+            return (
+              <DynamicCard
+                item={i}
+                key={index}
+              />
+            )
+          })
       }
 
-
-
     </div>
-
   )
 }
 

@@ -23,16 +23,16 @@ interface Props {
   avatar: string
   name: string
   evaluation: string
-  releaseTime: string
-  agree: number
-  noAgree: number
+  releaseTime: string | undefined
+  // agree: number
+  // noAgree: number
   children?: ReactNode
 }
 
-function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, agree, noAgree, avatar }: Props) {
+function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime,  avatar }: Props) {
   // const [pictureArr, setPictureArr] = useState<string[]>([])
-  const [dz, setDz] = useState(false) // 点赞和取消点赞
-  const [ca, setCa] = useState(false) // 踩和取消踩
+  // const [dz, setDz] = useState(false) // 点赞和取消点赞
+  // const [ca, setCa] = useState(false) // 踩和取消踩
   // const [visible, setVisible] = React.useState(false)
   // const [value, setValue] = useState('') // 弹框的值
   const { theme } = useTheme()
@@ -49,7 +49,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
   // console.log(tweetSendArr, '123')
   // }
 
-  const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
+  // const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <>
       <div>
@@ -60,14 +60,14 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
             </p>
             <p className='flex items-center gap-4 mt-1 s-'>
               <span style={{ fontSize: '14px' }}> {releaseTime} </span>
-              <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>
+              {/* <span className='flex gap-1 items-center' onClick={() => setDz(!dz)}>
                 {dz ? <PedalIcon fill={handleFillColor()} /> : <RemoveIcon fill={handleFillColor()} />}
                 <span>{agree}</span>
               </span>
               <span className='flex gap-1 items-center' onClick={() => setCa(!ca)}>
                 {ca ? <RemovePedalIcon fill={handleFillColor()} /> : <KudosIcon fill={handleFillColor()} />}
                 <span>{noAgree}</span>
-              </span>
+              </span> */}
               {/* <span style={{ fontSize: '14px', cursor: 'pointer' }} onClick={() => handler()}>
                 reply
               </span> */}

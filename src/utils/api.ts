@@ -22,7 +22,7 @@ export async function getGroupMessage(groupObj: { title: string;limit: number;of
   return res.data
 }
 
-export async function getTweet(tweetObj: { owner: string;limit: number;offset: number }): Promise<TweetType> {
+export async function getTweet(tweetObj: { owner: string|undefined;limit: number;offset: number }): Promise<TweetType> {
   const res = await request.get(Tweet, { params: tweetObj })
   return res.data
 }

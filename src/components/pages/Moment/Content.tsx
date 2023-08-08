@@ -5,11 +5,11 @@ import Find from './components/MomentContent/Find'
 import Bookmark from './components/MomentContent/Bookmark'
 import Message from './components/MomentContent/Message'
 import More from './components/MomentContent/More'
-import Verify from './components/MomentContent/Verify'
-import FindInformation from './components/FindInformation'
 import RightMessage from './components/RightSidebar/RightMessage'
 import VerifyModal from './components/VerifyModal'
 import { useRouter } from 'next/navigation'
+import FindInformation from './components/FindInformation'
+
 interface MomentContentData {
   type: string // 判断是哪个路由
 }
@@ -20,7 +20,7 @@ function MomentContent({ type }: MomentContentData) {
   const [isUpper, setIsUpper] = useState('Recommendation')
   const router = useRouter();
 
-  
+
   const closeHandler = () => {
     router.back()
   };

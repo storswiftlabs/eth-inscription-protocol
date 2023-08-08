@@ -1,10 +1,18 @@
 import { create } from 'zustand'
 
 interface Store {
+  ownerProfile:{
+    image: string
+    text: string
+  }
   reply: {
     text: string
     txHash: string
   }
+  setOwnerProfileF:(conten:{
+    image:string
+    text: string
+  }) => void
   setReplyMessage: (reply: {
     text: string
     txHash: string
@@ -13,6 +21,8 @@ interface Store {
 }
 
 export const useChatMessageReply = create<Store>()(set => ({
+  ownerProfile:{image:"",text:""},
+  setOwnerProfileF:content  => ({ownerProfile:content}),
   reply: { text: '', txHash: '' },
   setReplyMessage: content => set({ reply: content }),
   clearReplyMessage: () => set({ reply: { text: '', txHash: '' } }),

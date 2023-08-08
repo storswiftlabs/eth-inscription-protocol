@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
 import { getProfile } from '@/utils/requestApi'
+import { useChatMessageReply } from '@/store/useChatMessage'
 
 export function CustomConnectButton() {
   const { disconnect } = useDisconnect()
@@ -11,6 +12,7 @@ export function CustomConnectButton() {
 
   const [visible, setVisible] = useState(false)
   const uploadFile = useRef<HTMLInputElement>(null)
+  const setOwnerProfileF = useChatMessageReply(state => state.setOwnerProfileF) // 存储一下给公共状态
   const [ownerProfile, setOwnerProfile] = useState({
     image: '',
     text: '',
@@ -22,6 +24,11 @@ export function CustomConnectButton() {
       text: e.text,
     }))
   }, [])
+
+  useEffect(() => {
+    setOwnerProfileF(ownerProfile) // 存储
+  }, [ownerProfile])
+
 
   const handler = () => setVisible(true)
   const closeHandler = () => {

@@ -1,13 +1,13 @@
-'use client'
 import { useState } from 'react'
 import { useTheme } from 'next-themes'
 import { FillColor } from '@/type/Moment'
-import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from '../Icons'
+import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from './Icons'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { ItemType, tweetLike } from '@/utils/InterfaceType'
-import { Profile, WelcomeTweet } from '@/constant/Apits'
+import {  WelcomeTweet } from '@/constant/Apits'
 import { getTimeDifference } from '@/utils/timedifference'
 import { imageFormat } from '@/utils/imageFormat'
+import { useRouter } from 'next/navigation'
 
 /**
  * @WhatsHappening - 动态内容卡片组件
@@ -20,8 +20,8 @@ interface Props {
 
 export default function DynamicCard({ item }: Props) {
 
+  const router = useRouter()
   const { profile, tweet } = item
-
   const [likeData, setUpLikeData] = useState<tweetLike>({
     type: ItemType.tweet_like,
     with: item.with.trxHash,
@@ -38,9 +38,23 @@ export default function DynamicCard({ item }: Props) {
     console.log(data);
   }
 
+  const aa = () => {
+    // router.push(`$`);
+  };
+
+  console.log(item, 'item');
+
+
+
+
+
+  const onFindformation = (item: WelcomeTweet) => {
+    router.push(`${tweet.trxHash}`)
+  }
+
 
   return (
-    <div className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
+    <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
       <img src={imageFormat(profile.image[0])} alt={''} width={35} height={35} ></img>
       <div className="flex ju367v10 w-full">
         <div className=' w-full'>
