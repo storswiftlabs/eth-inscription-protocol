@@ -1,8 +1,8 @@
 'use client'
 import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
 import { Focus, UnFollow } from '../Icons'
 import { FillColor } from '@/type/Moment'
-import { useTheme } from 'next-themes'
 
 function ListFocusIcon() {
   const [isAdd, setIsAdd] = useState(false)
@@ -17,4 +17,3 @@ function ListFocusIcon() {
 }
 
 export default ListFocusIcon
-

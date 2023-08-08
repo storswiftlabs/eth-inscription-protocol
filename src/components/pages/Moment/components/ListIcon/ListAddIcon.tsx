@@ -1,14 +1,14 @@
 'use client'
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
+import { useTheme } from 'next-themes'
 import { AddIcon, ChooseIcon } from '../Icons'
 import { FillColor } from '@/type/Moment'
-import { useTheme } from 'next-themes'
 
 interface Props {
   // children: ReactNode
 }
 
-function ListAddIcon({ }: Props) {
+function ListAddIcon() {
   const [isAdd, setIsAdd] = useState(false)
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black

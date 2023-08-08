@@ -12,6 +12,7 @@ import { Notifications } from '@/components/Notifications'
 import type { MessageOnChain } from '@/utils/sendMessageOnChain'
 import { sendMessageOnChain } from '@/utils/sendMessageOnChain'
 import { useChatMessageReply } from '@/store/useChatMessage'
+import { uploadFile } from '@/utils/ipfs'
 
 interface Props {
   type: string
@@ -21,13 +22,14 @@ export function ChatInput({ type }: Props) {
   const [inputData, setInputData] = useState('')
   const [themeColor, setThemeColor] = useState('')
   const [pictureArr, setPictureArr] = useState<string[]>([])
+  const [pictureArrCid, setPictureArrCid] = useState<string[]>([])
   const { data: walletClient } = useWalletClient()
   const fileRef = useRef<HTMLInputElement>(null)
   const chatInputRef = useRef<HTMLInputElement>(null)
   const [isOpen, setIsOpen] = useState(false)
   const [isOpen2, setIsOpen2] = useState(false)
   const [atMember, setAtMember] = useState<string[]>([])
-  const { address, isConnected } = useAccount()
+  const { isConnected } = useAccount()
   const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
   const replyMessage = useChatMessageReply(state => state.reply)
   const clearReplyMessage = useChatMessageReply(state => state.clearReplyMessage)
@@ -49,22 +51,37 @@ export function ChatInput({ type }: Props) {
     data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
   })
   const handleSend = () => {
-    !isConnected && alert('Please connect your wallet first')
-    sendTransaction()
+    if (!isConnected)
+      alert('Please connect your wallet first')
+    if (pictureArr.length !== pictureArrCid.length)
+      alert('wait a minute')
+    else
+      sendTransaction()
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter')
       handleSend()
   }
+  // console.log(pictureArrCid)
 
   useEffect(() => {
-    replyMessage.txHash && setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
-    pictureArr.length > 0 && setSendDataOnChain({ ...sendDataOnChain, image: pictureArr })
+    (async () => {
+      replyMessage.txHash && setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
+      pictureArr.length > 0 && setPictureArrCid((await Promise.all(pictureArr.map(t => uploadFile(t)))).map(t => `ipfs://${t}`))
+    })()
   }, [replyMessage, pictureArr])
+
+  useEffect(() => {
+    pictureArrCid.length > 0 && setSendDataOnChain({ ...sendDataOnChain, image: pictureArrCid })
+    atMember.length > 0 && setSendDataOnChain({ ...sendDataOnChain, at: atMember })
+  }, [pictureArrCid, atMember])
 
   useEffect(() => {
     const clearData = () => {
       setInputData('')
+      setPictureArr([])
+      setAtMember([])
+      setPictureArrCid([])
       clearReplyMessage()
     }
     isSuccess && clearData()

@@ -42,7 +42,7 @@ export interface updateGroupAdd extends defaultBasicType {
   receiver: string[] // 为要加的人（ 必填 )
 }
 
-export interface updateGroupDel extends defaultBasicType {
+export interface updateGroupDel extends Omit<defaultBasicType, 'text'> {
   type: ItemType.update_group_del
   receiver: string[] // 要删除的人（ 必填 )
 }

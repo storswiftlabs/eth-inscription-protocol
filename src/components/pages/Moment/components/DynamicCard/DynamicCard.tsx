@@ -1,12 +1,9 @@
 'use client'
-import Image from 'next/image'
-import { Textarea } from '@nextui-org/react'
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { FillColor } from '@/type/Moment'
 import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from '../Icons'
+import { FillColor } from '@/type/Moment'
 
 /**
  * @WhatsHappening - 动态内容卡片组件
@@ -38,7 +35,7 @@ export default function DynamicCard({ avatar, name, time, text, img }: Props) {
       <div className="flex ju367v10">
         <div>
           <div className="flex mb-1 gap-4">
-            <span className='hover:underline text-[.8rem]' onClick={(e) => e.stopPropagation()}>{name}</span>
+            <span className='hover:underline text-[.8rem]' onClick={e => e.stopPropagation()}>{name}</span>
             <span>·</span>
             <span className=' ml-[-.6rem]'>{time}</span>
           </div>
@@ -54,7 +51,10 @@ export default function DynamicCard({ avatar, name, time, text, img }: Props) {
           <div className="mt-8 flex justify-between">
             <ShareIcon fill={handleFillColor()} />
             <MessagesIcon fill={handleFillColor()} />
-            <span onClick={(e) => { setLove(!love); e.stopPropagation() }}>
+            <span onClick={(e) => {
+              setLove(!love)
+              e.stopPropagation()
+            }}>
               {love ? <ILoveIcon fill={handleFillColor()} /> : <LoveIcon fill={handleFillColor()} />}
             </span>
           </div>
@@ -63,5 +63,3 @@ export default function DynamicCard({ avatar, name, time, text, img }: Props) {
     </div>
   )
 }
-
-

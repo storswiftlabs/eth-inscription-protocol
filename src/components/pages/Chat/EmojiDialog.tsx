@@ -24,7 +24,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                     Add Group
                 </Dialog.Title >
                     <br />
-                    <Input></Input>
+                    <Input onChange={e => setSelected(e.target.value)}></Input>
                 </>
       case 'at':
         return <> < Dialog.Title
