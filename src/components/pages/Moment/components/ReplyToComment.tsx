@@ -16,6 +16,7 @@ import { FillColor } from '@/type/Moment'
  * @param {string} props.agree - 点赞人数
  * @param {string} props.noAgree - 不觉得赞人数
  * @param {children} props.children - 二级评论
+ * @param {string[]} props.at - @的人
  */
 
 interface Props {
@@ -27,9 +28,10 @@ interface Props {
   // agree: number
   // noAgree: number
   children?: ReactNode
+  at: string[]
 }
 
-function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime,  avatar }: Props) {
+function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, at }: Props) {
   // const [pictureArr, setPictureArr] = useState<string[]>([])
   // const [dz, setDz] = useState(false) // 点赞和取消点赞
   // const [ca, setCa] = useState(false) // 踩和取消踩
@@ -57,6 +59,11 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime,  
           <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: theme === 'dark' ? '#fff' : '#000' }, 'padding': '0' }}>
             <p className='commentaries text-[#000] dark:text-[#fff]'>
               {evaluation}
+              {
+                at?.map((m, h) => (
+                  <a className=' ml-4 text-[#51b2f3] hover:underline' href="#">{`@${m}`}</a>
+                ))
+              }
             </p>
             <p className='flex items-center gap-4 mt-1 s-'>
               <span style={{ fontSize: '14px' }}> {releaseTime} </span>

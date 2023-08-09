@@ -55,6 +55,8 @@ export default function DynamicCard({ item }: Props) {
     router.push(`${tweet.trxHash}`)
   }
 
+
+
   return (
     <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
       {isSuccess ? <Notifications data={data?.hash} /> : null}
@@ -68,7 +70,12 @@ export default function DynamicCard({ item }: Props) {
           </div>
           {tweet.title && <h2 className=' text-[1.2rem]'>{tweet.title}</h2>}
           <div className="overflow-hidden overflow-ellipsis line-clamp-3 mb-2">
-            {tweet.text}
+            <span>{tweet.text}</span>
+            {
+              tweet.at.map((m, h) => (
+                <a className=' ml-4 text-[#51b2f3] hover:underline' href="#">{`@${m}`}</a>
+              ))
+            }
           </div>
           {
             tweet.image.map((i, j) => {
