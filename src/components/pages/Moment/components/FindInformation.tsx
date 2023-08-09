@@ -17,6 +17,7 @@ import { getTweet } from '@/utils/api'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { WelcomeTweet } from '@/constant/Apits'
 import { imageFormat } from '@/utils/imageFormat'
+import { Notifications } from '@/components/Notifications'
 
 interface Props {
   type: string | number
@@ -77,35 +78,35 @@ function FindInformation({ type }: Props) {
   if (!isConnected)
     alert('Please connect your wallet first')
 
-  const closeHandler = (tweetSendArr: { image: string[]; text: string }) => { //  直接评论
+  const closeHandler = (tweetSendArr: { image: string[]; text: string, at?: string[] }) => { //  直接评论
     setTweetCommentData({
       type: ItemType.tweet_comment,
       text: tweetSendArr.text,
       image: tweetSendArr.image,
-      at: [''],
-      with: '',
+      at: tweetSendArr.at,
+      with: tweetDetails.tweet.trxHash,
     })
     sendTransaction()
   }
 
   /**
-   * 关注用户
-   * @param withi - 要关注的用户
+   * 进行用户关注或取消关注的操作
+   * @param withi - 要关注或取消关注的用户
+   * @param follow - 表示是否进行关注操作，默认为 true，即关注用户
    */
-  const followFunction = (withi: string) => {
-    // TODO: 实现关注逻辑
-    setFollowUn({ ...followUn, with: withi })
-    sendTransaction()
-  }
+  const manageFollow = (follow: boolean) => {
+    // 根据传入的参数 follow，确定 updateObj 的不同属性
+    const updateObj = {
+      type: follow ? ItemType.tweet_follow : ItemType.follow_unfollow,
+      with: tweetDetails.tweet.sender,
+    } as tweetFollow;
 
-  /**
-     * 取消关注用户
-     * @param withi - 要取消关注的用户
-     */
-  const unfollowFunction = (withi: string) => {
-    setFollowUn({ type: ItemType.follow_unfollow, with: withi })
-    sendTransaction()
-  }
+    // 更新状态
+    setFollowUn(updateObj);
+
+    // 执行事务操作
+    sendTransaction();
+  };
 
 
   function extractDatetime(datetimeStr = '2010'): string | undefined {
@@ -121,6 +122,7 @@ function FindInformation({ type }: Props) {
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <Grid.Container css={{ minHeight: '100vh', padding: '1rem' }} id="yourElementId" className="FindInformation-container h-full text-[#000] dark:text-[#fff]">
+      {isSuccess ? <Notifications data={data?.hash} /> : null}
       <Col >
         <Row align='center' css={{ height: '3.4rem' }}>
           <Grid onClick={() => router.back()} xs={1}>
@@ -150,13 +152,13 @@ function FindInformation({ type }: Props) {
 
                 </Dropdown.Item> */}
                 <Dropdown.Item key="settings" >
-                  <div className='flex gap-4' onClick={() => followFunction('')}>
+                  <div className='flex gap-4' onClick={() => manageFollow(true)}>
                     <FocusIcon />
                     <span>Follow this user</span>
                   </div>
                 </Dropdown.Item>
                 <Dropdown.Item key="team_settings">
-                  <div className=' flex gap-4' onClick={() => unfollowFunction('')}>
+                  <div className=' flex gap-4' onClick={() => manageFollow(false)}>
                     <UnfollowIcon />
                     <span>Unfollow this user</span>
                   </div>
@@ -202,9 +204,7 @@ function FindInformation({ type }: Props) {
           {/* <Col className='underline-on-hover'>0 Retweets</Col> */}
           {/* <Col>0 Bookmarks</Col> */}
         </Row>
-
         <DialogueInput isSuccess={false} closeHandler={closeHandler} />
-
         <Spacer y={1} />
         {
           tweetDetails.comments?.length > 0 ? tweetDetails.comments?.map((i, j) => {
@@ -220,10 +220,10 @@ function FindInformation({ type }: Props) {
                 name={profile?.text}
                 evaluation={comment?.text} />
             )
-          }): <div className='w-full  flex justify-center items-center flex-col'>
-              <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
-              No message
-            </div>
+          }) : <div className='w-full  flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            No message
+          </div>
         }
       </Col>
 

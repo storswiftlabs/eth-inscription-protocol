@@ -1,5 +1,6 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+// eslint-disable-next-line no-console
+import React, { useEffect, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import Image from 'next/image'
 import DynamicCard from '../DynamicCard'
@@ -7,7 +8,7 @@ import DialogueInput from '../DialogueInput'
 import type { tweetSend } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
-import { getTweet } from '@/utils/api'
+import { getFollowTweet, getTweet } from '@/utils/api'
 import type { WelcomeTweet } from '@/constant/Apits'
 
 interface Props {
@@ -22,13 +23,16 @@ interface objtyle {
 
 function Find({ isUpper }: Props) {
   const { address, isConnected } = useAccount()
-
+  const [isloading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(0)
   const [ownerObj, setOwnerObj] = useState<objtyle>({
     owner: address,
-    limit: 10,
+    limit: 4,
     offset: 0,
   })
+  const resRef = useRef<any>({});
   const [tweetList, setTweetList] = useState([] as WelcomeTweet[])
+  const [follow, setFollow] = useState([] as WelcomeTweet[])
   const [uploadData, setUploadData] = useState<tweetSend>({
     type: ItemType.tweet_send,
     title: '',
@@ -38,52 +42,151 @@ function Find({ isUpper }: Props) {
     with: '123',
   })
 
-  useEffect(() => {
-    if (isUpper === 'Follow')
-      setTweetList([])
-    else
-      getTweetFunction(ownerObj)
-  }, [isUpper])
-
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
 
   if (!isConnected)
     alert('Please connect your wallet first')
+
+  useEffect(() => {
+
+    let timer: string | number | NodeJS.Timeout | undefined;
+    var element = document.getElementById('gund');
+
+    function handleScroll() {
+      // 清除之前的计时器
+      clearTimeout(timer);
+      // 开始一个新的计时器
+      timer = setTimeout(() => {
+        // 获取页面高度
+        const windowHeight = window.innerHeight;
+        // 获取文档高度
+        const documentHeight = document.documentElement.scrollHeight;
+        // 获取滚动位置
+        const scrollPosition = window.scrollY;
+
+        // 判断是否接近页面底部
+        if (documentHeight - scrollPosition <= windowHeight + 100 && resRef.current.a) {
+          // 接近页面底部，增加 offset 值
+          setPage((page) => page + 1)
+        }
+      }, 2000); // 设置延迟时间为1秒
+    }
+
+
+
+    // 监听滚动事件
+    element && element.addEventListener('scroll', handleScroll);
+
+    // 在组件卸载时移除滚动事件监听器
+    return () => {
+      clearTimeout(timer); // 清除计时器
+      element && element.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOwnerObj({
+      ...ownerObj,
+      offset: page * ownerObj.limit
+    })
+  }, [page])
+
+
+  const getTweetFunction = async (obj: objtyle) => { // 获取 recommendation 数据
+    setIsLoading(true)
+    resRef.current.a = false
+    try {
+      const tweetData = await getTweet(obj)
+      if (tweetData.tweets.length <= 0) { // 代表没有数据了
+        return
+      } else {
+        setTweetList([...tweetList, ...tweetData.tweets])
+        resRef.current.a = true
+        setIsLoading(false)
+      }
+    }
+    catch (error) {
+      resRef.current.a = true
+      setIsLoading(false)
+      console.log(error)
+    }
+  }
+
+  const getFollowTweetFun = async (obj: objtyle) => {
+    setIsLoading(true)
+    resRef.current.a = false
+    try {
+      const user = await getFollowTweet(obj)
+      if (user.tweets.length <= 0) {
+        return
+      } else {
+        setFollow({ ...user.tweets, ...follow })
+        resRef.current.a = true
+        setIsLoading(false)
+      }
+    }
+    catch (error) {
+      resRef.current.a = true
+      setIsLoading(false)
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    resRef.current.a = true;
+    if (isUpper === 'Follow')
+      getFollowTweetFun(ownerObj)
+    else
+      getTweetFunction(ownerObj)
+  }, [ownerObj.offset])
 
   const closeHandler = (tweetSendArr: { image: string[]; text: string }) => {
     setUploadData({ ...uploadData, image: tweetSendArr.image, text: tweetSendArr.text })
     sendTransaction()
   }
 
-  const getTweetFunction = async (obj: objtyle) => {
-    try {
-      const tweetData = await getTweet(obj)
-      setTweetList(tweetData.tweets)
-    }
-    catch (error) {
-      console.log(error)
+  const renderContent = () => {
+    if (isUpper === 'Follow') {
+      if (follow.length <= 0) {
+        return (
+          <div className='w-full h-full flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            NO DATA
+          </div>
+        );
+      }
+      return tweetList.map((i, index) => (
+        <DynamicCard
+          item={i}
+          key={index}
+        />
+      ));
+    } else {
+      if (tweetList.length <= 0) {
+        return (
+          <div className='w-full h-full flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            NO DATA
+          </div>
+        );
+      }
+      return tweetList.map((i, index) => (
+        <DynamicCard
+          item={i}
+          key={index}
+        />
+      ));
     }
   }
 
   return (
-    <div style={{ width: '100%', overflow: 'hidden' }}>
+    <div style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
       <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
+      {renderContent()}
       {
-        tweetList.length <= 0
-          ? <div className='w-full h-full flex justify-center items-center flex-col'>
-            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
-            NO DATA
-          </div>
-          : tweetList.map((i, index) => {
-            return (
-              <DynamicCard
-                item={i}
-                key={index}
-              />
-            )
-          })
+        isloading ? 1 : 2
       }
-
     </div>
   )
 }

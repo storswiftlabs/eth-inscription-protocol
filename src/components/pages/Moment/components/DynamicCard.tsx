@@ -9,6 +9,7 @@ import { ItemType } from '@/utils/InterfaceType'
 import type { WelcomeTweet } from '@/constant/Apits'
 import { getTimeDifference } from '@/utils/timedifference'
 import { imageFormat } from '@/utils/imageFormat'
+import { Notifications } from '@/components/Notifications'
 
 /**
  * @WhatsHappening - 动态内容卡片组件
@@ -32,10 +33,23 @@ export default function DynamicCard({ item }: Props) {
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
-  const likeFunction = () => {
-    if (sendTransaction)
-      sendTransaction()
-  }
+  /**
+   * 执行点赞操作或取消点赞操作
+   * @param likeBool - 点赞或取消点赞的布尔值
+   */
+  const likeFunction = (likeBool: boolean) => {
+    if (!sendTransaction) return;
+
+    const type = likeBool ? ItemType.follow_unfollow : ItemType.tweet_like;
+    // 设置点赞数据
+    setUpLikeData({
+      type,
+      with: item.with.trxHash,
+    });
+
+    sendTransaction();
+  };
+
 
   const onFindformation = (item: WelcomeTweet) => {
     router.push(`${tweet.trxHash}`)
@@ -43,6 +57,7 @@ export default function DynamicCard({ item }: Props) {
 
   return (
     <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
+      {isSuccess ? <Notifications data={data?.hash} /> : null}
       <img src={imageFormat(profile.image[0])} alt={''} width={35} height={35} ></img>
       <div className="flex ju367v10 w-full">
         <div className=' w-full'>
@@ -71,12 +86,11 @@ export default function DynamicCard({ item }: Props) {
             <MessagesIcon fill={handleFillColor()} />
             <div onClick={(e) => {
               e.stopPropagation()
-              likeFunction()
+              likeFunction(item.likeBool)
             }}>
               {item.likeBool ? <ILoveIcon fill={handleFillColor()} /> : <LoveIcon fill={handleFillColor()} />}
             </div>
           </div>
-
         </div>
       </div>
     </div>

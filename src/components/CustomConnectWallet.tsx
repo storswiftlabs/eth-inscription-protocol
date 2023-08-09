@@ -9,7 +9,6 @@ import { useChatMessageReply } from '@/store/useChatMessage'
 export function CustomConnectButton() {
   const { disconnect } = useDisconnect()
   const { address } = useAccount()
-
   const [visible, setVisible] = useState(false)
   const uploadFile = useRef<HTMLInputElement>(null)
   const setOwnerProfileF = useChatMessageReply(state => state.setOwnerProfileF) // 存储一下给公共状态
@@ -28,7 +27,6 @@ export function CustomConnectButton() {
   useEffect(() => {
     setOwnerProfileF(ownerProfile) // 存储
   }, [ownerProfile])
-
 
   const handler = () => setVisible(true)
   const closeHandler = () => {

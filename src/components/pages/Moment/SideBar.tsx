@@ -114,7 +114,7 @@ export default function MomentSideBar({ type = 'find' }) {
   }
 
   return (
-    <div className="nav flex flex-col justify-start items-center w-[300px] h-full p-4 border-x border-x-[#edecf3] dark:bg-[#121212] dark:border-x-[#262626]">
+    <div className="nav flex flex-col justify-start items-center w-[300px]   min-h-screen p-4 border-x border-x-[#edecf3] dark:bg-[#121212] dark:border-x-[#262626]">
       <div>
         <h1 className="font-bold text-2xl mb-5 mt-10 text-center">Moments</h1>
         <div className="w-full flex justify-center flex-col">
