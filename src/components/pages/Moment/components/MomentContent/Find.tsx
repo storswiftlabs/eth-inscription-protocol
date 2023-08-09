@@ -11,6 +11,8 @@ import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { getFollowTweet, getTweet } from '@/utils/api'
 import type { WelcomeTweet } from '@/constant/Apits'
 import { Loading } from '@nextui-org/react'
+import { FillColor } from '@/type/Chat'
+import { useTheme } from 'next-themes'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -31,6 +33,8 @@ function Find({ isUpper }: Props) {
     limit: 4,
     offset: 0,
   })
+  const { theme } = useTheme()
+
   const resRef = useRef<any>({});
   const [tweetList, setTweetList] = useState([] as WelcomeTweet[])
   const [follow, setFollow] = useState([] as WelcomeTweet[])
@@ -130,7 +134,7 @@ function Find({ isUpper }: Props) {
     }
   }
 
-  
+
 
 
   useEffect(() => {
@@ -179,14 +183,19 @@ function Find({ isUpper }: Props) {
       ));
     }
   }
-
+  const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <div style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
       <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
       {renderContent()}
+
       {
         loading && <div className=' flex justify-center items-center h-[4rem]'>
-          <Loading type="gradient" size="lg" />
+          <Loading css={{
+            '._2': {
+              bg: theme === 'dark' ? '#000' : '#fff'
+            }
+          }} type="gradient" size="lg" />
         </div>
       }
     </div>
