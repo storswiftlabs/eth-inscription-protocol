@@ -30,6 +30,6 @@ services:
     links:
       - postgres:postgres
     environment:
-      - DATABASE_URL=postgres://admin:secure@postgres:5432/indexer-dev?sslmode=disable
+      - DATABASE_URL=postgres://admin:secure@postgres-starknet-indexer:5432/indexer-dev?sslmode=disable
     depends_on:
       - postgres

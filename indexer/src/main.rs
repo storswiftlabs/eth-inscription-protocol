@@ -1,14 +1,14 @@
 extern crate diesel;
 
-use crate::{program_handler::program_handler, routes::routes};
+use crate::routes::routes;
 use anyhow::{format_err, Context, Error};
 use clap::Parser;
 use cli::{Cli, Commands};
-use database::{batch_insert_records, POOL};
+use database::{batch_insert_transactions, POOL};
 use futures03::StreamExt;
-use http::Method
+use http::Method;
 use prost::Message;
-use proto::{module_output::Data as ModuleOutputData, BlockScopedData, Records};
+use proto::{module_output::Data as ModuleOutputData, BlockScopedData, Transactions};
 use std::{env, net::SocketAddr, str::FromStr, sync::Arc};
 use substreams::SubstreamsEndpoint;
 use substreams_stream::{BlockResponse, SubstreamsStream};
@@ -30,7 +30,6 @@ async fn main() {
 
     match &cli.command {
         Some(Commands::Sync {
-            rest_api,
             endpoint_url,
             package_file,
             module_name,
@@ -38,7 +37,6 @@ async fn main() {
             end_block,
         }) => {
             sync(
-                rest_api,
                 endpoint_url,
                 package_file,
                 module_name,
@@ -48,16 +46,11 @@ async fn main() {
             .await;
         }
 
-        Some(Commands::Serve {
-            rest_api,
-            port,
-            host,
-        }) => {
-            serve(rest_api, host, port).await;
+        Some(Commands::Serve { port, host }) => {
+            serve(host, port).await;
         }
 
         Some(Commands::All {
-            rest_api,
             endpoint_url,
             package_file,
             module_name,
@@ -68,14 +61,13 @@ async fn main() {
         }) => {
             tokio::join!(
                 sync(
-                    rest_api,
                     endpoint_url,
                     package_file,
                     module_name,
                     start_block,
                     end_block,
                 ),
-                serve(rest_api, host, port),
+                serve(host, port),
             );
         }
 
@@ -84,7 +76,6 @@ async fn main() {
 }
 
 async fn sync(
-    rest_api: &String,
     endpoint_url: &String,
     package_file: &String,
     module_name: &String,
@@ -116,8 +107,6 @@ async fn sync(
 
     let mut conn = POOL.get().unwrap();
 
-    let program_id = env::var("ALEO_PROGRAM_ID").unwrap_or_default();
-
     loop {
         match stream.next().await {
             None => {
@@ -130,12 +119,10 @@ async fn sync(
                     println!("Consuming module output (cursor {})", data.cursor);
 
                     match extract_records(data, &module_name).unwrap() {
-                        Some(records) => {
-                            batch_insert_records(&mut conn, &records)
+                        Some(txs) => {
+                            batch_insert_transactions(&mut conn, txs)
                                 .context("insertion in db failed")
                                 .unwrap();
-
-                            program_handler(&mut conn, rest_api, &records, &program_id);
                         }
                         None => {}
                     }
@@ -152,7 +139,7 @@ async fn sync(
     }
 }
 
-async fn serve(rest_api: &String, host: &String, port: &u16) {
+async fn serve(host: &String, port: &u16) {
     let app = routes().layer(
         CorsLayer::new()
             .allow_methods([Method::GET])
@@ -167,7 +154,10 @@ async fn serve(rest_api: &String, host: &String, port: &u16) {
         .unwrap();
 }
 
-fn extract_records(data: BlockScopedData, module_name: &String) -> Result<Option<Records>, Error> {
+fn extract_records(
+    data: BlockScopedData,
+    module_name: &String,
+) -> Result<Option<Transactions>, Error> {
     let output = data
         .outputs
         .first()
@@ -181,8 +171,8 @@ fn extract_records(data: BlockScopedData, module_name: &String) -> Result<Option
     }
     match output.data.as_ref().unwrap() {
         ModuleOutputData::MapOutput(data) => {
-            let records: Records = Message::decode(data.value.as_slice())?;
-            Ok(Some(records))
+            let txs: Transactions = Message::decode(data.value.as_slice())?;
+            Ok(Some(txs))
         }
         ModuleOutputData::StoreDeltas(_) => Err(format_err!(
             "invalid module output StoreDeltas, expecting MapOutput"

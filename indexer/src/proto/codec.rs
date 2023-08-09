@@ -6,5 +6,5 @@ mod pbsubstreams;
 #[path = "swift.inscription.r#type.v1.rs"]
 mod pbinscription;
 
-pub use pbsubstreams::*;
 pub use pbinscription::*;
+pub use pbsubstreams::*;
