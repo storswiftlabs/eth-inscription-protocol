@@ -10,6 +10,7 @@ import { ItemType } from '@/utils/InterfaceType'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { getFollowTweet, getTweet } from '@/utils/api'
 import type { WelcomeTweet } from '@/constant/Apits'
+import { Loading } from '@nextui-org/react'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -23,7 +24,7 @@ interface objtyle {
 
 function Find({ isUpper }: Props) {
   const { address, isConnected } = useAccount()
-  const [isloading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(0)
   const [ownerObj, setOwnerObj] = useState<objtyle>({
     owner: address,
@@ -69,9 +70,8 @@ function Find({ isUpper }: Props) {
           // 接近页面底部，增加 offset 值
           setPage((page) => page + 1)
         }
-      }, 2000); // 设置延迟时间为1秒
+      }, 1500); // 设置延迟时间为1秒
     }
-
 
 
     // 监听滚动事件
@@ -93,44 +93,44 @@ function Find({ isUpper }: Props) {
 
 
   const getTweetFunction = async (obj: objtyle) => { // 获取 recommendation 数据
-    setIsLoading(true)
+    setLoading(true)
     resRef.current.a = false
     try {
       const tweetData = await getTweet(obj)
       if (tweetData.tweets.length <= 0) { // 代表没有数据了
+        setLoading(false)
         return
       } else {
         setTweetList([...tweetList, ...tweetData.tweets])
         resRef.current.a = true
-        setIsLoading(false)
       }
     }
     catch (error) {
       resRef.current.a = true
-      setIsLoading(false)
       console.log(error)
     }
   }
 
   const getFollowTweetFun = async (obj: objtyle) => {
-    setIsLoading(true)
+    setLoading(true)
     resRef.current.a = false
     try {
+      setLoading(false)
       const user = await getFollowTweet(obj)
       if (user.tweets.length <= 0) {
         return
       } else {
         setFollow({ ...user.tweets, ...follow })
         resRef.current.a = true
-        setIsLoading(false)
       }
     }
     catch (error) {
       resRef.current.a = true
-      setIsLoading(false)
       console.log(error);
     }
   }
+
+  
 
 
   useEffect(() => {
@@ -185,7 +185,9 @@ function Find({ isUpper }: Props) {
       <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
       {renderContent()}
       {
-        isloading ? 1 : 2
+        loading && <div className=' flex justify-center items-center h-[4rem]'>
+          <Loading type="gradient" size="lg" />
+        </div>
       }
     </div>
   )
