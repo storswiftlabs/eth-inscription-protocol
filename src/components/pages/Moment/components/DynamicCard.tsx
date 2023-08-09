@@ -55,7 +55,8 @@ export default function DynamicCard({ item }: Props) {
     router.push(`${tweet.trxHash}`)
   }
 
-
+  console.log(profile.image[0],'profile.image[0]');
+  
 
   return (
     <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >

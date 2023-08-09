@@ -9,6 +9,7 @@ import Pictures from './Pictures'
 import { AtIcon, EmojiIcon } from '@/components/pages/Chat/Icons'
 import { FillColor } from '@/type/Moment'
 import { useChatMessageReply } from '@/store/useChatMessage'
+import { uploadFile } from '@/utils/ipfs'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -46,6 +47,8 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   const chatInputRef = useRef<HTMLTextAreaElement>(null)
   const [inputData, setInputData] = useState('')
   const ownerProfile = useChatMessageReply(state => state.ownerProfile) // 存储一下给公共状态
+  const [pictureArrCid, setPictureArrCid] = useState<string[]>([])
+
 
   useEffect(() => {
     if (isSuccess) {
@@ -114,7 +117,18 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
     closeModal2()
     setAtMember([...atMember, selected])
   }
-  
+
+  async function onSend() {
+    closeHandler({ image: pictureArrCid, text: inputData, at: atMember })
+  }
+
+  useEffect(() => {
+    (async () => {
+      pictureArr.length > 0 && setPictureArrCid((await Promise.all(pictureArr.map(t => uploadFile(t)))).map(t => `ipfs://${t}`))
+    })()
+  }, [pictureArr])
+
+
   return (
     <>
       <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x)} type='at' />
@@ -147,7 +161,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
               {/* <SpeechIcon fill={handleFillColor()} /> */}
               {/* <CloudIcon fill={handleFillColor()} /> */}
             </Row>
-            <Button disabled={!removeSpaces(inputData)} auto onClick={() => closeHandler({ image: pictureArr, text: inputData, at: atMember })}>
+            <Button disabled={!removeSpaces(inputData)} auto onClick={() => onSend()}>
               Send</Button>
           </Row>
         </Row>
