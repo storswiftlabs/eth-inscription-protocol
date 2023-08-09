@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
 import { useTheme } from 'next-themes'
+import { useRouter } from 'next/navigation'
 import { EmojiDialog } from './EmojiDialog'
 import { GroupIcon } from './Icons'
 import { type MessageOnChain, sendMessageOnChain } from '@/utils/sendMessageOnChain'
@@ -16,7 +17,7 @@ import { AbbreviatedText } from '@/utils/AbbreviatedText'
 
 export function ChatSideBar({ path = 'general' }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>()
+  const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'create-group' })
   const [submitData, setSubmitData] = useState(false)
   const { data: walletClient } = useWalletClient()
   const { address, isConnected } = useAccount()
@@ -24,6 +25,7 @@ export function ChatSideBar({ path = 'general' }) {
   const [themeColor, setThemeColor] = useState('')
   const [messageList, setMessageList] = useState<SwiftChatResponse[]>([])
   const [messageGroupList, setMessageGroupList] = useState<SwiftChatResponse[]>([])
+  const Router = useRouter()
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
     getMessageList(address!).then(e => setMessageList(e.profiles))
@@ -40,6 +42,10 @@ export function ChatSideBar({ path = 'general' }) {
   function openModal() {
     setIsOpen(true)
   }
+  useEffect(() => {
+    if (!isConnected)
+      return Router.push('/')
+  }, [isConnected])
 
   const handleSend = () => {
     !isConnected && alert('Please connect your wallet first')
@@ -51,13 +57,13 @@ export function ChatSideBar({ path = 'general' }) {
 
     return Math.floor(randomNumber * timeSeed)
   }
-  function selectedOK(selected: string[]) {
-    setSendDataOnChain({ ...sendDataOnChain, receiver: selected, type: 'create-group', title: randomNumberFromTime().toString() })
+  function selectedOK(selected: string) {
+    setSendDataOnChain({ ...sendDataOnChain, receiver: [selected], type: 'create-group', title: randomNumberFromTime().toString() })
     setSubmitData(true)
     closeModal()
   }
   useEffect(() => {
-    if (sendDataOnChain?.receiver?.length > 0 && submitData)
+    if (sendDataOnChain?.receiver && sendDataOnChain?.receiver?.length > 0 && submitData)
       handleSend()
     setSubmitData(false)
   }, [submitData])

@@ -1,5 +1,6 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import RightSidebar from './components/RightSidebar/RightSidebar'
 import Find from './components/MomentContent/Find'
 import Bookmark from './components/MomentContent/Bookmark'
@@ -7,7 +8,6 @@ import Message from './components/MomentContent/Message'
 import More from './components/MomentContent/More'
 import RightMessage from './components/RightSidebar/RightMessage'
 import VerifyModal from './components/VerifyModal'
-import { useRouter } from 'next/navigation'
 import FindInformation from './components/FindInformation'
 
 interface MomentContentData {
@@ -18,13 +18,11 @@ function MomentContent({ type }: MomentContentData) {
 
 
   const [isUpper, setIsUpper] = useState('Recommendation')
-  const router = useRouter();
-
+  const router = useRouter()
 
   const closeHandler = () => {
     router.back()
-  };
-
+  }
 
   /**
    * 根据给定的类型返回对应的组件
@@ -44,18 +42,15 @@ function MomentContent({ type }: MomentContentData) {
       case 'more':
         return <More />
       case 'verify':
-        if (true) {
+        if (true)
           return <VerifyModal visible={true} closeHandler={closeHandler} />
-        } else {
-          return null;
-        }
+        else
+          return null
+
       default:
         return <FindInformation type={type} />
     }
   }
-
-
-
 
   /**
    * 根据给定的类型返回对应的右侧组件
@@ -91,9 +86,8 @@ function MomentContent({ type }: MomentContentData) {
    * @returns 若给定的类型为 'find'，返回 true；否则返回 false
    */
   const isNavaFunction = (type: string) => {
-    return type === 'find';
+    return type === 'find'
   }
-
 
   return (
     <div className="w-full flex relative  min-h-screen">
@@ -117,8 +111,7 @@ function MomentContent({ type }: MomentContentData) {
       </div>
 
     </div>
-  );
-
+  )
 }
 
 export default MomentContent

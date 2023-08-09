@@ -51,13 +51,18 @@ export function ChatInput({ type }: Props) {
     data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
   })
   const handleSend = () => {
-    !isConnected && alert('Please connect your wallet first')
-    sendTransaction()
+    if (!isConnected)
+      alert('Please connect your wallet first')
+    if (pictureArr.length !== pictureArrCid.length)
+      alert('wait a minute')
+    else
+      sendTransaction()
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter')
       handleSend()
   }
+  // console.log(pictureArrCid)
 
   useEffect(() => {
     (async () => {
@@ -68,11 +73,15 @@ export function ChatInput({ type }: Props) {
 
   useEffect(() => {
     pictureArrCid.length > 0 && setSendDataOnChain({ ...sendDataOnChain, image: pictureArrCid })
-  }, [pictureArrCid])
+    atMember.length > 0 && setSendDataOnChain({ ...sendDataOnChain, at: atMember })
+  }, [pictureArrCid, atMember])
 
   useEffect(() => {
     const clearData = () => {
       setInputData('')
+      setPictureArr([])
+      setAtMember([])
+      setPictureArrCid([])
       clearReplyMessage()
     }
     isSuccess && clearData()

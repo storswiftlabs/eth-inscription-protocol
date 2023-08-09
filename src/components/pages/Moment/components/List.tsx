@@ -1,6 +1,7 @@
 'use client'
-import { Row, Image, Spacer } from '@nextui-org/react'
-import React, { ReactNode, useEffect, useState } from 'react'
+import { Image, Row, Spacer } from '@nextui-org/react'
+import type { ReactNode } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { FillColor } from '@/type/Moment'
 
@@ -16,10 +17,7 @@ interface Props {
   children: ReactNode
 }
 
-
-
 function List({ data, head, children }: Props) {
-
   const [dataList, setDataList] = useState([])
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
@@ -28,10 +26,6 @@ function List({ data, head, children }: Props) {
     const a = data.slice(0, 3)
     setDataList(a)
   }, [data])
-
-
-
-
 
   return (
     <div>
@@ -42,7 +36,7 @@ function List({ data, head, children }: Props) {
           <Row align='center' className=' hover:bg-[#f7f7f7] py-[1rem] dark:hover:bg-[#262626]'>
             <div className='px-[1.2rem]'>
               <Image
-                css={{ borderRadius: "0.6rem" }}
+                css={{ borderRadius: '0.6rem' }}
                 width={48}
                 height={48}
                 src="https://github.com/nextui-org/nextui/blob/next/apps/docs/public/nextui-banner.jpeg?raw=true"
@@ -53,7 +47,7 @@ function List({ data, head, children }: Props) {
             <Spacer x={0.4} />
             <div className='flex flex-col'>
               <div className="flex mb-1 gap-2">
-                <span className='hover:underline font-bold cursor-pointer' onClick={(e) => e.stopPropagation()}>{'news updates!'}</span>
+                <span className='hover:underline font-bold cursor-pointer' onClick={e => e.stopPropagation()}>{'news updates!'}</span>
                 <span>·</span>
                 <span className=' ml-[-.2rem]'>{123}</span>
                 <span>members</span>
@@ -86,4 +80,3 @@ function List({ data, head, children }: Props) {
 }
 
 export default List
-

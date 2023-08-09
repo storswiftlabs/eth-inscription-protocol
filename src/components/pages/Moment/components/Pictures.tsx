@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
+import { useTheme } from 'next-themes'
 import { PictureIcon } from '../../Chat/Icons'
 import { FillColor } from '@/type/Chat'
-import { useTheme } from 'next-themes'
 
 interface Props {
   pictureArr: string[]
@@ -9,7 +9,6 @@ interface Props {
 }
 
 function Pictures({ pictureArr, setPictureArr }: Props) {
-
   const { theme } = useTheme()
   const fileRef = useRef<HTMLInputElement>(null)
 

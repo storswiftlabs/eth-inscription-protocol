@@ -1,12 +1,12 @@
-import { Row, Text, Col, Spacer, Button } from '@nextui-org/react'
+import { Button, Row, Spacer } from '@nextui-org/react'
 import React from 'react'
-import { EmailIcom, ShezhiIcon } from '../Icons'
 import { useTheme } from 'next-themes'
+import { EmailIcom, ShezhiIcon } from '../Icons'
 import { FillColor } from '@/type/Moment'
 
 /**
  * @Message - 邮箱
- * @param {string} props. - 
+ * @param {string} props. -
  */
 
 interface Props {
@@ -14,7 +14,6 @@ interface Props {
 }
 
 function Message() {
-
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
@@ -32,7 +31,7 @@ function Message() {
         <Spacer y={0.5} />
         <p>Drop a line, share Tweets and more with private conversations between you and others on Twitter. </p>
         <Spacer y={1} />
-        <Button css={{ height: "3rem" }} rounded className="nav-button  border-2 border-[#0e76fd] gb-[#0e76fd] dark:bg-[#404040] dark:border-[#696969]">
+        <Button css={{ height: '3rem' }} rounded className="nav-button  border-2 border-[#0e76fd] gb-[#0e76fd] dark:bg-[#404040] dark:border-[#696969]">
           Write a message
         </Button>
       </div>

@@ -93,7 +93,7 @@ export function CustomConnectButton() {
                           const dataURL = reader.result as string
                           setOwnerProfile({ ...ownerProfile, image: dataURL })
                         }
-                        reader.readAsDataURL(file)
+                        file && reader.readAsDataURL(file)
                       }} className='w-0 h-0 none' />
 
                       {account.displayName}
