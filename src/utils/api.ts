@@ -1,6 +1,6 @@
 import request from './request'
 import { Follow, FollowTweet, Group, MessageWin, Profile, Tweet } from '@/constant/Global'
-import type { FollowTweetType, FollowType, GroupMessageType, GroupsType, MessageAddressType, MessageWinType, ProfileType, TweetAddressType, TweetType } from '@/constant/Apits'
+import type { FollowType, GroupMessageType, GroupsType, MessageAddressType, MessageWinType, ProfileType, TweetAddressType, TweetType } from '@/constant/Apits'
 
 export async function getGroup(address: string): Promise<GroupsType> {
   const res = await request.get(Group, { params: { address } })
@@ -22,12 +22,12 @@ export async function getGroupMessage(groupObj: { title: string;limit: number;of
   return res.data
 }
 
-export async function getTweet(tweetObj: { owner: string;limit: number;offset: number }): Promise<TweetType> {
+export async function getTweet(tweetObj: { owner: string | undefined;limit: number;offset: number }): Promise<TweetType> {
   const res = await request.get(Tweet, { params: tweetObj })
   return res.data
 }
 
-export async function getFollowTweet(FollowtweetObj: { owner: string;limit: number;offset: number }): Promise<FollowTweetType> {
+export async function getFollowTweet(FollowtweetObj: { owner: string | undefined;limit: number;offset: number }): Promise<TweetType> {
   const res = await request.get(FollowTweet, { params: FollowtweetObj })
   return res.data
 }

@@ -56,7 +56,7 @@ export interface tweetComment extends Omit<defaultBasicType, 'title'> { // 评�
 }
 
 export interface tweetLike { // 点赞
-  type: ItemType.tweet_like
+  type: ItemType.tweet_like | ItemType.follow_unfollow
   with: string //    with 参数为 trx hash ，代表点赞改trx hash里面的推文（ 必填 )
 }
 
