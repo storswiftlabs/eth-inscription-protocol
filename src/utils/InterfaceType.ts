@@ -13,7 +13,7 @@ export enum ItemType {
 }
 
 interface defaultBasicType {
-  text: string // 消息（ 必填 )
+  text?: string // 消息（ 必填 )
   title?: string // 为群名，有的话代表群聊（ 选填 )
   image?: string[] // 为图片（ 选填 )
   with?: string // 参数为trx hash，在这里为  “转发” （ 选填 )
@@ -37,7 +37,7 @@ export interface createGroup extends defaultBasicType { // 创建群聊
   receiver: string[] // 为群成员，带上自己， 在2个以上（ 必填 )
 }
 
-export interface updateGroupAdd extends defaultBasicType {
+export interface updateGroupAdd extends Omit<defaultBasicType, 'text'> {
   type: ItemType.update_group_add
   receiver: string[] // 为要加的人（ 必填 )
 }
@@ -56,7 +56,7 @@ export interface tweetComment extends Omit<defaultBasicType, 'title'> { // 评�
 }
 
 export interface tweetLike { // 点赞
-  type: ItemType.tweet_like
+  type: ItemType.tweet_like | ItemType.follow_unfollow
   with: string //    with 参数为 trx hash ，代表点赞改trx hash里面的推文（ 必填 )
 }
 

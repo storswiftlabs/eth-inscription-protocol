@@ -6,8 +6,9 @@ import { useTheme } from 'next-themes'
 import { EmojiDialog } from '../../Chat/EmojiDialog'
 import Solid from './Solid'
 import Pictures from './Pictures'
-import { EmojiIcon } from '@/components/pages/Chat/Icons'
+import { AtIcon, EmojiIcon } from '@/components/pages/Chat/Icons'
 import { FillColor } from '@/type/Moment'
+import { useChatMessageReply } from '@/store/useChatMessage'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -26,25 +27,29 @@ import { FillColor } from '@/type/Moment'
 interface content {
   image: string[]
   text: string
+  at?: string[]
 }
 
 interface Props {
   isSolid?: boolean
-  closeHandler: ({ image, text }: content) => void
+  closeHandler: ({ image, text, at }: content) => void
   rowCss?: CSSProperties
   isSuccess: boolean
 }
 
 function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   const { theme } = useTheme()
+  const [isOpen2, setIsOpen2] = useState(false)
+  const [atMember, setAtMember] = useState<string[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [pictureArr, setPictureArr] = useState<string[]>([])
   const chatInputRef = useRef<HTMLTextAreaElement>(null)
   const [inputData, setInputData] = useState('')
+  const ownerProfile = useChatMessageReply(state => state.ownerProfile) // 存储一下给公共状态
 
   useEffect(() => {
     if (isSuccess) {
-      setPictureArr([''])
+      setPictureArr([])
       setInputData('')
     }
   }, [isSuccess])
@@ -96,15 +101,33 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
     >
     </path>
   </svg>
+
+  function openModal2() {
+    setIsOpen2(true)
+  }
+
+  function closeModal2() {
+    setIsOpen2(false)
+  }
+
+  function selectedOK2(selected: string) {
+    closeModal2()
+    setAtMember([...atMember, selected])
+  }
+  
   return (
     <>
+      <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x)} type='at' />
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
       <EmojiDialog dialogCss={{ position: 'absolute', zIndex: '19999' }} isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
       <Row className={'reply p-4 border-[#edecf3] dark:border-[#262626] '} css={{ ...rowCss }}>
-        <User css={{ padding: '0' }} src="https://i.pravatar.cc/150?u=a042581f4e29026704d" name="" />
+        <User css={{ padding: '0' }} src={ownerProfile.image ? ownerProfile.image : 'https://i.pravatar.cc/150?u=a042581f4e29026704d'} name="" />
         <Row wrap='wrap'>
           <div style={{ width: '100%' }}>
             <Textarea ref={chatInputRef} css={customTextareaStyles} size='xl' value={inputData} onChange={(e) => { setInputData(e.target.value) }} fullWidth placeholder="Default Textarea!" />
+            {atMember.length > 0 && <div className='p-2'>
+              {atMember.map(t => <span className='bg-slate-300 rounded-md p-1 mx-1'>@{t}</span>)}
+            </div>}
             {pictureArr.map((t, index) => (
               <div className=' relative'>
                 <img key={index} className='my-2' src={t} alt={`image-${index}`} />
@@ -115,16 +138,16 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
             ))}
             <Solid foll={'y'} />
           </div>
-
           <Row className='mt-2' align='center'>
             <Row className='cursor gap-4 '>
               <Pictures pictureArr={pictureArr} setPictureArr={setPictureArr} />
               <EmojiIcon onClick={() => openModal()} fill={handleFillColor()}></EmojiIcon>
+              <AtIcon onClick={() => openModal2()} fill={handleFillColor()} />
               {/* <LockIcon fill={handleFillColor()} /> */}
               {/* <SpeechIcon fill={handleFillColor()} /> */}
               {/* <CloudIcon fill={handleFillColor()} /> */}
             </Row>
-            <Button disabled={!removeSpaces(inputData)} auto onClick={() => closeHandler({ image: pictureArr, text: inputData })}>
+            <Button disabled={!removeSpaces(inputData)} auto onClick={() => closeHandler({ image: pictureArr, text: inputData, at: atMember })}>
               Send</Button>
           </Row>
         </Row>

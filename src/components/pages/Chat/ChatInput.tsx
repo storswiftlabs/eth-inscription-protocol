@@ -5,6 +5,7 @@ import { useTheme } from 'next-themes'
 import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
 import { Loading } from '@nextui-org/react'
 import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 import { AtIcon, EmojiIcon, PictureIcon, SendIcon } from './Icons'
 import { EmojiDialog } from './EmojiDialog'
 import { FillColor } from '@/type/Chat'
@@ -33,6 +34,7 @@ export function ChatInput({ type }: Props) {
   const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
   const replyMessage = useChatMessageReply(state => state.reply)
   const clearReplyMessage = useChatMessageReply(state => state.clearReplyMessage)
+  const Router = useSearchParams()
 
   function closeModal() {
     setIsOpen(false)
@@ -62,8 +64,9 @@ export function ChatInput({ type }: Props) {
     if (e.key === 'Enter')
       handleSend()
   }
-  // console.log(pictureArrCid)
-
+  useEffect(() => {
+    setSendDataOnChain({ ...sendDataOnChain, text: inputData })
+  }, [inputData])
   useEffect(() => {
     (async () => {
       replyMessage.txHash && setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
@@ -73,7 +76,7 @@ export function ChatInput({ type }: Props) {
 
   useEffect(() => {
     pictureArrCid.length > 0 && setSendDataOnChain({ ...sendDataOnChain, image: pictureArrCid })
-    atMember.length > 0 && setSendDataOnChain({ ...sendDataOnChain, at: atMember })
+    atMember.length > 0 && setSendDataOnChain({ ...sendDataOnChain, at: atMember, image: pictureArrCid })
   }, [pictureArrCid, atMember])
 
   useEffect(() => {
@@ -83,6 +86,7 @@ export function ChatInput({ type }: Props) {
       setAtMember([])
       setPictureArrCid([])
       clearReplyMessage()
+      window.location.reload()
     }
     isSuccess && clearData()
   }, [isSuccess])
@@ -91,7 +95,7 @@ export function ChatInput({ type }: Props) {
 
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
-    setSendDataOnChain({ ...sendDataOnChain, title: type.substring(0, 2) === '0x' ? '' : type, type: 'im' })
+    setSendDataOnChain({ ...sendDataOnChain, title: type.substring(0, 2) === '0x' ? '' : type, type: 'im', receiver: Router.toString() !== 'type=message' ? [] : [window.location.pathname.split('/')[2]] })
   }, [])
 
   function selectedOK(selected: string) {
@@ -124,9 +128,9 @@ export function ChatInput({ type }: Props) {
           type="text"
         />}
       {replyMessage.txHash.length > 0 && <div className='relative'>
-        <div className='bg-neutral-700/70 text-sm rounded-md p-1 mx-2 mt-2 '>{replyMessage.text}</div>
+        <div className='bg-neutral-300/70 dark:bg-neutral-700/70 text-sm rounded-md p-1 mx-2 mt-2 '>{replyMessage.text}</div>
         <div onClick={() => clearReplyMessage()} className='absolute right-1 top-1 bg-slate-400 rounded-full cursor-pointer' >
-          <svg className="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2477" width="12" height="12"><path d="M16.943988 16.886615C3.127666 31.214652 0.569088 37.35524 0.569088 58.33558v25.074065l213.385411 214.408842 213.385411 214.408843-199.569089 200.59252c-110.018857 110.018857-206.221392 208.268255-213.385411 217.479136-20.468625 25.585781-18.933478 53.218424 3.582009 75.733911 22.515487 22.515487 50.14813 24.050634 75.733911 3.58201 9.210881-7.164019 107.460279-103.366554 217.479136-213.385412L512.284702 596.14869l201.104236 200.080805c110.018857 110.018857 208.268255 206.221392 217.479136 213.385412 25.585781 20.468625 53.218424 18.933478 75.733911-3.58201 22.515487-22.515487 24.050634-50.14813 3.58201-75.733911-7.164019-9.210881-103.366554-107.460279-213.385412-217.990851L596.717778 511.715614l200.080805-201.104236c110.018857-110.018857 206.221392-208.268255 213.385412-217.479136 22.003771-27.120928 16.886615-63.964452-11.76946-86.479939-4.093725-3.582009-18.933478-6.652303-32.749799-6.652303h-25.585781l-213.897126 213.385411L512.284702 426.770822 298.387575 213.385411 84.490449 0h-25.585781C36.389181 0 31.272025 2.046862 16.943988 16.886615z" p-id="2478"></path></svg>
+          <svg className="icon" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2477" width="11" height="11"><path d="M16.943988 16.886615C3.127666 31.214652 0.569088 37.35524 0.569088 58.33558v25.074065l213.385411 214.408842 213.385411 214.408843-199.569089 200.59252c-110.018857 110.018857-206.221392 208.268255-213.385411 217.479136-20.468625 25.585781-18.933478 53.218424 3.582009 75.733911 22.515487 22.515487 50.14813 24.050634 75.733911 3.58201 9.210881-7.164019 107.460279-103.366554 217.479136-213.385412L512.284702 596.14869l201.104236 200.080805c110.018857 110.018857 208.268255 206.221392 217.479136 213.385412 25.585781 20.468625 53.218424 18.933478 75.733911-3.58201 22.515487-22.515487 24.050634-50.14813 3.58201-75.733911-7.164019-9.210881-103.366554-107.460279-213.385412-217.990851L596.717778 511.715614l200.080805-201.104236c110.018857-110.018857 206.221392-208.268255 213.385412-217.479136 22.003771-27.120928 16.886615-63.964452-11.76946-86.479939-4.093725-3.582009-18.933478-6.652303-32.749799-6.652303h-25.585781l-213.897126 213.385411L512.284702 426.770822 298.387575 213.385411 84.490449 0h-25.585781C36.389181 0 31.272025 2.046862 16.943988 16.886615z" p-id="2478"></path></svg>
 
         </div>
       </div>}

@@ -1,19 +1,38 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+// eslint-disable-next-line no-console
+import React, { useEffect, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
-import DynamicCard from '../DynamicCard/DynamicCard'
+import Image from 'next/image'
+import DynamicCard from '../DynamicCard'
 import DialogueInput from '../DialogueInput'
 import type { tweetSend } from '@/utils/InterfaceType'
 import { ItemType } from '@/utils/InterfaceType'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
+import { getFollowTweet, getTweet } from '@/utils/api'
+import type { WelcomeTweet } from '@/constant/Apits'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
 }
 
+interface objtyle {
+  owner: `0x${string}` | undefined
+  limit: number
+  offset: number
+}
+
 function Find({ isUpper }: Props) {
-  const [data1, setData] = useState([] as any[])
   const { address, isConnected } = useAccount()
+  const [isloading, setIsLoading] = useState(false)
+  const [page, setPage] = useState(0)
+  const [ownerObj, setOwnerObj] = useState<objtyle>({
+    owner: address,
+    limit: 4,
+    offset: 0,
+  })
+  const resRef = useRef<any>({});
+  const [tweetList, setTweetList] = useState([] as WelcomeTweet[])
+  const [follow, setFollow] = useState([] as WelcomeTweet[])
   const [uploadData, setUploadData] = useState<tweetSend>({
     type: ItemType.tweet_send,
     title: '',
@@ -23,55 +42,152 @@ function Find({ isUpper }: Props) {
     with: '123',
   })
 
-  // const { data: walletClient } = useWalletClient()
-
-  useEffect(() => {
-
-    // getMessageWindow({ owner: '123', to: "123", limit: 0, offset: 10 }).then((res) => {
-    //   console.log(res, 'getMessageWindow');
-
-    // }).catch((err) => { })
-
-    // if (isUpper === 'Recommendation')
-    //   setData([1, 2, 3])
-
-    // else
-    //   setData([4, 5, 6])
-  }, [isUpper])
-
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
 
   if (!isConnected)
     alert('Please connect your wallet first')
+
+  useEffect(() => {
+
+    let timer: string | number | NodeJS.Timeout | undefined;
+    var element = document.getElementById('gund');
+
+    function handleScroll() {
+      // 清除之前的计时器
+      clearTimeout(timer);
+      // 开始一个新的计时器
+      timer = setTimeout(() => {
+        // 获取页面高度
+        const windowHeight = window.innerHeight;
+        // 获取文档高度
+        const documentHeight = document.documentElement.scrollHeight;
+        // 获取滚动位置
+        const scrollPosition = window.scrollY;
+
+        // 判断是否接近页面底部
+        if (documentHeight - scrollPosition <= windowHeight + 100 && resRef.current.a) {
+          // 接近页面底部，增加 offset 值
+          setPage((page) => page + 1)
+        }
+      }, 2000); // 设置延迟时间为1秒
+    }
+
+
+
+    // 监听滚动事件
+    element && element.addEventListener('scroll', handleScroll);
+
+    // 在组件卸载时移除滚动事件监听器
+    return () => {
+      clearTimeout(timer); // 清除计时器
+      element && element.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOwnerObj({
+      ...ownerObj,
+      offset: page * ownerObj.limit
+    })
+  }, [page])
+
+
+  const getTweetFunction = async (obj: objtyle) => { // 获取 recommendation 数据
+    setIsLoading(true)
+    resRef.current.a = false
+    try {
+      const tweetData = await getTweet(obj)
+      if (tweetData.tweets.length <= 0) { // 代表没有数据了
+        return
+      } else {
+        setTweetList([...tweetList, ...tweetData.tweets])
+        resRef.current.a = true
+        setIsLoading(false)
+      }
+    }
+    catch (error) {
+      resRef.current.a = true
+      setIsLoading(false)
+      console.log(error)
+    }
+  }
+
+  const getFollowTweetFun = async (obj: objtyle) => {
+    setIsLoading(true)
+    resRef.current.a = false
+    try {
+      const user = await getFollowTweet(obj)
+      if (user.tweets.length <= 0) {
+        return
+      } else {
+        setFollow({ ...user.tweets, ...follow })
+        resRef.current.a = true
+        setIsLoading(false)
+      }
+    }
+    catch (error) {
+      resRef.current.a = true
+      setIsLoading(false)
+      console.log(error);
+    }
+  }
+
+
+  useEffect(() => {
+    resRef.current.a = true;
+    if (isUpper === 'Follow')
+      getFollowTweetFun(ownerObj)
+    else
+      getTweetFunction(ownerObj)
+  }, [ownerObj.offset])
 
   const closeHandler = (tweetSendArr: { image: string[]; text: string }) => {
     setUploadData({ ...uploadData, image: tweetSendArr.image, text: tweetSendArr.text })
     sendTransaction()
   }
 
-  // console.log(uploadData, '123')
-  // console.log(data, '123')
-  // console.log(isSuccess, 'isSuccess')
-  const text = ' Playing the guitar has also taught me discipline and patience Learning new chords and songs takes time and practice.Its aconstant journey of improvement.When I finally master adifficult1difficult1difficult1difficult1difficult1difficult1123'
-
-  const toux = 'https://console.xyz/cdn-cgi/image/width=40,height=40,fit=crop,quality=75,dpr=2/https://images.gamma.io/ipfs/Qmb84UcaMr1MUwNbYBnXWHM3kEaDcYrKuPWwyRLVTNKELC/3066.png'
-
-  const image = 'https://pbs.twimg.com/semantic_core_img/1376695792417693699/hpBiuH-q?format=jpg&name=360x360'
-  return (
-    <div style={{ width: '100%', overflow: 'hidden' }}>
-      <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
-      {data1.map((i, index) => (
+  const renderContent = () => {
+    if (isUpper === 'Follow') {
+      if (follow.length <= 0) {
+        return (
+          <div className='w-full h-full flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            NO DATA
+          </div>
+        );
+      }
+      return tweetList.map((i, index) => (
         <DynamicCard
+          item={i}
           key={index}
-          img={image}
-          text={text}
-          time={`${i}h`}
-          name={`Mewtru tuiie ${i}`}
-          avatar={toux}
         />
-      ))}
-    </div>
+      ));
+    } else {
+      if (tweetList.length <= 0) {
+        return (
+          <div className='w-full h-full flex justify-center items-center flex-col'>
+            <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
+            NO DATA
+          </div>
+        );
+      }
+      return tweetList.map((i, index) => (
+        <DynamicCard
+          item={i}
+          key={index}
+        />
+      ));
+    }
+  }
 
+  return (
+    <div style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
+      <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
+      {renderContent()}
+      {
+        isloading ? 1 : 2
+      }
+    </div>
   )
 }
 
