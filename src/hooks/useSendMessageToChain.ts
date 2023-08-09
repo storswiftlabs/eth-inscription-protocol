@@ -1,7 +1,7 @@
 /* eslint-disable n/prefer-global/buffer */
 'use client'
 import { useSendTransaction, useWalletClient } from 'wagmi'
-import type { createGroup, createProfile, sendMessage, tweetComment, tweetFollow, tweetLike, tweetSend, updareProfile, updateGroupAdd, updateGroupDel } from '../utils/InterfaceType'
+import type { createGroup, createProfile, sendMessage, tweetComment, tweetFollow, tweetLike, tweetSend, updateGroupAdd, updateGroupDel, updateProfile } from '../utils/InterfaceType'
 
 /**
  * @description 发送交易的钩子函数。
@@ -29,7 +29,7 @@ import type { createGroup, createProfile, sendMessage, tweetComment, tweetFollow
  *
  * @returns {object} 包含发送交易状态、数据和加载状态的对象。
  */
-export function useSendMessageToChain(chainData: tweetLike | tweetSend | tweetComment | tweetFollow | updateGroupDel | updateGroupAdd | createGroup | sendMessage | updareProfile | createProfile) {
+export function useSendMessageToChain(chainData: tweetLike | tweetSend | tweetComment | tweetFollow | updateGroupDel | updateGroupAdd | createGroup | sendMessage | updateProfile | createProfile) {
   const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,

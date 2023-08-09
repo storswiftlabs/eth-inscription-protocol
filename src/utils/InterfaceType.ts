@@ -1,6 +1,6 @@
 export enum ItemType {
   create_profile = 'create-profile', // 创建profile
-  updare_profile = 'update-profile', // 更新profile
+  update_profile = 'update-profile', // 更新profile
   send_message = 'im', // 发送消息
   create_group = 'create-group', // 创建群聊
   update_group_add = 'update-group-add', // 新增群成员
@@ -24,8 +24,8 @@ export interface createProfile extends Omit<defaultBasicType, 'title' | 'with' |
   type: ItemType.create_profile
 }
 
-export interface updareProfile extends Omit<defaultBasicType, 'title' | 'with' | 'at'> { // 更新profile
-  type: ItemType.updare_profile
+export interface updateProfile extends Omit<defaultBasicType, 'title' | 'with' | 'at'> { // 更新profile
+  type: ItemType.update_profile
 }
 
 export interface sendMessage extends defaultBasicType { // 发送消息
