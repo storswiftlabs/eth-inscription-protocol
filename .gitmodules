@@ -1,0 +1,3 @@
+[submodule "firehose-ethereum"]
+	path = firehose-ethereum
+	url = https://github.com/streamingfast/firehose-ethereum.git

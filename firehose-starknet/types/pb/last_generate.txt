@@ -1,3 +1,0 @@
-generate.sh - Thu 03 Aug 2023 08:54:35 AM UTC - demo
-streamingfast/proto revision: 
-streamingfast/firehose-starknet/proto revision: 
