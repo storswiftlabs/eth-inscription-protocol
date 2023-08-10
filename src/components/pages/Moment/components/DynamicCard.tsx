@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { ILoveIcon, LoveIcon, MessagesIcon, ShareIcon } from './Icons'
@@ -10,6 +10,10 @@ import type { WelcomeTweet } from '@/constant/Apits'
 import { getTimeDifference } from '@/utils/timedifference'
 import { imageFormat } from '@/utils/imageFormat'
 import { Notifications } from '@/components/Notifications'
+import { formatNumber } from '@/utils/AbbreviatedText'
+import copy from 'copy-to-clipboard';
+import { useHandleNotify } from '@/hooks/useNotify'
+
 
 /**
  * @WhatsHappening - 动态内容卡片组件
@@ -21,11 +25,12 @@ interface Props {
 }
 
 export default function DynamicCard({ item }: Props) {
+  const { handleNewNotification } = useHandleNotify()
   const router = useRouter()
   const { profile, tweet } = item
   const [likeData, setUpLikeData] = useState<tweetLike>({
     type: ItemType.tweet_like,
-    with: item.with.trxHash,
+    with: '',
   })
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(likeData)
@@ -35,28 +40,22 @@ export default function DynamicCard({ item }: Props) {
 
   /**
    * 执行点赞操作或取消点赞操作
-   * @param likeBool - 点赞或取消点赞的布尔值
+   * @param likeBool - 点赞或取消点赞的布尔值 如果 为true 代表要取消点赞 fales 反之
    */
   const likeFunction = (likeBool: boolean) => {
-    if (!sendTransaction) return;
-
     const type = likeBool ? ItemType.follow_unfollow : ItemType.tweet_like;
     // 设置点赞数据
-    setUpLikeData({
-      type,
-      with: item.with.trxHash,
-    });
-
-    sendTransaction();
+    setUpLikeData({ type, with: item.with.trxHash, });
   };
+
+  useEffect(() => {
+    likeData.with !== '' && sendTransaction();
+  }, [likeData])
 
 
   const onFindformation = (item: WelcomeTweet) => {
     router.push(`${tweet.trxHash}`)
   }
-
-  console.log(profile.image[0],'profile.image[0]');
-  
 
   return (
     <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
@@ -89,14 +88,27 @@ export default function DynamicCard({ item }: Props) {
           }
           <br />
           <div className="border-[1px] mb-4 border-[#cfd9de] dark:border-[#404040]"></div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <ShareIcon fill={handleFillColor()} />
-            <MessagesIcon fill={handleFillColor()} />
-            <div onClick={(e) => {
+          <div className='text-[#536471]' style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className='flex gap-1'><MessagesIcon fill={handleFillColor()} />
+              {formatNumber(item.comments.length)}
+            </div>
+            <div className='flex gap-1' onClick={(e) => {
               e.stopPropagation()
               likeFunction(item.likeBool)
             }}>
               {item.likeBool ? <ILoveIcon fill={handleFillColor()} /> : <LoveIcon fill={handleFillColor()} />}
+              {formatNumber(Number(item.likeNum))}
+            </div>
+            <div onClick={(e) => {
+              e.stopPropagation()
+              const herf = window.location.href
+              const parts = herf.split('/')
+              parts[parts.length - 1] = `${item.tweet.trxHash}`;
+              let newUrl = parts.join("/");
+              copy(newUrl)
+              handleNewNotification('success', 'Success , Share It With Your Friends', 'Success')
+            }}>
+              <ShareIcon fill={handleFillColor()} />
             </div>
           </div>
         </div>
