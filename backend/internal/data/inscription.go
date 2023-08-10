@@ -61,6 +61,21 @@ func (r *inscriptionRepo) InsertLike(ctx context.Context, like *module.Like) err
 	return err
 }
 
+func (r *inscriptionRepo) InsertChainHeight(ctx context.Context, chain *biz.Chain) error {
+	_, err := r.data.postgre.Insert(chain)
+	return err
+}
+
+func (r *inscriptionRepo) UpdateChainHeight(ctx context.Context, chain *biz.Chain) error {
+	_, err := r.data.postgre.Where("name = ?", chain.Name).Update(chain)
+	return err
+}
+
+func (r *inscriptionRepo) GetChainHeight(ctx context.Context, chain *biz.Chain) (*biz.Chain, error) {
+	_, err := r.data.postgre.Get(chain)
+	return chain, err
+}
+
 func (r *inscriptionRepo) DeleteLike(ctx context.Context, like *module.Like) error  {
 	_, err := r.data.postgre.Where("\"with\" = ? AND sender = ?", like.With, like.Sender).Delete(like)
 	return err

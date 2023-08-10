@@ -3,6 +3,7 @@ package biz
 import (
 	"backend/module"
 	"context"
+	"github.com/avast/retry-go/v4"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -10,7 +11,10 @@ type Inscription struct {
 	Hello string
 }
 
-// TODO 添加数据库记录高度功能
+const (
+	ZksyncStartHeight = 10000
+	GoerliStartHeight = 10000
+)
 
 // InscriptionRepo is a Inscription repo.
 type InscriptionRepo interface {
@@ -43,17 +47,104 @@ type InscriptionRepo interface {
 	GetMessageWindowByOwner(ctx context.Context, owner string) ([]*module.Profile, error)
 	DeleteFollow(ctx context.Context, follow *module.Follow) error
 	DeleteLike(ctx context.Context, like *module.Like) error
+	InsertChainHeight(ctx context.Context, chain *Chain) error
+	UpdateChainHeight(ctx context.Context, chain *Chain) error
+	GetChainHeight(ctx context.Context, chain *Chain) (*Chain, error)
 }
 
 // InscriptionUsecase is a inscription usecase.
 type InscriptionUsecase struct {
-	repo InscriptionRepo
-	log  *log.Helper
+	repo   InscriptionRepo
+	goerli ChainSync
+	zkSync ChainSync
+	log    *log.Helper
 }
 
 // NewInscriptionUsecase new a Inscription usecase.
 func NewInscriptionUsecase(repo InscriptionRepo, logger log.Logger) *InscriptionUsecase {
-	return &InscriptionUsecase{repo: repo, log: log.NewHelper(logger)}
+	ctx := context.Background()
+	uc := &InscriptionUsecase{
+		repo:   repo,
+		goerli: NewChain("goerli", 0),
+		zkSync: NewChain("zkSync", 0),
+		log:    log.NewHelper(logger),
+	}
+	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.goerli.GetName(), Height: GoerliStartHeight})
+	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.zkSync.GetName(), Height: ZksyncStartHeight})
+	//go uc.SyncZksync(ctx)
+	//go uc.SyncGoerli(ctx)
+	return uc
+}
+
+func (uc *InscriptionUsecase) SyncZksync(ctx context.Context) {
+	var currentHeight int64
+
+	chain, err := uc.repo.GetChainHeight(ctx, &Chain{Name: uc.zkSync.GetName()})
+	if err != nil {
+		uc.log.Warn(err)
+	}
+	currentHeight = chain.Height
+	for {
+		err := retry.Do(
+			func() error {
+				swifts, err := uc.zkSync.GetSwiftsByHeight(ctx, currentHeight)
+				if err != nil {
+					return err
+				}
+				if len(swifts) > 0 {
+					uc.HandleSwift(ctx, swifts)
+				}
+				err = uc.repo.UpdateChainHeight(ctx, &Chain{
+					Name:   uc.zkSync.GetName(),
+					Height: currentHeight,
+				})
+				if err != nil {
+					return err
+				}
+				uc.log.Infof("current sync height: %d", currentHeight)
+				return nil
+			})
+		if err != nil {
+			uc.log.Error("Get Swift Fail At Height %d: %v", currentHeight, err)
+		}
+		currentHeight++
+	}
+}
+
+func (uc *InscriptionUsecase) SyncGoerli(ctx context.Context) {
+	var currentHeight int64
+
+	chain, err := uc.repo.GetChainHeight(ctx, &Chain{Name: uc.goerli.GetName()})
+	if err != nil {
+		uc.log.Warn(err)
+	}
+	currentHeight = chain.Height
+	for {
+		err := retry.Do(
+			func() error {
+				swifts, err := uc.goerli.GetSwiftsByHeight(ctx, currentHeight)
+				if err != nil {
+					return err
+				}
+				if len(swifts) > 0 {
+					uc.HandleSwift(ctx, swifts)
+				}
+
+				err = uc.repo.UpdateChainHeight(ctx, &Chain{
+					Name:   uc.goerli.GetName(),
+					Height: currentHeight,
+				})
+				if err != nil {
+					return err
+				}
+				uc.log.Infof("current sync height: %d", currentHeight)
+				return nil
+			})
+		if err != nil {
+			uc.log.Error("Get Swift Fail At Height %d: %v", currentHeight, err)
+		}
+		currentHeight++
+	}
 }
 
 func (uc *InscriptionUsecase) GetProfileHandle(ctx context.Context, address string) (*module.Profile, error) {

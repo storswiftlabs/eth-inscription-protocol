@@ -1,6 +1,7 @@
 package data
 
 import (
+	"backend/internal/biz"
 	"backend/internal/conf"
 	"backend/module"
 	"github.com/go-kratos/kratos/v2/log"
@@ -62,8 +63,9 @@ func (d *Data) InitDB() {
 	follow := new(module.Follow)
 	record := new(module.Record)
 	messageWindow := new(module.MessageWindow)
+	chainSync := new(biz.Chain)
 
-	err := d.postgre.CreateTables(profile, group, message, groupMessage, tweet, comment, like, follow, record, messageWindow)
+	err := d.postgre.CreateTables(profile, group, message, groupMessage, tweet, comment, like, follow, record, messageWindow, chainSync)
 	if err != nil {
 		log.Error(err)
 	}

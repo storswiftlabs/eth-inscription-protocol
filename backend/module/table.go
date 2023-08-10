@@ -3,17 +3,19 @@ package module
 import "time"
 
 type Swift struct {
-	Type     string
-	Title    string
-	Text     string
-	Image    []string
-	Receiver []string
-	At       []string
-	With     string
-	Height   int64
-	TrxHash  string
-	TrxTime  string
-	Sender   string
+	Id       int64     `json:"id"`
+	Type     string    `json:"type"`
+	Chain    string    `json:"chain"`
+	Title    string    `json:"title"`
+	Text     string    `json:"text"`
+	Image    []string  `json:"image"`
+	Receiver []string  `json:"receiver"`
+	At       []string  `json:"at"`
+	With     string    `json:"with"`
+	Height   int64     `json:"height"`
+	TrxHash  string    `json:"trx_hash"`
+	TrxTime  time.Time `json:"trx_time"`
+	Sender   string    `json:"sender"`
 }
 
 type Profile struct {

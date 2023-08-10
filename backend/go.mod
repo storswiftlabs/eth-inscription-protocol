@@ -3,6 +3,7 @@ module backend
 go 1.18
 
 require (
+	github.com/avast/retry-go/v4 v4.5.0
 	github.com/go-kratos/kratos/v2 v2.6.2
 	github.com/google/wire v0.5.0
 	github.com/gorilla/handlers v1.5.1
