@@ -12,6 +12,7 @@ import { imageFormat } from '@/utils/imageFormat'
 import { Notifications } from '@/components/Notifications'
 import { formatNumber } from '@/utils/AbbreviatedText'
 import copy from 'copy-to-clipboard';
+import { useHandleNotify } from '@/hooks/useNotify'
 
 
 /**
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function DynamicCard({ item }: Props) {
+  const { handleNewNotification } = useHandleNotify()
   const router = useRouter()
   const { profile, tweet } = item
   const [likeData, setUpLikeData] = useState<tweetLike>({
@@ -104,7 +106,7 @@ export default function DynamicCard({ item }: Props) {
               parts[parts.length - 1] = `${item.tweet.trxHash}`;
               let newUrl = parts.join("/");
               copy(newUrl)
-              alert('分享给你的好友')
+              handleNewNotification('success', 'Success , Share It With Your Friends', 'Success')
             }}>
               <ShareIcon fill={handleFillColor()} />
             </div>

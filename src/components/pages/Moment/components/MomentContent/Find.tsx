@@ -202,7 +202,7 @@ function Find({ isUpper }: Props) {
   return (
     <div style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
       {isSuccess ? <Notifications data={data?.hash} /> : null}
-      <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
+      <DialogueInput bottonText={'Post'} isSuccess={isSuccess} closeHandler={closeHandler} />
       {renderContent()}
       {
         isUpper === 'Follow' ? isLoadingFun(follow) : isLoadingFun(tweetList)

@@ -15,6 +15,7 @@ import { uploadFile } from '@/utils/ipfs'
  * @DialogueInput - 评论回复的样式框
  * @param {string} value -  input 输入kuang数据
  * @param {string[]} pictureArr - 上传照片数据
+ * @param {string} bottonText - 上传照片数据
  *
  * @param {string} props.rowCss - 传进来tailwind css 写法 控制顶部对话框的顶部盒子
  * @param {boolean} props.isSolid - 控制上下的线条是否出现
@@ -36,9 +37,10 @@ interface Props {
   closeHandler: ({ image, text, at }: content) => void
   rowCss?: CSSProperties
   isSuccess: boolean
+  bottonText: string
 }
 
-function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
+function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }: Props) {
   const { theme } = useTheme()
   const [isOpen2, setIsOpen2] = useState(false)
   const [atMember, setAtMember] = useState<string[]>([])
@@ -165,7 +167,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
               {/* <CloudIcon fill={handleFillColor()} /> */}
             </Row>
             <Button disabled={!removeSpaces(inputData)} auto onClick={() => onSend()}>
-              Send</Button>
+              {bottonText}</Button>
           </Row>
         </Row>
       </Row>

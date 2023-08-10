@@ -25,7 +25,7 @@ interface Props {
 export default function DynamicCard({ avatar, name, time, text, img }: Props) {
   const [love, setLove] = useState(false)
   const router = useRouter()
-
+  
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 

@@ -126,8 +126,6 @@ function FindInformation({ type }: Props) {
     setPag(s => ({ ...s, currentPage: page }))
   }
 
-  console.log(tweetDetails, '1');
-
   const tagClick = (trxHash: string): void => {
     window.open(`https://sepolia.etherscan.io/tx/${trxHash}`, '_blank');
   };
@@ -234,7 +232,7 @@ function FindInformation({ type }: Props) {
           {/* <Col className='underline-on-hover'>0 Retweets</Col> */}
           {/* <Col>0 Bookmarks</Col> */}
         </Row>
-        <DialogueInput isSuccess={false} closeHandler={closeHandler} />
+        <DialogueInput bottonText='Reply' isSuccess={false} closeHandler={closeHandler} />
         <Spacer y={1} />
         {
           tweetDetails?.comments?.length > 0 ? <>
