@@ -7,19 +7,20 @@ import { getProfile } from '@/utils/requestApi'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { ItemType } from '@/utils/InterfaceType'
+import { uploadFile } from '@/utils/ipfs'
 
 export function CustomConnectButton() {
   const { disconnect } = useDisconnect()
   const { address } = useAccount()
   const [visible, setVisible] = useState(false)
-  const uploadFile = useRef<HTMLInputElement>(null)
+  const uploadFileInput = useRef<HTMLInputElement>(null)
   const setOwnerProfileF = useChatMessageReply(state => state.setOwnerProfileF) // 存储一下给公共状态
-
+  const [ownerProfileUpload, setOwnerProfileUpload] = useState({ image: '' })
   const [ownerProfile, setOwnerProfile] = useState({
     image: '',
     text: '',
   })
-  const { sendTransaction, isSuccess } = useSendMessageToChain({ type: ItemType.update_profile, image: [ownerProfile.image], text: ownerProfile.text })
+  const { sendTransaction, isSuccess } = useSendMessageToChain({ type: ItemType.update_profile, image: [ownerProfileUpload.image], text: ownerProfile.text })
 
   useEffect(() => {
     getProfile(address!).then(e => setOwnerProfile({
@@ -29,13 +30,22 @@ export function CustomConnectButton() {
   }, [])
 
   useEffect(() => {
-    setOwnerProfileF(ownerProfile) // 存储
+    (async () => {
+      setOwnerProfileF(ownerProfile) // 存储
+
+      setOwnerProfileUpload({ image: `ipfs://${await uploadFile(ownerProfile.image)}` })
+    })()
   }, [ownerProfile])
 
   const handler = () => setVisible(true)
   const closeHandler = () => {
-    setVisible(false)
-    sendTransaction()
+    if (ownerProfileUpload.image.length === 0) {
+      alert('wait a minute')
+    }
+    else {
+      setVisible(false)
+      sendTransaction()
+    }
   }
   return (
     <>
@@ -88,13 +98,13 @@ export function CustomConnectButton() {
                   <div style={{ display: 'flex', gap: 12 }}>
 
                     <button className='bg-[#dfdfdf] text-black whitespace-nowrap px-3 py-2 rounded-xl font-bold' onClick={handler} type="button">
-                      <input type="file" ref={uploadFile} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      <input type="file" ref={uploadFileInput} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         if (!e.target)
                           return
 
                         const file = e.target?.files && e.target?.files[0]
                         const reader = new FileReader()
-                        reader.onload = function (e) {
+                        reader.onload = async function (e) {
                           const dataURL = reader.result as string
                           setOwnerProfile({ ...ownerProfile, image: dataURL })
                         }
@@ -110,7 +120,8 @@ export function CustomConnectButton() {
                       preventClose
                       aria-labelledby="modal-title"
                       open={visible}
-                      onClose={closeHandler}
+                      onClose={() => setVisible(false)
+                      }
                     >
                       <Modal.Header>
                         <Text id="modal-title" size={18}>
@@ -124,7 +135,8 @@ export function CustomConnectButton() {
                         <div className='flex items-center flex-col justify-center'>
 
                           <User
-                            onClick={e => uploadFile.current?.click()}
+                            onClick={e => uploadFileInput.current?.click()}
+                            className='cursor-pointer'
                             bordered
                             src={ownerProfile.image ? ownerProfile.image : 'https://i.pravatar.cc/150?u=a042581f4e29026704d'}
                             name=""
