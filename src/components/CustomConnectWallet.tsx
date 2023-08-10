@@ -5,6 +5,8 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
 import { getProfile } from '@/utils/requestApi'
 import { useChatMessageReply } from '@/store/useChatMessage'
+import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
+import { ItemType } from '@/utils/InterfaceType'
 
 export function CustomConnectButton() {
   const { disconnect } = useDisconnect()
@@ -12,10 +14,12 @@ export function CustomConnectButton() {
   const [visible, setVisible] = useState(false)
   const uploadFile = useRef<HTMLInputElement>(null)
   const setOwnerProfileF = useChatMessageReply(state => state.setOwnerProfileF) // 存储一下给公共状态
+
   const [ownerProfile, setOwnerProfile] = useState({
     image: '',
     text: '',
   })
+  const { sendTransaction, isSuccess } = useSendMessageToChain({ type: ItemType.update_profile, image: [ownerProfile.image], text: ownerProfile.text })
 
   useEffect(() => {
     getProfile(address!).then(e => setOwnerProfile({
@@ -31,6 +35,7 @@ export function CustomConnectButton() {
   const handler = () => setVisible(true)
   const closeHandler = () => {
     setVisible(false)
+    sendTransaction()
   }
   return (
     <>
