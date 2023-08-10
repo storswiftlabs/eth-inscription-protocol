@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { useAccount } from 'wagmi'
+import { useRouter } from 'next/navigation'
 import { EmojiDialog } from './EmojiDialog'
 import { ReplyIcon } from './Icons'
 import { FillColor } from '@/type/Chat'
@@ -17,7 +18,7 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
   const [withMessageData, setWithMessageData] = useState<ProfileResponse>()
   const [profileData, setProfileData] = useState<ProfileResponse>()
   const setReplyMessage = useChatMessageReply(state => state.setReplyMessage)
-
+  const Router = useRouter()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   function closeModal() {
@@ -68,8 +69,8 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
 
         </div>
 
-        <Image onClick={openModal} className={`w-10 h-10 cursor-pointer absolute top-0 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`} src='/emoji.svg' alt='' width={20} height={20}></Image>
-        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+        <Image onClick={() => Router.push(`https://etherscan.io/tx/${data.trxHash}`)} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-[-10px]' : 'left-0'}  group-hover:visible invisible`} src='/Ethereum.svg' alt='' width={20} height={20}></Image>
+        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-7 h-7 cursor-pointer absolute top-0 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
           <ReplyIcon fill={handleFillColor()}></ReplyIcon>
         </div>
 

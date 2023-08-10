@@ -30,7 +30,7 @@ export function ChatContent({ type }: ContentData) {
   const getData = async () => {
     if (window.location.search === '?type=group') {
       setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages])
-      scrollToBottom()
+      messageData.length === 5 && scrollToBottom()
     }
 
     if (window.location.search === '?type=message')
@@ -39,8 +39,6 @@ export function ChatContent({ type }: ContentData) {
   function checkVisibilityAndRequest() {
     if (document.visibilityState === 'visible')
       timer.current = setInterval(() => getData(), 10000)
-    // 在这里执行您的请求操作
-
     else
       clearInterval(timer.current)
   }

@@ -16,6 +16,7 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { ThemeProvider } from 'next-themes'
+import { NotificationProvider } from '@web3uikit/core'
 import { ProjectId } from '@/utils/getEnv'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -66,13 +67,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute='class'>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider
-          chains={chains}
-          avatar={CustomAvatar}
-          appInfo={demoAppInfo}
-        >
-          <div className="flex w-screen">{children}</div>
-        </RainbowKitProvider>
+        <NotificationProvider>
+          <RainbowKitProvider
+            chains={chains}
+            avatar={CustomAvatar}
+            appInfo={demoAppInfo}
+          >
+            <div className="flex w-screen">{children}</div>
+          </RainbowKitProvider>
+        </NotificationProvider>
       </WagmiConfig>
     </ThemeProvider>
   )

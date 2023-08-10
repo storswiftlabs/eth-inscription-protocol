@@ -20,6 +20,7 @@ export function ChatHeader({ title }: { title: string }) {
 
   const [data, setData] = useState<updateGroupAdd | updateGroupDel>({ type: ItemType.update_group_add, title, receiver: [''] })
   const { theme } = useTheme()
+
   const { sendTransaction, isSuccess } = useSendMessageToChain(data)
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   function closeModal() {
@@ -48,7 +49,7 @@ export function ChatHeader({ title }: { title: string }) {
         {Router.toString() !== 'type=message'
             && <div className='flex items-center'>
                 <Input clearable placeholder="History Message" initialValue="" />
-                <GroupMember />
+                <GroupMember title={title} />
                 {theme && <AddGroupIcon onClick={() => openModal()} fill={handleFillColor()} />}
                 <Image onClick={handleLeaveGroup} src='/leave.svg' className='cursor-pointer ml-2' alt={''} width={20} height={20} ></Image>
                 <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'addGroup'} selectedOK={x => selectedOK(x)} />

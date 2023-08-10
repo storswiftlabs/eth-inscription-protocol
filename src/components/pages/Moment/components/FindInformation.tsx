@@ -18,6 +18,8 @@ import { useChatMessageReply } from '@/store/useChatMessage'
 import { WelcomeTweet, Comment } from '@/constant/Apits'
 import { imageFormat } from '@/utils/imageFormat'
 import { Notifications } from '@/components/Notifications'
+import Solid from './Solid'
+import { formatNumber } from '@/utils/AbbreviatedText'
 
 interface Props {
   type: string | number
@@ -27,6 +29,12 @@ interface objtyle {
   owner: `0x${string}` | undefined
   limit: number
   offset: number
+}
+
+interface tweetSendType {
+  image?: string[]
+  text: string
+  at?: string[]
 }
 
 function FindInformation({ type }: Props) {
@@ -49,9 +57,7 @@ function FindInformation({ type }: Props) {
   const getTweetFunction = async (obj: objtyle) => {
     try {
       const tweetData = await getTweet(obj)
-      console.log(tweetData, 'tweetdata');
       const dist = tweetData.tweets.filter(t => t.tweet.trxHash === params.type)
-      console.log(dist, 'dist');
       setTweetDetails(dist[0])
     }
     catch (error) {
@@ -59,44 +65,30 @@ function FindInformation({ type }: Props) {
     }
   }
 
-
-
   useEffect(() => {
     getTweetFunction(ownerObj)
   }, [params.type])
 
-
-  const [tweetCommentData, setTweetCommentData] = useState<tweetComment>({
+  const [tweetCommentData, setTweetCommentData] = useState<tweetComment | tweetFollow>({
     type: ItemType.tweet_comment,
-    text: '',
-    image: [''],
-    at: [''],
-    with: '',
+    with: ''
   })
-
-  const [followUn, setFollowUn] = useState<tweetFollow>({
-    type: ItemType.tweet_follow,
-    with: '',
-  })
-
 
   const { theme } = useTheme()
-
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(tweetCommentData)
+
 
   if (!isConnected)
     alert('Please connect your wallet first')
 
-  const closeHandler = (tweetSendArr: { image: string[]; text: string, at?: string[] }) => { //  直接评论
-    setTweetCommentData({
-      type: ItemType.tweet_comment,
-      text: tweetSendArr.text,
-      image: tweetSendArr.image,
-      at: tweetSendArr.at,
-      with: tweetDetails.tweet.trxHash,
-    })
-    sendTransaction()
+  const closeHandler = ({ text, image, at }: tweetSendType) => { //  直接评论
+    setTweetCommentData({ type: ItemType.tweet_comment, text, image, at, with: tweetDetails.tweet.trxHash })
   }
+
+  useEffect(() => {
+    tweetCommentData.with !== '' && sendTransaction()
+  }, [tweetCommentData])
+
 
   /**
    * 进行用户关注或取消关注的操作
@@ -105,16 +97,10 @@ function FindInformation({ type }: Props) {
    */
   const manageFollow = (follow: boolean) => {
     // 根据传入的参数 follow，确定 updateObj 的不同属性
-    const updateObj = {
-      type: follow ? ItemType.tweet_follow : ItemType.follow_unfollow,
-      with: tweetDetails.tweet.sender,
-    } as tweetFollow;
-
+    const updateObj = { type: follow ? ItemType.tweet_follow : ItemType.follow_unfollow, with: tweetDetails.tweet.sender, } as tweetFollow;
     // 更新状态
-    setFollowUn(updateObj);
-
+    setTweetCommentData(updateObj);
     // 执行事务操作
-    sendTransaction();
   };
 
 
@@ -133,13 +119,20 @@ function FindInformation({ type }: Props) {
     const endIndex = startIndex + pag.pageSize - 1;
     const data = tweetDetails?.comments?.slice(startIndex, endIndex + 1)
     setPag(s => ({ ...s, totalPages: Math.ceil(tweetDetails?.comments?.length / s.pageSize), data }))
-  }, [pag.currentPage,tweetDetails])
+  }, [pag.currentPage, tweetDetails])
 
 
   const pagFunction = (page: number) => {
     setPag(s => ({ ...s, currentPage: page }))
   }
 
+  const tagClick = (trxHash: string): void => {
+    window.open(`https://sepolia.etherscan.io/tx/${trxHash}`, '_blank');
+  };
+
+  const tagAddress = (address: string): void => {
+    window.open(`https://sepolia.etherscan.io/address/${address}`, '_blank');
+  }
 
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
@@ -154,14 +147,19 @@ function FindInformation({ type }: Props) {
             Tweet
           </div>
         </Row>
-        <Row css={{ marginTop: '2rem', marginBottom: '1rem' }} justify='space-between'>
+        <Row css={{ marginTop: '2rem', marginBottom: '1rem' }} justify='space-between' align='center'>
           <Col className='flex items-center gap-4'>
             <Col>
               <User css={{
                 '.nextui-c-eGlVTL': {
                   color: theme === 'dark' ? '#fff' : '#000',
                 },
-              }} zoomed src={imageFormat(tweetDetails?.profile?.image[0])} name={tweetDetails?.profile?.text} description={tweetDetails?.profile?.sender} />
+              }} zoomed src={imageFormat(tweetDetails?.profile?.image[0])} name={tweetDetails?.profile?.text} >
+                <p onClick={() => tagAddress(tweetDetails?.profile?.sender)} className='commentaries cursor-pointer hover:underline text-[#9ca3af] dark:text-[#9ca3af] text-[0.8rem]'>
+                  {tweetDetails?.profile?.sender}
+                </p>
+              </User>
+
             </Col>
           </Col>
           <div>
@@ -200,6 +198,8 @@ function FindInformation({ type }: Props) {
             </Dropdown>
           </div>
         </Row>
+        <Solid foll={'y'} />
+        <div onClick={() => tagClick(tweetDetails?.tweet?.trxHash)} className='cursor-pointer hover:underline py-[1rem]'>{tweetDetails?.tweet?.trxHash}</div>
         <Row>
           <Text className='text-[#000]  dark:text-[#fff]'>
             {tweetDetails?.tweet?.text}
@@ -223,15 +223,16 @@ function FindInformation({ type }: Props) {
           <Text size={12}><span className='underline-on-hover'>{extractDatetime(tweetDetails?.tweet?.trxTime)}</span> · {tweetDetails?.tweet?.height} Height</Text>
         </Row>
         <Spacer y={1} />
+
         <Row className='data-presentation border-y-[1px] border-[#edecf3] dark:border-[#262626]'>
-          <Col className='underline-on-hover'>{tweetDetails?.comments?.length} Recover</Col>
-          <Col className='underline-on-hover'>{tweetDetails?.likeNum} Likes</Col>
+          <Col className='underline-on-hover'>{formatNumber(tweetDetails?.comments?.length)} Recover</Col>
+          <Col className='underline-on-hover'>{formatNumber(Number(tweetDetails?.likeNum))} Likes</Col>
           <Col className='underline-on-hover'></Col>
           <Col className='underline-on-hover'></Col>
           {/* <Col className='underline-on-hover'>0 Retweets</Col> */}
           {/* <Col>0 Bookmarks</Col> */}
         </Row>
-        <DialogueInput isSuccess={false} closeHandler={closeHandler} />
+        <DialogueInput bottonText='Reply' isSuccess={false} closeHandler={closeHandler} />
         <Spacer y={1} />
         {
           tweetDetails?.comments?.length > 0 ? <>

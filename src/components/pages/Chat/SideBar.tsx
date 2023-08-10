@@ -14,6 +14,7 @@ import { FillColor } from '@/type/Chat'
 import { getMessageGroupList, getMessageList } from '@/utils/requestApi'
 import type { SwiftChatResponse } from '@/utils/InterfaceType'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
+import { useGroupMember } from '@/store/useChatGroupMember'
 
 export function ChatSideBar({ path = 'general' }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,11 +27,15 @@ export function ChatSideBar({ path = 'general' }) {
   const [messageList, setMessageList] = useState<SwiftChatResponse[]>([])
   const [messageGroupList, setMessageGroupList] = useState<SwiftChatResponse[]>([])
   const Router = useRouter()
+  const setGroupMember = useGroupMember(s => s.setGroupMember)
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
     getMessageList(address!).then(e => setMessageList(e.profiles))
     getMessageGroupList(address!).then(e => setMessageGroupList(e.groups))
   }, [])
+  useEffect(() => {
+    setGroupMember(messageGroupList)
+  }, [messageList])
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
