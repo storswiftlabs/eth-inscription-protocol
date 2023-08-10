@@ -6,12 +6,12 @@ start:
     - relayer
   flags:
     # Specifies the path to the binary
-    reader-node-path: "pathfinder"
+    reader-node-path: "/mnt/nfs/code/eth-inscription-protocol/pathfinder/target/release/pathfinder"
     # Flags that will be added to the dummy chain process command
-    reader-node-arguments: --data-directory ./pathfinder-data --ethereum.url http://127.0.0.1:8545 --firehose-enable
+    reader-node-arguments: --data-directory /mnt/nfs/tmp/data --ethereum.url https://mainnet.infura.io/v3/1bf058f635e945ad92cbc55e5d1fea29 --firehose-enable
+    common-first-streamable-block: 1500
     substreams-enabled: true
     substreams-client-endpoint: localhost:18015
     substreams-client-plaintext: true
     substreams-partial-mode-enabled: true
     substreams-sub-request-block-range-size: 25000
-    substreams-sub-request-parallel-jobs: 20
