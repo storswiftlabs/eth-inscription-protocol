@@ -32,7 +32,7 @@ function RightSidebar() {
       <div className="mb-8  w-full pr-8">
         <Dropdown>
           <Dropdown.Button className="nav-button border-[1px] bg-tahiti-button-bg-w dark:bg-tahiti-button-bg-d border-tahiti-button-border-w dark:border-tahiti-button-border-d">
-            FIlter
+            Filter
           </Dropdown.Button>
           <Dropdown.Menu variant="solid" aria-label="Actions">
             <Dropdown.Item key="new">New file</Dropdown.Item>
