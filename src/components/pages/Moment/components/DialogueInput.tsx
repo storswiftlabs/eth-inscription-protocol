@@ -26,7 +26,7 @@ import { uploadFile } from '@/utils/ipfs'
  */
 
 interface content {
-  image: string[]
+  image?: string[]
   text: string
   at?: string[]
 }
@@ -119,7 +119,10 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess }: Props) {
   }
 
   async function onSend() {
-    closeHandler({ image: pictureArrCid, text: inputData, at: atMember })
+    if (pictureArr.length !== pictureArrCid.length)
+      alert('wait a minute')
+    else
+      closeHandler({ image: pictureArrCid, text: inputData, at: atMember })
   }
 
   useEffect(() => {

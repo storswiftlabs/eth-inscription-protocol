@@ -13,6 +13,7 @@ import type { WelcomeTweet } from '@/constant/Apits'
 import { Loading } from '@nextui-org/react'
 import { FillColor } from '@/type/Chat'
 import { useTheme } from 'next-themes'
+import { Notifications } from '@/components/Notifications'
 
 interface Props {
   isUpper: string // 判断是推荐 还是 关注 Recommendation 推荐  Follow 关注
@@ -22,6 +23,12 @@ interface objtyle {
   owner: `0x${string}` | undefined
   limit: number
   offset: number
+}
+
+interface tweetSendType {
+  image?: string[]
+  text: string
+  at?: string[]
 }
 
 function Find({ isUpper }: Props) {
@@ -40,11 +47,7 @@ function Find({ isUpper }: Props) {
   const [follow, setFollow] = useState([] as WelcomeTweet[])
   const [uploadData, setUploadData] = useState<tweetSend>({
     type: ItemType.tweet_send,
-    title: '',
-    text: 'shouci',
-    image: ['1', '2'],
-    at: ['12'],
-    with: '123',
+    text: '',
   })
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
@@ -89,12 +92,12 @@ function Find({ isUpper }: Props) {
   }, []);
 
   useEffect(() => {
-    setOwnerObj({
-      ...ownerObj,
-      offset: page * ownerObj.limit
-    })
+    setOwnerObj({ ...ownerObj, offset: page * ownerObj.limit })
   }, [page])
 
+  useEffect(() => {
+    uploadData.text !== '' && sendTransaction()
+  }, [uploadData])
 
   const getTweetFunction = async (obj: objtyle) => { // 获取 recommendation 数据
     setLoading(true)
@@ -134,9 +137,6 @@ function Find({ isUpper }: Props) {
     }
   }
 
-
-
-
   useEffect(() => {
     resRef.current.a = true;
     if (isUpper === 'Follow')
@@ -145,9 +145,8 @@ function Find({ isUpper }: Props) {
       getTweetFunction(ownerObj)
   }, [ownerObj.offset])
 
-  const closeHandler = (tweetSendArr: { image: string[]; text: string }) => {
-    setUploadData({ ...uploadData, image: tweetSendArr.image, text: tweetSendArr.text })
-    sendTransaction()
+  const closeHandler = ({ image, text, at }: tweetSendType) => {
+    setUploadData({ ...uploadData, image, text, at })
   }
 
   const renderContent = () => {
@@ -183,20 +182,30 @@ function Find({ isUpper }: Props) {
       ));
     }
   }
+
+  const isLoadingFun = (arr: any[]) => {
+    if (arr.length > 0) {
+      return loading && <div className=' flex justify-center items-center h-[4rem]'>
+        <Loading css={{
+          '._2': {
+            bg: theme === 'dark' ? '#000' : '#fff'
+          }
+        }} type="gradient" size="lg" />
+      </div>
+    } else {
+      return <>
+      </>
+    }
+  }
+
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
     <div style={{ width: '100%', overflow: 'hidden', height: '100%' }}>
+      {isSuccess ? <Notifications data={data?.hash} /> : null}
       <DialogueInput isSuccess={isSuccess} closeHandler={closeHandler} />
       {renderContent()}
-
       {
-        loading && <div className=' flex justify-center items-center h-[4rem]'>
-          <Loading css={{
-            '._2': {
-              bg: theme === 'dark' ? '#000' : '#fff'
-            }
-          }} type="gradient" size="lg" />
-        </div>
+        isUpper === 'Follow' ? isLoadingFun(follow) : isLoadingFun(tweetList)
       }
     </div>
   )
