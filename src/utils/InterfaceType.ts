@@ -62,7 +62,7 @@ export interface tweetLike { // 点赞
 }
 
 export interface tweetFollow {
-  type: ItemType.tweet_follow | ItemType.follow_unfollow
+  type: ItemType.tweet_follow | ItemType.un_follow
   with: string // with 为要关注用户的钱包地址,代表关注该用户
 }
 
