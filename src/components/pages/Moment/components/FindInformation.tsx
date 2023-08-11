@@ -219,7 +219,7 @@ function FindInformation({ type }: Props) {
         </div>
         <Spacer y={1} />
         <Row >
-          <Text size={12}><span className='underline-on-hover'>{extractDatetime(tweetDetails?.tweet?.trxTime)}</span> · {tweetDetails?.tweet?.height} Height</Text>
+          <Text size={12} className='text-[#000]  dark:text-[#fff]'><span className='underline-on-hover '>{extractDatetime(tweetDetails?.tweet?.trxTime)}</span> · {tweetDetails?.tweet?.height} Height</Text>
         </Row>
         <Spacer y={1} />
 

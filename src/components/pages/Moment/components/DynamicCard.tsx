@@ -57,11 +57,16 @@ export default function DynamicCard({ item }: Props) {
     router.push(`${tweet.trxHash}`)
   }
 
+  console.log(tweet.trxTime,'tweet.trxTime');
+  
+  console.log(getTimeDifference(tweet.trxTime),'getTimeDifference(tweet.trxTime)',tweet.trxTime);
+  
+
   return (
-    <div onClick={() => onFindformation(item)} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
+    <div onClick={() => onFindformation(item)} className="DynamicCard-grid max-h-[37.5rem]  bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
       {isSuccess ? <Notifications data={data?.hash} /> : null}
       <img src={imageFormat(profile.image[0])} alt={''} width={35} height={35} ></img>
-      <div className="flex ju367v10 w-full">
+      <div className="flex ju367v10 w-[90%]">
         <div className=' w-full'>
           <div className="flex mb-1 gap-4">
             <span className='hover:underline text-[.8rem]' onClick={e => e.stopPropagation()}>{profile.text}</span>
@@ -69,7 +74,7 @@ export default function DynamicCard({ item }: Props) {
             <span className=' ml-[-.6rem]'>{getTimeDifference(tweet.trxTime)}</span>
           </div>
           {tweet.title && <h2 className=' text-[1.2rem]'>{tweet.title}</h2>}
-          <div className="overflow-hidden overflow-ellipsis line-clamp-3 mb-2">
+          <div className="overflow-hidden overflow-ellipsis line-clamp-3 mb-2 ">
             <span>{tweet.text}</span>
             {
               tweet.at.map((m, h) => (
@@ -77,18 +82,20 @@ export default function DynamicCard({ item }: Props) {
               ))
             }
           </div>
-          {
-            tweet.image.map((i, j) => {
-              return (
-                <div className=' w-full' >
-                  <img className='w-full' src={imageFormat(i)} alt="" />
-                </div>
-              )
-            })
-          }
+          <div className='max-h-[22rem] overflow-hidden'>
+            {
+              tweet.image.slice(0, 3).map((i, j) => {
+                return (
+                  <div className=' w-full max-h-[20rem] overflow-hidden py-[0.5rem]' >
+                    <img className='w-full h-full' src={imageFormat(i)} alt="" />
+                  </div>
+                )
+              })
+            }
+          </div>
           <br />
           <div className="border-[1px] mb-4 border-[#cfd9de] dark:border-[#404040]"></div>
-          <div className='text-[#536471]' style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className='text-[#536471] h-8' style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div className='flex gap-1'><MessagesIcon fill={handleFillColor()} />
               {formatNumber(item.comments.length)}
             </div>
