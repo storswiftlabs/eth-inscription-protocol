@@ -10,6 +10,7 @@ import { FillColor } from '@/type/Chat'
 import type { ChatContentMessageType, ProfileResponse } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { getMessageWith, getProfile } from '@/utils/requestApi'
+import { imageFormat } from '@/utils/imageFormat'
 
 export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -50,7 +51,7 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
 
   return <div className={`min-h-[100px] w-full flex ${data.sender !== address ? 'justify-start' : 'justify-end'}`} >
     <div className={`flex m-4  ${data.sender !== address ? '' : 'flex-row-reverse'}`}>
-      {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== 'ipfs://test' ? <img src={profileData?.image[0]} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={'relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500'} />}
+      {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== 'ipfs://test' ? <img src={imageFormat(profileData?.image[0])} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={'relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500'} />}
       <div className={`flex flex-col ${data.sender !== address ? '' : 'items-end'} group relative`}>
         {profileData?.text}
         <div className='max-w-[800px] text-sm'>
@@ -61,7 +62,7 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
             {data?.image?.length > 1 && <br />}
             <div className='flex gap-2 flex-wrap'>
               {data?.image?.map((t, index) => {
-                return <Image src={'https://i.pravatar.cc/150?u=a042581f4e29026704d'} alt='' className='rounded-xl' width={150} height={150}></Image>
+                return <img src={imageFormat(t)} alt='' className='rounded-xl' width={150} height={150}></img>
               })}
             </div>
           </div>
