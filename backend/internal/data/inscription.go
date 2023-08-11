@@ -25,7 +25,6 @@ func (r *inscriptionRepo) InsertProfile(ctx context.Context, profile *module.Pro
 	return err
 }
 
-// TODO 创建时候插入N条
 func (r *inscriptionRepo) InsertGroup(ctx context.Context, group *module.Group) error {
 	_, err := r.data.postgre.Insert(group)
 	return err
@@ -86,7 +85,6 @@ func (r *inscriptionRepo) DeleteFollow(ctx context.Context, follow *module.Follo
 	return err
 }
 
-// TODO 每产生一条message 插入两条记录
 func (r *inscriptionRepo) InsertMessageWindow(ctx context.Context, messageWindow *module.MessageWindow) error {
 	exist, _ := r.ExistMessageWindow(ctx, messageWindow)
 	if exist == true {

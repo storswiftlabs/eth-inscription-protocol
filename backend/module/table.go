@@ -16,6 +16,7 @@ type Swift struct {
 	TrxHash  string    `json:"trx_hash"`
 	TrxTime  time.Time `json:"trx_time"`
 	Sender   string    `json:"sender"`
+	To       string    `json:"to"`
 }
 
 type Profile struct {
