@@ -84,11 +84,11 @@ export function ChatSideBar({ path = 'general' }) {
       <div className='w-full flex justify-center flex-col'>
         <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${path === 'general' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 💬 General</div></Link>
         <Collapse
-          expanded={messageGroupList.filter(t => t.title === path).length > 0}
+          expanded={messageGroupList.filter(t => t.title === decodeURIComponent(path)).length > 0}
           css={{ border: 'none', padding: '0 16px' }}
           title={<div className='text-black dark:text-white'>👥 Group</div>}
         >
-          {messageGroupList?.map(t => <Link href={`/chat/${t.title}?type=group`}><div className={`m-2 rounded-lg p-2 ${path === t.title ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}>👥 {t.title}</div></Link>)}
+          {messageGroupList?.map(t => <Link href={`/chat/${t.title}?type=group`}><div className={`m-2 rounded-lg p-2 ${decodeURIComponent(path) === t.title ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}>👥 {t.title}</div></Link>)}
 
         </Collapse>
       </div>
