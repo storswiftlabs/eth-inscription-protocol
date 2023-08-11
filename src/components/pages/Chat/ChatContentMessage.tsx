@@ -59,7 +59,7 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
             <div>
               {data.text}
             </div>
-            {data?.image?.length > 1 && <br />}
+            {data?.image?.length >= 1 && <br />}
             <div className='flex gap-2 flex-wrap'>
               {data?.image?.map((t, index) => {
                 return <img src={imageFormat(t)} alt='' className='rounded-xl' width={150} height={150}></img>

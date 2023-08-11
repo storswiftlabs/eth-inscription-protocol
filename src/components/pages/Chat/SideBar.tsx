@@ -15,6 +15,7 @@ import { getMessageGroupList, getMessageList } from '@/utils/requestApi'
 import type { SwiftChatResponse } from '@/utils/InterfaceType'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
 import { useGroupMember } from '@/store/useChatGroupMember'
+import { imageFormat } from '@/utils/imageFormat'
 
 export function ChatSideBar({ path = 'general' }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -41,6 +42,7 @@ export function ChatSideBar({ path = 'general' }) {
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
   })
+
   function closeModal() {
     setIsOpen(false)
   }
@@ -82,11 +84,11 @@ export function ChatSideBar({ path = 'general' }) {
       <div className='w-full flex justify-center flex-col'>
         <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${path === 'general' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 💬 General</div></Link>
         <Collapse
-          expanded={messageGroupList.filter(t => t.title === path).length > 0}
+          expanded={messageGroupList.filter(t => t.title === decodeURIComponent(path)).length > 0}
           css={{ border: 'none', padding: '0 16px' }}
           title={<div className='text-black dark:text-white'>👥 Group</div>}
         >
-          {messageGroupList?.map(t => <Link href={`/chat/${t.title}?type=group`}><div className={`m-2 rounded-lg p-2 ${path === t.title ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}>👥 {t.title}</div></Link>)}
+          {messageGroupList?.map(t => <Link href={`/chat/${t.title}?type=group`}><div className={`m-2 rounded-lg p-2 ${decodeURIComponent(path) === t.title ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}>👥 {t.title}</div></Link>)}
 
         </Collapse>
       </div>
@@ -97,7 +99,7 @@ export function ChatSideBar({ path = 'general' }) {
         Messages
       </h1>
       <div className='w-full flex justify-center flex-col'>
-        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-2 rounded-lg m-1`}>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; {AbbreviatedText(t.sender)}</div></Link>)}
+        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex items-center ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-1 rounded-lg m-1`}>&nbsp; <Image className='rounded-lg' src={imageFormat(t.image[0])} width={30} height={30} alt={''} />&nbsp; {t.text !== '' ? t.text : AbbreviatedText(t.sender)}</div></Link>)}
 
         {/* <div className='flex'>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; 0xEa...B65c</div> */}
 
