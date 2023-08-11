@@ -62,8 +62,8 @@ export function ChatSideBar({ path = 'general' }) {
 
     return Math.floor(randomNumber * timeSeed)
   }
-  function selectedOK(selected: string) {
-    setSendDataOnChain({ ...sendDataOnChain, receiver: [selected], type: 'create-group', title: randomNumberFromTime().toString() })
+  function selectedOK(selected: { title: string; receiver: string }) {
+    setSendDataOnChain({ ...sendDataOnChain, receiver: [selected.receiver], type: 'create-group', title: `${selected.title}-${randomNumberFromTime().toString()}` })
     setSubmitData(true)
     closeModal()
   }
