@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import Image from 'next/image'
+import { Loading } from '@nextui-org/react'
 import { ChatHeader } from './ChatHeader'
 import { ChatInput } from './ChatInput'
 import { ChatContentMessage } from './ChatContentMessage'
@@ -16,6 +17,7 @@ export function ChatContent({ type }: ContentData) {
   const [offset, setOffset] = useState(0)
   const [messageData, setMessageData] = useState<ChatContentMessageType[]>([])
   const [newMessageData, setNewMessageData] = useState<ChatContentMessageType[]>([])
+  const [loadingMessage, setLoadingMessage] = useState(false)
   const { address } = useAccount()
   const timer = useRef<any>()
 
@@ -32,7 +34,7 @@ export function ChatContent({ type }: ContentData) {
   const getData = async () => {
     if (window.location.search === '?type=group')
       messageData.length === 0 ? setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages]) : setNewMessageData([...(await getMessageGroup(type, limit, offset)).messages])
-      // messageData.length === 10 && scrollToBottom()
+    // messageData.length === 10 && scrollToBottom()
 
     if (window.location.search === '?type=message')
       messageData.length === 0 ? setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages]) : setNewMessageData([...(await getMessagePerson(address!, type, limit, offset)).messages])
@@ -46,8 +48,10 @@ export function ChatContent({ type }: ContentData) {
 
   const handleScroll = async () => {
     if (messageRef.current?.scrollTop === 0) {
+      setLoadingMessage(true)
       if (window.location.search === '?type=group')
         setMessageData([...(await getMessageGroup(type, limit, messageData.length)).messages, ...messageData])
+      setLoadingMessage(false)
 
       if (window.location.search === '?type=message')
         setMessageData([...(await getMessagePerson(address!, type, limit, messageData.length)).messages, ...messageData])
@@ -63,6 +67,9 @@ export function ChatContent({ type }: ContentData) {
     <div className='w-full h-screen flex flex-col'>
       <ChatHeader title={type} />
       <div ref={messageRef as React.MutableRefObject<HTMLDivElement>} onScroll={handleScroll} className="border border-neutral-200 dark:border-neutral-700 content-border m-2 rounded-xl flex-1 overflow-auto ">
+        {loadingMessage && <div className='w-full flex items-center justify-center my-4'>
+          <Loading />
+        </div>}
         {messageData.length > 0
           ? messageData?.map((t) => {
             return <ChatContentMessage data={t} />
