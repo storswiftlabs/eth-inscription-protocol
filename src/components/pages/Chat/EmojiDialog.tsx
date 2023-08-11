@@ -29,6 +29,16 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                     <br />
                     <div>Receiver: <Input onChange={e => setSelectedGroup({ ...selectedGroup, receiver: e.target.value })}></Input></div>
                 </>
+      case 'inviteGroup':
+        return <> < Dialog.Title
+                    as="h2"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                >
+                    Add Group
+                </Dialog.Title >
+                    <br />
+                    Invite: <Input onChange={e => setSelected(e.target.value)}></Input>
+                </>
       case 'at':
         return <> < Dialog.Title
                     as="h2"

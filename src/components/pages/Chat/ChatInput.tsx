@@ -49,7 +49,7 @@ export function ChatInput({ type }: Props) {
     setIsOpen2(true)
   }
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
-    to: walletClient?.account.address,
+    to: Router.toString() === 'type=message' ? window.location.pathname.split('/')[2] : walletClient?.account.address,
     data: `0x${Buffer.from(`data:,${JSON.stringify(sendMessageOnChain(sendDataOnChain))}`, 'utf-8').toString('hex')}`,
   })
   const handleSend = () => {
@@ -95,7 +95,7 @@ export function ChatInput({ type }: Props) {
 
   useEffect(() => {
     setThemeColor(theme === 'dark' ? FillColor.White : FillColor.Black)
-    setSendDataOnChain({ ...sendDataOnChain, title: type.substring(0, 2) === '0x' ? '' : type, type: 'im', receiver: Router.toString() !== 'type=message' ? [] : [window.location.pathname.split('/')[2]] })
+    setSendDataOnChain({ ...sendDataOnChain, title: type.substring(0, 2) === '0x' ? '' : type, type: 'im' })
   }, [])
 
   function selectedOK(selected: string) {

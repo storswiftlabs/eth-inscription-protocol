@@ -52,7 +52,7 @@ export function ChatHeader({ title }: { title: string }) {
         <GroupMember title={title} />
         {theme && <AddGroupIcon onClick={() => openModal()} fill={handleFillColor()} />}
         <Image onClick={handleLeaveGroup} src='/leave.svg' className='cursor-pointer ml-2' alt={''} width={20} height={20} ></Image>
-        <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'addGroup'} selectedOK={x => selectedOK(x)} />
+        <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'inviteGroup'} selectedOK={x => selectedOK(x)} />
 
       </div>
     }
