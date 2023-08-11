@@ -34,7 +34,7 @@ export function ChatContent({ type }: ContentData) {
     }
 
     if (window.location.search === '?type=message')
-      setMessageData([...messageData, ...(await getMessagePerson(address!, type)).messages])
+      setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages])
   }
   function checkVisibilityAndRequest() {
     if (document.visibilityState === 'visible')
@@ -49,7 +49,7 @@ export function ChatContent({ type }: ContentData) {
         setMessageData([...(await getMessageGroup(type, limit, messageData.length)).messages, ...messageData])
 
       if (window.location.search === '?type=message')
-        setMessageData([...(await getMessagePerson(address!, type)).messages, ...messageData])
+        setMessageData([...(await getMessagePerson(address!, type, limit, messageData.length)).messages, ...messageData])
     }
   }
   useEffect(() => {

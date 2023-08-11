@@ -15,8 +15,8 @@ export async function getMessageGroupList(owner: string) {
 export async function getMessageGroup(group: string, limit: number, offset: number) {
   return await fetch(`${ApiUrl}/api/group_message?title=${group}&limit=${limit}&offset=${offset}`).then(e => e.json())
 }
-export async function getMessagePerson(owner: string, to: string) {
-  return await fetch(`${ApiUrl}/api/message?owner=${owner}&to=${to}&limit=10&offset=1`).then(e => e.json())
+export async function getMessagePerson(owner: string, to: string, limit: number, offset: number) {
+  return await fetch(`${ApiUrl}/api/message?owner=${owner}&to=${to}&limit=${limit}&offset=${offset}`).then(e => e.json())
 }
 export async function getMessageWith(txhash: string, type: string) {
   return await fetch(`${ApiUrl}/api/message/${txhash}?type=${type}`).then(e => e.json())
