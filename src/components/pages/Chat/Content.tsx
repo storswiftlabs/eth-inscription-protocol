@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
 import Image from 'next/image'
 import { Loading } from '@nextui-org/react'
@@ -18,12 +18,14 @@ export function ChatContent({ type }: ContentData) {
   const [messageData, setMessageData] = useState<ChatContentMessageType[]>([])
   const [newMessageData, setNewMessageData] = useState<ChatContentMessageType[]>([])
   const [loadingMessage, setLoadingMessage] = useState(false)
+  const [scrollToBottomOnFirstLoad, setScrollToBottomOnFirstLoad] = useState(true)
+
   const { address } = useAccount()
   const timer = useRef<any>()
 
   useEffect(() => {
     if (messageData.length === 10)
-      scrollToBottom()
+      scrollToBottomOnFirstLoad && scrollToBottom()
   }, [messageData])
 
   function scrollToBottom() {
@@ -31,35 +33,52 @@ export function ChatContent({ type }: ContentData) {
       messageRef.current.scrollTop = messageRef.current.scrollHeight + 100
   }
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     if (window.location.search === '?type=group')
-      messageData.length === 0 ? setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages]) : setNewMessageData([...(await getMessageGroup(type, limit, offset)).messages])
-    // messageData.length === 10 && scrollToBottom()
+      setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages])
 
     if (window.location.search === '?type=message')
-      messageData.length === 0 ? setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages]) : setNewMessageData([...(await getMessagePerson(address!, type, limit, offset)).messages])
+      setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages])
+  }, [])
+
+  const getNewData = async () => {
+    if (window.location.search === '?type=group')
+      setNewMessageData((await getMessageGroup(type, limit, offset)).messages)
+
+    if (window.location.search === '?type=message')
+      setNewMessageData((await getMessagePerson(address!, type, limit, offset)).messages)
   }
+  useEffect(() => {
+    if (newMessageData.length > 0) {
+      const newData = (newMessageData.filter(t => Number(t.height) > Number(messageData[messageData.length - 1].height)))
+      setMessageData([...messageData, ...newData])
+    }
+  }, [newMessageData])
   function checkVisibilityAndRequest() {
     if (document.visibilityState === 'visible')
-      // timer.current = setInterval(() => getData(), 5000)
-      // else
+      timer.current = setInterval(() => getNewData(), 5000)
+    else
       clearInterval(timer.current)
   }
 
   const handleScroll = async () => {
     if (messageRef.current?.scrollTop === 0) {
       setLoadingMessage(true)
-      if (window.location.search === '?type=group')
+      if (window.location.search === '?type=group') {
         setMessageData([...(await getMessageGroup(type, limit, messageData.length)).messages, ...messageData])
-      setLoadingMessage(false)
+        setLoadingMessage(false)
+        setScrollToBottomOnFirstLoad(false)
+      }
 
-      if (window.location.search === '?type=message')
+      if (window.location.search === '?type=message') {
         setMessageData([...(await getMessagePerson(address!, type, limit, messageData.length)).messages, ...messageData])
+        setLoadingMessage(false)
+        setScrollToBottomOnFirstLoad(false)
+      }
     }
   }
   useEffect(() => {
     getData()
-
     document.addEventListener('visibilitychange', checkVisibilityAndRequest)
   }, [])
 

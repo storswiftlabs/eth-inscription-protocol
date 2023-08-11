@@ -15,6 +15,7 @@ export interface ChatContentMessageType {
   sender: string
   with: string
   trxHash: string
+  height: number
 }
 
 export interface ProfileResponse {
