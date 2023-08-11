@@ -28,7 +28,7 @@ export default function GroupMember({ title }: { title: string }) {
                 ${open ? '' : 'text-opacity-90'}
                 `}
                         >
-                            <div className='flex items-center m-6 bg-slate-300/20 rounded-xl pr-2 cursor-pointer'>
+                            <div className='flex items-center ml-6 bg-slate-300/20 rounded-xl pr-2 cursor-pointer'>
                                 <div className="flex items-center justify-between w-6 relative">
                                     <img
                                         src={imageFormat(groupMember[0]?.image[0])}

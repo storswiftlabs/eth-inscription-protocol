@@ -45,7 +45,7 @@ export function ChatHeader({ title }: { title: string }) {
     !isSuccess && setData({ type: ItemType.update_group_add, title, receiver: [''] })
   }, [isSuccess])
   return <div className="w-full flex items-center p-4 h-[100px] flex justify-between">
-    <h1 className="text-xl font-bold">💬 #{AbbreviatedText(title.toUpperCase())}</h1>
+    <h1 className="text-xl font-bold">💬 #{AbbreviatedText(decodeURIComponent(title).toUpperCase())}</h1>
     {Router.toString() !== 'type=message'
       && <div className='flex items-center'>
         <Input clearable placeholder="History Message" initialValue="" />
