@@ -14,7 +14,7 @@ type Swift struct {
 	With     string    `json:"with"`
 	Height   int64     `json:"height"`
 	TrxHash  string    `json:"trx_hash"`
-	TrxTime  time.Time `json:"trx_time"`
+	TrxTime  time.Time `json:"timestamp"`
 	Sender   string    `json:"sender"`
 	To       string    `json:"to"`
 }
