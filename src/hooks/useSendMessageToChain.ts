@@ -33,7 +33,7 @@ export function useSendMessageToChain(chainData: tweetLike | tweetSend | tweetCo
   const { data: walletClient } = useWalletClient()
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(chainData), 'utf-8').toString('hex')}` || undefined,
+    data: `0x${Buffer.from(`data:,${JSON.stringify(chainData)}`, 'utf-8').toString('hex')}` || undefined,
   })
 
   return { sendTransaction, data, isLoading, isSuccess }

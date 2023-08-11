@@ -12,14 +12,15 @@ interface ContentData {
 }
 export function ChatContent({ type }: ContentData) {
   const messageRef = useRef<HTMLDivElement | undefined>()
-  const limit = useState(5)[0]
+  const limit = useState(10)[0]
   const [offset, setOffset] = useState(0)
   const [messageData, setMessageData] = useState<ChatContentMessageType[]>([])
+  const [newMessageData, setNewMessageData] = useState<ChatContentMessageType[]>([])
   const { address } = useAccount()
   const timer = useRef<any>()
 
   useEffect(() => {
-    if (messageData.length === 5)
+    if (messageData.length === 10)
       scrollToBottom()
   }, [messageData])
 
@@ -27,19 +28,19 @@ export function ChatContent({ type }: ContentData) {
     if (messageRef.current)
       messageRef.current.scrollTop = messageRef.current.scrollHeight + 100
   }
+
   const getData = async () => {
-    if (window.location.search === '?type=group') {
-      setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages])
-      messageData.length === 5 && scrollToBottom()
-    }
+    if (window.location.search === '?type=group')
+      messageData.length === 0 ? setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages]) : setNewMessageData([...(await getMessageGroup(type, limit, offset)).messages])
+      // messageData.length === 10 && scrollToBottom()
 
     if (window.location.search === '?type=message')
-      setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages])
+      messageData.length === 0 ? setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages]) : setNewMessageData([...(await getMessagePerson(address!, type, limit, offset)).messages])
   }
   function checkVisibilityAndRequest() {
     if (document.visibilityState === 'visible')
-      timer.current = setInterval(() => getData(), 10000)
-    else
+      // timer.current = setInterval(() => getData(), 5000)
+      // else
       clearInterval(timer.current)
   }
 
@@ -69,7 +70,6 @@ export function ChatContent({ type }: ContentData) {
           : <div className='w-full h-full flex justify-center items-center flex-col'>
             <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
             NO DATA</div>}
-
       </div>
 
       <ChatInput type={type} />

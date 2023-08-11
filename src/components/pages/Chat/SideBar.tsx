@@ -40,7 +40,7 @@ export function ChatSideBar({ path = 'general' }) {
 
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
+    data: `0x${Buffer.from(`data:,${JSON.stringify(sendMessageOnChain(sendDataOnChain))}`, 'utf-8').toString('hex')}`,
   })
 
   function closeModal() {

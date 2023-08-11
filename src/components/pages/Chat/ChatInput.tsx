@@ -50,7 +50,7 @@ export function ChatInput({ type }: Props) {
   }
   const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
-    data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
+    data: `0x${Buffer.from(`data:,${JSON.stringify(sendMessageOnChain(sendDataOnChain))}`, 'utf-8').toString('hex')}`,
   })
   const handleSend = () => {
     if (!isConnected)
