@@ -29,7 +29,7 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
   function openModal() {
     setIsOpen(true)
   }
-  function selectedOK(selected: string) {
+  function selectedOK(selected: string | { title: string; receiver: string }) {
     closeModal()
   }
   useEffect(() => {
