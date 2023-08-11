@@ -1,27 +1,41 @@
-export function getTimeDifference(timestamp: string): string {
-  const currentTime = new Date()
-  const targetTime = new Date(timestamp)
+export function getTimeDifference(dateTimeStamp: string): string | undefined {
+  // 时间字符串转时间戳
+  const dateTime = `${dateTimeStamp.split(' ')[0]} ${dateTimeStamp.split(' ')[1]}`
 
-  const differenceInMilliseconds = currentTime.getTime() - targetTime.getTime()
+  const timestamp = new Date(dateTime).getTime()
+  const minute = 1000 * 60
+  const hour = minute * 60
+  const day = hour * 24
+  const halfamonth = day * 15
+  const month = day * 30
+  const year = day * 365
+  const now = new Date().getTime()
 
-  // 计算分钟差值
-  const minutes = Math.floor(differenceInMilliseconds / (1000 * 60))
-  if (minutes < 60)
-    return `${minutes} minutes ago`
+  const diffValue = now - timestamp
+  let result
+  if (diffValue < 0)
+    return
 
-  // 计算小时差值
-  const hours = Math.floor(minutes / 60)
-  if (hours < 24)
-    return `${hours} hours ago`
+  const yearC = diffValue / year as any
+  const monthC = diffValue / month as any
+  const weekC = diffValue / (7 * day) as any
+  const dayC = diffValue / day as any
+  const hourC = diffValue / hour as any
+  const minC = diffValue / minute as any
+  if (yearC >= 1)
+    result = `${Number.parseInt(yearC)} year ago`
+  else if (monthC >= 1)
+    result = `${Number.parseInt(monthC)} month ago`
+  else if (weekC >= 1)
+    result = `${Number.parseInt(weekC)} week ago`
+  else if (dayC >= 1)
+    result = `${Number.parseInt(dayC)} day ago`
+  else if (hourC >= 1)
+    result = `${Number.parseInt(hourC)} hour ago`
+  else if (minC >= 1)
+    result = `${Number.parseInt(minC)} minute ago`
+  else
+    result = 'just now'
 
-  // 计算天数差值
-  const days = Math.floor(hours / 24)
-
-  if (days > 30) {
-    const formattedDate = targetTime.toISOString().slice(0, 19).replace('T', ' ')
-    return formattedDate
-  }
-  else {
-    return `${days} days ago`
-  }
+  return result
 }
