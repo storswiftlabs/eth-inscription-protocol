@@ -9,7 +9,8 @@ export enum ItemType {
   tweet_comment = 'tweet-comment', //   评论推文
   tweet_like = 'tweet-like', //     点赞
   tweet_follow = 'tweet-follow', //      关注用户
-  follow_unfollow = 'un-follow', // 取消关注或取消收藏
+  un_follow = 'un-follow', // 取消关注或取消收藏
+  un_like = 'un-like',
 }
 
 interface defaultBasicType {
@@ -56,7 +57,7 @@ export interface tweetComment extends Omit<defaultBasicType, 'title'> { // 评�
 }
 
 export interface tweetLike { // 点赞
-  type: ItemType.tweet_like | ItemType.follow_unfollow
+  type: ItemType.tweet_like | ItemType.un_like
   with: string //    with 参数为 trx hash ，代表点赞改trx hash里面的推文（ 必填 )
 }
 
