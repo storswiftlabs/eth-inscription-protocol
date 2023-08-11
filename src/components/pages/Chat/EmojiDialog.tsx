@@ -8,10 +8,11 @@ interface Props {
   type?: string
   dialogCss?: CSSProperties
   closeModal: () => void
-  selectedOK: (x: string) => void
+  selectedOK: (x: string | { title: string; receiver: string }) => void
 }
 export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }: Props) {
   const [selected, setSelected] = useState('')
+  const [selectedGroup, setSelectedGroup] = useState({ title: '', receiver: '' })
   const [selectedGroupMember, setSelectedGroupMember] = useState(['buenos-aires', 'sydney'])
 
   const render = () => {
@@ -24,7 +25,9 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                     Add Group
                 </Dialog.Title >
                     <br />
-                    <Input onChange={e => setSelected(e.target.value)}></Input>
+                    <div>Name: <Input onChange={e => setSelectedGroup({ ...selectedGroup, title: e.target.value })}></Input></div>
+                    <br />
+                    <div>Receiver: <Input onChange={e => setSelectedGroup({ ...selectedGroup, receiver: e.target.value })}></Input></div>
                 </>
       case 'at':
         return <> < Dialog.Title
@@ -84,7 +87,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                                 <button
                                     type="button"
                                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                    onClick={() => selectedOK(selected)}
+                                    onClick={() => type === 'addGroup' ? selectedOK(selectedGroup) : selectedOK(selected)}
                                 >
                                     OK!
                                 </button>
