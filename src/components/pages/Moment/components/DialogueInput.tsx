@@ -71,7 +71,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
     setIsOpen(false)
   }
 
-  function selectedOK(selected: string) {
+  function selectedOK(selected: string | any) {
     closeModal()
     const newValue = chatInputRef.current?.value.substring(0, chatInputRef.current?.selectionStart as number | undefined)
       + selected
@@ -115,7 +115,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
     setIsOpen2(false)
   }
 
-  function selectedOK2(selected: string) {
+  function selectedOK2(selected: string | any) {
     closeModal2()
     setAtMember([...atMember, selected])
   }
