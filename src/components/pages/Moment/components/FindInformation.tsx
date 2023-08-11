@@ -159,7 +159,6 @@ function FindInformation({ type }: Props) {
                   {tweetDetails?.profile?.sender}
                 </p>
               </User>
-
             </Col>
           </Col>
           <div>

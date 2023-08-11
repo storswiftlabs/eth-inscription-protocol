@@ -15,6 +15,7 @@ import { getMessageGroupList, getMessageList } from '@/utils/requestApi'
 import type { SwiftChatResponse } from '@/utils/InterfaceType'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
 import { useGroupMember } from '@/store/useChatGroupMember'
+import { imageFormat } from '@/utils/imageFormat'
 
 export function ChatSideBar({ path = 'general' }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -41,6 +42,7 @@ export function ChatSideBar({ path = 'general' }) {
     to: walletClient?.account.address,
     data: `0x${Buffer.from(JSON.stringify(sendMessageOnChain(sendDataOnChain)), 'utf-8').toString('hex')}`,
   })
+
   function closeModal() {
     setIsOpen(false)
   }
@@ -97,7 +99,7 @@ export function ChatSideBar({ path = 'general' }) {
         Messages
       </h1>
       <div className='w-full flex justify-center flex-col'>
-        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-2 rounded-lg m-1`}>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; {AbbreviatedText(t.sender)}</div></Link>)}
+        {messageList.map(t => <Link href={`/chat/${t.sender}?type=message`}><div className={`flex items-center ${path === t.sender ? 'bg-red-200 dark:bg-slate-500/40' : ''} p-1 rounded-lg m-1`}>&nbsp; <Image className='rounded-lg' src={imageFormat(t.image[0])} width={30} height={30} alt={''} />&nbsp; {t.text !== '' ? t.text : AbbreviatedText(t.sender)}</div></Link>)}
 
         {/* <div className='flex'>&nbsp; <Image src='/logo.png' width={20} height={20} alt={''} />&nbsp; 0xEa...B65c</div> */}
 

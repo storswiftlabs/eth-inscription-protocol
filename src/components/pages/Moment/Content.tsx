@@ -90,9 +90,9 @@ function MomentContent({ type }: MomentContentData) {
   }
 
   return (
-    <div className="w-full flex relative  min-h-screen">
+    <div className="w-full flex relative  min-h-screen max-w-full overflow-hidden">
       <div style={{ width: '100%', height: "100vh", overflowY: "auto", display: "flex" }} id='gund' className=" relative border-r-[1px] border-tahiti-border-w dark:border-tahiti-border-d">
-        <div className=' flex-1'>
+        <div className=' w-[60%]'>
           {isNavaFunction(type) && (
             <div className="upper-div text-tahiti-color-w dark:text-tahiti-color-d bg-tahiti-100 dark:bg-tahiti-101 sticky h-20 w-full bg-slate-400 flex text-center items-center top-0 z-10">
               <div onClick={() => isUpperFunction('Recommendation')} className={`ju367vy border-r-[2px] border-r-[#edecf3] dark:border-r-[#262626] w-1/2 ${isUpper === 'Recommendation' ? 'font-bold text-[#0f1419] dark:text-[#fffdfd]' : ''}`}>
