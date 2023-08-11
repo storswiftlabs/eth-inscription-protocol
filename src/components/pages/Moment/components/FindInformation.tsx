@@ -97,7 +97,7 @@ function FindInformation({ type }: Props) {
    */
   const manageFollow = (follow: boolean) => {
     // 根据传入的参数 follow，确定 updateObj 的不同属性
-    const updateObj = { type: follow ? ItemType.tweet_follow : ItemType.follow_unfollow, with: tweetDetails.tweet.sender, } as tweetFollow;
+    const updateObj = { type: follow ? ItemType.tweet_follow : ItemType.un_follow, with: tweetDetails.tweet.sender, } as tweetFollow;
     // 更新状态
     setTweetCommentData(updateObj);
     // 执行事务操作

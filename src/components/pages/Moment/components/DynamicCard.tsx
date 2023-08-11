@@ -43,9 +43,9 @@ export default function DynamicCard({ item }: Props) {
    * @param likeBool - 点赞或取消点赞的布尔值 如果 为true 代表要取消点赞 fales 反之
    */
   const likeFunction = (likeBool: boolean) => {
-    const type = likeBool ? ItemType.follow_unfollow : ItemType.tweet_like;
+    const type = likeBool ? ItemType.un_like : ItemType.tweet_like;
     // 设置点赞数据
-    setUpLikeData({ type, with: item.with.trxHash, });
+    setUpLikeData({ type, with: item.tweet.trxHash, });
   };
 
   useEffect(() => {
