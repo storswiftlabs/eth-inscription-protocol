@@ -79,7 +79,7 @@ function FindInformation({ type }: Props) {
 
 
   if (!isConnected)
-    alert('Please connect your wallet first')
+    typeof window !== 'undefined' && alert('Please connect your wallet first')
 
   const closeHandler = ({ text, image, at }: tweetSendType) => { //  直接评论
     setTweetCommentData({ type: ItemType.tweet_comment, text, image, at, with: tweetDetails.tweet.trxHash })

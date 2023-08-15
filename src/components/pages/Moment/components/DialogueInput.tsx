@@ -122,7 +122,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
 
   async function onSend() {
     if (pictureArr.length !== pictureArrCid.length)
-      alert('wait a minute')
+      typeof window !== 'undefined' && alert('wait a minute')
     else
       closeHandler({ image: pictureArrCid, text: inputData, at: atMember })
   }

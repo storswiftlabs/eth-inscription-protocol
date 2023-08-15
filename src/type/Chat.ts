@@ -3,6 +3,10 @@ export enum FillColor {
   Black = 'black',
   Orange = 'orange',
 }
+export interface AddGroupDialogType {
+  title: string
+  receiver: string
+}
 
 export interface ChatContentMessageType {
   type: string

@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import { EmojiDialog } from './EmojiDialog'
 import { GroupIcon } from './Icons'
 import { type MessageOnChain, sendMessageOnChain } from '@/utils/sendMessageOnChain'
+import type { AddGroupDialogType } from '@/type/Chat'
 import { FillColor } from '@/type/Chat'
 import { getMessageGroupList, getMessageList } from '@/utils/requestApi'
 import type { SwiftChatResponse } from '@/utils/InterfaceType'
@@ -55,7 +56,7 @@ export function ChatSideBar({ path = 'general' }) {
   }, [isConnected])
 
   const handleSend = () => {
-    !isConnected && alert('Please connect your wallet first')
+    !isConnected && typeof window !== 'undefined' && alert('Please connect your wallet first')
     sendTransaction()
   }
   function randomNumberFromTime() {
@@ -111,7 +112,7 @@ export function ChatSideBar({ path = 'general' }) {
       {themeColor && <GroupIcon fill={handleFillColor()} />}
       &nbsp;
       Add Group
-      <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'addGroup'} selectedOK={x => selectedOK(x)} />
+      <EmojiDialog isOpen={isOpen} closeModal={closeModal} type={'addGroup'} selectedOK={x => selectedOK(x as AddGroupDialogType)} />
 
     </div>
   </div>

@@ -53,7 +53,7 @@ function Find({ isUpper }: Props) {
   const { data, isLoading, isSuccess, sendTransaction } = useSendMessageToChain(uploadData)
 
   if (!isConnected)
-    alert('Please connect your wallet first')
+    typeof window !== 'undefined' && alert('Please connect your wallet first')
 
   useEffect(() => {
 

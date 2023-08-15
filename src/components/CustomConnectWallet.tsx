@@ -40,7 +40,7 @@ export function CustomConnectButton() {
   const handler = () => setVisible(true)
   const closeHandler = () => {
     if (ownerProfileUpload.image.length === 0) {
-      alert('wait a minute')
+      typeof window !== 'undefined' && alert('wait a minute')
     }
     else {
       setVisible(false)

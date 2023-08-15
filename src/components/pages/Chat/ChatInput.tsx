@@ -54,9 +54,9 @@ export function ChatInput({ type }: Props) {
   })
   const handleSend = () => {
     if (!isConnected)
-      alert('Please connect your wallet first')
+      typeof window !== 'undefined' && alert('Please connect your wallet first')
     if (pictureArr.length !== pictureArrCid.length)
-      alert('wait a minute')
+      typeof window !== 'undefined' && alert('wait a minute')
     else
       sendTransaction()
   }
@@ -112,8 +112,8 @@ export function ChatInput({ type }: Props) {
   }
 
   return <div className='p-4  w-full  min-h-[130px] '>
-    <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
-    <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x)} type='at' />
+    <EmojiDialog isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x as string)} type='emoji' />
+    <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x as string)} type='at' />
     {isSuccess ? <Notifications data={data?.hash} /> : null}
     <div className='bg-neutral-200/40 dark:bg-neutral-500/30 h-full rounded-xl flex justify-between flex-col p-2 '>
       {isLoading

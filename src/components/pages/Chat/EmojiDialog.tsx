@@ -2,13 +2,14 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Input } from '@nextui-org/react'
 import type { CSSProperties } from 'react'
 import { Fragment, useState } from 'react'
+import type { AddGroupDialogType } from '@/type/Chat'
 
 interface Props {
   isOpen: boolean
   type?: string
   dialogCss?: CSSProperties
   closeModal: () => void
-  selectedOK: (x: string | { title: string; receiver: string }) => void
+  selectedOK: (x: string | AddGroupDialogType) => void
 }
 export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }: Props) {
   const [selected, setSelected] = useState('')
