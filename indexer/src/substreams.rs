@@ -2,11 +2,12 @@ use std::{fmt::Display, sync::Arc, time::Duration};
 
 use http::{uri::Scheme, Uri};
 use tonic::{
+    codegen::http,
     metadata::MetadataValue,
     transport::{Channel, ClientTlsConfig},
 };
 
-use crate::proto;
+use crate::pb::sf::substreams::rpc::v2::{stream_client::StreamClient, Request, Response};
 
 #[derive(Clone, Debug)]
 pub struct SubstreamsEndpoint {
@@ -35,10 +36,11 @@ impl SubstreamsEndpoint {
                 .expect("TLS config on this host is invalid"),
             _ => panic!("invalid uri scheme for firehose endpoint"),
         }
-        .connect_timeout(Duration::from_secs(10));
+        .connect_timeout(Duration::from_secs(10))
+        .http2_adaptive_window(true)
+        .tcp_keepalive(Some(Duration::from_secs(30)));
 
         let uri = endpoint.uri().to_string();
-        //connect_lazy() used to return Result, but not anymore, that makes sence since Channel is not used immediatelly
         let channel = endpoint.connect_lazy();
 
         Ok(SubstreamsEndpoint {
@@ -50,14 +52,15 @@ impl SubstreamsEndpoint {
 
     pub async fn substreams(
         self: Arc<Self>,
-        request: proto::Request,
-    ) -> Result<tonic::Streaming<proto::Response>, anyhow::Error> {
-        let token_metadata = match self.token.clone() {
-            Some(token) => Some(MetadataValue::try_from(token.as_str())?),
+        request: Request,
+    ) -> Result<tonic::Streaming<Response>, anyhow::Error> {
+        let token_metadata: Option<MetadataValue<tonic::metadata::Ascii>> = match self.token.clone()
+        {
+            Some(token) => Some(token.as_str().try_into()?),
             None => None,
         };
 
-        let mut client = proto::stream_client::StreamClient::with_interceptor(
+        let mut client = StreamClient::with_interceptor(
             self.channel.clone(),
             move |mut r: tonic::Request<()>| {
                 if let Some(ref t) = token_metadata {
@@ -70,6 +73,7 @@ impl SubstreamsEndpoint {
 
         let response_stream = client.blocks(request).await?;
         let block_stream = response_stream.into_inner();
+
         Ok(block_stream)
     }
 }

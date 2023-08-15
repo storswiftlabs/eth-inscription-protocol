@@ -1,14 +1,20 @@
-use std::env;
+use std::{
+    env,
+    ops::Add,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 use crate::{
-    models::{InscriptionProtocolV1, NewTransaction, Transaction},
-    proto::Transactions,
+    models::{InscriptionProtocolV1, NewSwift, Swift},
+    pb::Swifts as PbSwifts,
     schema,
 };
 use anyhow::{Error, Ok};
 use diesel::{
+    query_dsl::methods::FilterDsl,
     r2d2::{ConnectionManager, PoolError},
-    ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl, SelectableHelper,
+    BoolExpressionMethods, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl,
+    SelectableHelper,
 };
 use lazy_static::lazy_static;
 use r2d2::{Pool, PooledConnection};
@@ -25,67 +31,73 @@ fn create_pg_pool() -> Result<PgPool, PoolError> {
     PgPool::builder().build(manager)
 }
 
-pub fn batch_insert_transactions(
+pub fn batch_insert_swifts(
     conn: &mut PooledConnection<ConnectionManager<PgConnection>>,
-    transactions: Transactions,
+    pb_swifts: PbSwifts,
 ) -> Result<(), Error> {
-    use schema::transition;
-
-    let txs: Vec<Transaction> = transactions
-        .transactions
+    use schema::swift;
+    let swifts: Vec<Swift> = pb_swifts
+        .swifts
         .iter()
-        .filter_map(|tx| {
-            let inscription = tx.input_data.clone()?;
-            let input_data_str = &serde_json::to_string(&InscriptionProtocolV1 {
-                r#type: inscription.r#type,
-                title: inscription.title,
-                text: inscription.text,
-                image: inscription.image,
-                receiver: inscription.receiver,
-                at: inscription.at,
-                with: inscription.with,
-            })
-            .unwrap_or_default();
-
-            Some(Transaction {
+        .map(|tx| {
+            let ts = tx.timestamp.as_ref().unwrap();
+            Swift {
                 chain: tx.chain.to_string(),
-                block_number: tx.block_number as i64,
-                transaction_hash: tx.transaction_hash.to_string(),
-                timestamp: tx.timestamp as i64,
-                from_address: tx.from.to_string(),
-                input_data: input_data_str.to_string(),
-            })
+                timestamp: SystemTime::from(
+                    UNIX_EPOCH.add(Duration::new(ts.seconds as u64, ts.nanos as u32)),
+                ),
+                height: tx.height as i64,
+                trx_hash: tx.trx_hash.to_string(),
+                sender: tx.sender.to_string(),
+                _to: tx.to.to_string(),
+                data: serde_json::to_string(&InscriptionProtocolV1 {
+                    r#type: tx.r#type.to_string(),
+                    title: tx.title.to_string(),
+                    text: tx.text.to_string(),
+                    image: tx.image.clone(),
+                    receiver: tx.receiver.clone(),
+                    at: tx.at.clone(),
+                    with: tx.with.to_string(),
+                })
+                .unwrap_or_default(),
+            }
         })
         .collect();
 
-    let txs: Vec<NewTransaction> = txs
+    let txs: Vec<NewSwift> = swifts
         .iter()
-        .map(|tx| NewTransaction {
+        .map(|tx| NewSwift {
             chain: &tx.chain,
-            block_number: tx.block_number as i64,
-            transaction_hash: &tx.transaction_hash,
-            timestamp: tx.timestamp as i64,
-            from_address: &tx.from_address,
-            input_data: &tx.input_data,
+            timestamp: tx.timestamp,
+            height: tx.height,
+            trx_hash: &tx.trx_hash,
+            sender: &tx.sender,
+            _to: &tx._to,
+            data: &tx.data,
         })
         .collect();
 
-    diesel::insert_into(transition::table)
+    diesel::insert_into(swift::table)
         .values(txs)
         .execute(conn)?;
 
     Ok(())
 }
 
-pub fn get_transactions_by_address(
+pub fn get_swifts_by_height_range(
     conn: &mut PooledConnection<ConnectionManager<PgConnection>>,
-    from_address: &String,
-) -> Result<Vec<Transaction>, Error> {
-    use schema::transition::dsl;
+    start_height: i64,
+    end_height: i64,
+) -> Result<Vec<Swift>, Error> {
+    use schema::swift::dsl;
 
-    let txs = dsl::transition
-        .filter(dsl::from_address.eq(from_address))
-        .select(Transaction::as_select())
+    let grouped = dsl::height.ge(start_height);
+    if end_height > 0 {
+        grouped.and(dsl::height.le(end_height));
+    }
+
+    let txs = FilterDsl::filter(dsl::swift, grouped)
+        .select(Swift::as_select())
         .load(conn)
         .expect("Error loading records");
 

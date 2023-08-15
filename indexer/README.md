@@ -1,6 +1,6 @@
-## NexusDAO Indexer (proof of concept)
+## Swift Indexer (proof of concept)
 
-This repository show cases consumption of an NexsuDAO Substreams and saving it to a database using Diesel.
+This repository show cases consumption of an Swift Substreams and saving it to a database using Diesel.
 
 ## Requirements
 
@@ -11,14 +11,14 @@ This repository show cases consumption of an NexsuDAO Substreams and saving it t
    brew install postgresql libpq
    ```
 
-- `firehose-starknet`
+- `firehose-*`
 
 ## Usage
 
-In a first terminal, launch `firehose-starknet` localnet setup:
+In a first terminal, launch `firehose-*` localnet setup:
 
 ```
-cd firehose-starknet
+cd firehose-*
 ./devel/localnet/start -c
 ```
 
@@ -40,7 +40,7 @@ And then run the script:
 make all
 ```
 
-This will read start a Substreams using `./substreams-startnet-v0.1.0.spkg`, receives all the `map_transactions` module output (of type `map`), decode the received entities and save them in the database.
+This will read start a Substreams using `./substreams-swift-v0.1.0.spkg`, receives all the `map_transactions` module output (of type `map`), decode the received entities and save them in the database.
 
 If show case how you can consume a Substreams module of type `map` to insert data in a database.
 

@@ -1,10 +1,10 @@
-REST_API ?= https://vm.aleo.org/api
-ENDPOINT_URL ?= http://localhost:18015
+ENDPOINT_URL ?= https://goerli.eth.streamingfast.io:443
 START_BLOCK ?= 0
-PACKAGE_FILE ?= ./substreams-starknet-v0.1.0.spkg
-MODULE_NAME ?= map_transactions
+END_BLOCK ?= 0
+MODULE_NAME ?= map_eth_swifts
+PACKAGE_FILE ?= ./substreams-swift-v0.1.0.spkg
 HOST ?= 127.0.0.1
-PORT ?= 8081
+PORT ?= 8010
 
 .PHONY: build
 build:
@@ -12,8 +12,7 @@ build:
 
 .PHONY: all
 all:
-	cargo run -- all \
-		--rest-api $(REST_API) \
+	cargo run --release -- all \
 		--endpoint-url $(ENDPOINT_URL) \
 		--package-file $(PACKAGE_FILE) \
 		--module-name $(MODULE_NAME) \
@@ -23,8 +22,7 @@ all:
 
 .PHONY: sync
 sync:
-	cargo run -- sync \
-		--rest-api $(REST_API) \
+	cargo run --release -- sync \
 		--endpoint-url $(ENDPOINT_URL) \
 		--package-file $(PACKAGE_FILE) \
 		--module-name $(MODULE_NAME) \
@@ -32,8 +30,7 @@ sync:
 
 .PHONY: serve
 serve:
-	cargo run -- serve \
-		--rest-api $(REST_API) \
+	cargo run --release -- serve \
 		--host $(HOST) \
 		--port $(PORT)
 

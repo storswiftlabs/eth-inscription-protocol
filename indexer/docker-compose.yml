@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    container_name: postgres-starknet-indexer
+    container_name: postgres-swift-indexer
     image: postgres:latest
     ports:
       - "5432:5432"
@@ -19,7 +19,7 @@ services:
       timeout: 10s
       retries: 15
   pgweb:
-    container_name: pgweb-starknet-indexer
+    container_name: pgweb-swift-indexer
     image: sosedoff/pgweb:0.11.10
     restart: on-failure
     ports:
@@ -30,6 +30,6 @@ services:
     links:
       - postgres:postgres
     environment:
-      - DATABASE_URL=postgres://admin:secure@postgres-starknet-indexer:5432/indexer-dev?sslmode=disable
+      - DATABASE_URL=postgres://admin:secure@postgres-swift-indexer:5432/indexer-dev?sslmode=disable
     depends_on:
       - postgres

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package swift.type.v1;
+
+import "google/protobuf/timestamp.proto";
+
+message Swifts {
+    repeated Swift swifts = 1;
+}
+
+message Swift {
+    google.protobuf.Timestamp timestamp = 1;
+    uint64 height = 2;
+    string trx_hash = 3;
+    string chain = 4;
+    string sender = 5;
+    string to = 6;
+    string type = 7;
+    string title = 8;
+    string text = 9;
+    string with = 10;
+    repeated string image = 11;
+    repeated string receiver = 12;
+    repeated string at = 13;
+}

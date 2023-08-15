@@ -4,12 +4,12 @@ use crate::routes::routes;
 use anyhow::{format_err, Context, Error};
 use clap::Parser;
 use cli::{Cli, Commands};
-use database::{batch_insert_transactions, POOL};
+use database::{batch_insert_swifts, POOL};
 use futures03::StreamExt;
 use http::Method;
 use prost::Message;
-use proto::{module_output::Data as ModuleOutputData, BlockScopedData, Transactions};
-use std::{env, net::SocketAddr, str::FromStr, sync::Arc};
+use pb::{Swifts, sf::substreams::{v1::Package, rpc::v2::BlockScopedData}};
+use std::{env, net::SocketAddr, str::FromStr, sync::Arc, process::exit};
 use substreams::SubstreamsEndpoint;
 use substreams_stream::{BlockResponse, SubstreamsStream};
 use tower_http::cors::{Any, CorsLayer};
@@ -18,7 +18,7 @@ mod cli;
 mod database;
 mod handlers;
 mod models;
-mod proto;
+mod pb;
 mod routes;
 mod schema;
 mod substreams;
@@ -88,7 +88,7 @@ async fn sync(
         token = Some(token_env);
     }
 
-    let package = read_package(&package_file).unwrap();
+    let package = read_package(&package_file).await.unwrap();
     let endpoint = Arc::new(SubstreamsEndpoint::new(&endpoint_url, token).await.unwrap());
 
     // FIXME: Handling of the cursor is missing here. It should be loaded from
@@ -113,28 +113,26 @@ async fn sync(
                 println!("Stream consumed");
                 break;
             }
-            Some(event) => match event {
-                Err(_) => {}
-                Ok(BlockResponse::New(data)) => {
-                    println!("Consuming module output (cursor {})", data.cursor);
-
-                    match extract_records(data, &module_name).unwrap() {
-                        Some(txs) => {
-                            batch_insert_transactions(&mut conn, txs)
-                                .context("insertion in db failed")
-                                .unwrap();
-                        }
-                        None => {}
+            Some(Ok(BlockResponse::New(data))) => {
+                println!("Consuming module output (cursor {})", data.cursor);
+                match extract_swifts(data, &module_name).unwrap() {
+                    Some(swifts) => {
+                        batch_insert_swifts(&mut conn, swifts)
+                            .context("insertion in db failed")
+                            .unwrap();
                     }
-
-                    // FIXME: Handling of the cursor is missing here. It should be saved each time
-                    // a full block has been correctly inserted in the database. By saving it
-                    // in the database, we ensure that if we crash, on startup we are going to
-                    // read it back from database and start back our SubstreamsStream with it
-                    // ensuring we are continuously streaming without ever losing a single
-                    // element.
+                    None => {}
                 }
-            },
+            }
+            Some(Ok(BlockResponse::Undo(undo_signal))) => {
+                println!("BlockUndoSignal");
+            }
+            Some(Err(err)) => {
+                println!();
+                println!("Stream terminated with error");
+                println!("{:?}", err);
+                exit(1);
+            }
         }
     }
 }
@@ -154,13 +152,9 @@ async fn serve(host: &String, port: &u16) {
         .unwrap();
 }
 
-fn extract_records(
-    data: BlockScopedData,
-    module_name: &String,
-) -> Result<Option<Transactions>, Error> {
+fn extract_swifts(data: BlockScopedData, module_name: &String) -> Result<Option<Swifts>, Error> {
     let output = data
-        .outputs
-        .first()
+        .output
         .ok_or(format_err!("expecting one module output"))?;
     if &output.name != module_name {
         return Err(format_err!(
@@ -169,18 +163,25 @@ fn extract_records(
             module_name
         ));
     }
-    match output.data.as_ref().unwrap() {
-        ModuleOutputData::MapOutput(data) => {
-            let txs: Transactions = Message::decode(data.value.as_slice())?;
-            Ok(Some(txs))
-        }
-        ModuleOutputData::StoreDeltas(_) => Err(format_err!(
-            "invalid module output StoreDeltas, expecting MapOutput"
-        )),
-    }
+    let swifts: Swifts = Message::decode(output.map_output.as_ref().unwrap().value.as_slice())?;
+    Ok(Some(swifts))
+
 }
 
-fn read_package(file: &str) -> Result<proto::Package, anyhow::Error> {
-    let content = std::fs::read(file).context(format_err!("read package {}", file))?;
-    proto::Package::decode(content.as_ref()).context("decode command")
+async fn read_package(input: &str) -> Result<Package, anyhow::Error> {
+    if input.starts_with("http") {
+        return read_http_package(input).await;
+    }
+
+    // Assume it's a local file
+
+    let content =
+        std::fs::read(input).context(format_err!("read package from file '{}'", input))?;
+    Package::decode(content.as_ref()).context("decode command")
+}
+
+async fn read_http_package(input: &str) -> Result<Package, anyhow::Error> {
+    let body = reqwest::get(input).await?.bytes().await?;
+
+    Package::decode(body).context("decode command")
 }
