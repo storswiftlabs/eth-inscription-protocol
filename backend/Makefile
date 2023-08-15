@@ -1,6 +1,7 @@
 GOHOSTOS:=$(shell go env GOHOSTOS)
 GOPATH:=$(shell go env GOPATH)
 VERSION=$(shell git describe --tags --always)
+SERVICE_DIR_NAME=$(shell basename $$PWD)
 
 ifeq ($(GOHOSTOS), windows)
 	#the `find.exe` is different from `find` in bash/shell.
@@ -79,5 +80,26 @@ help:
 		} \
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+
+image:
+	DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 \
+	docker-compose -f ./docker-compose.yaml build \
+	--build-arg SERVER_NAME=$(SERVICE_DIR_NAME)
+
+.PHONY: start
+start:
+	docker-compose -f ./docker-compose.yaml up -d
+
+.PHONY: stop
+stop:
+	docker-compose -f ./docker-compose.yaml  stop
+
+.PHONY: restart
+restart:
+	docker-compose -f ./docker-compose.yaml  restart
+
+.PHONY: logs
+logs:
+	docker-compose -f ./docker-compose.yaml   logs -f
 
 .DEFAULT_GOAL := help

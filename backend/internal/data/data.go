@@ -7,6 +7,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 	_ "github.com/lib/pq"
+	"os"
 	"xorm.io/xorm"
 )
 
@@ -38,7 +39,12 @@ func NewData(c *conf.Data, logger log.Logger, db *xorm.Engine) (*Data, func(), e
 }
 
 func NewPostgres(c *conf.Data) *xorm.Engine {
-	engine, err := xorm.NewEngine(c.Database.Driver, c.Database.Source)
+	Uri, ok := os.LookupEnv("POSTGRES_DB_URL")
+	if !ok {
+		Uri = c.Database.Source
+	}
+
+	engine, err := xorm.NewEngine(c.Database.Driver, Uri)
 
 	if err != nil {
 		log.Fatal(err)

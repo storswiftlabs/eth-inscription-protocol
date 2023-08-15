@@ -31,3 +31,19 @@ services:
       - DATABASE_URL=postgres://admin:secure@postgres:5432/inscription?sslmode=disable
     depends_on:
       - postgres
+
+  inscription:
+    hostname: inscription
+    image: inscription:v0.1
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_DB_URL: "postgres://admin:secure@postgres:5432/inscription?sslmode=disable"
+
