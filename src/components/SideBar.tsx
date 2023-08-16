@@ -14,7 +14,7 @@ export function SideBar() {
       <div className="flex flex-col w-44 h-screen  border-gray-200 bg-grey dark:bg-black justify-start items-center">
         <Link href="/"><Image src="/logo.png" width={50} height={50} alt="Logo" /></Link>
         {isConnected && <>
-          <Link href="/chat/general"><Image className='my-8' src="/chat.svg" width={30} height={30} alt="Logo" /></Link>
+          <Link href="/chat/general?type=group"><Image className='my-8' src="/chat.svg" width={30} height={30} alt="Logo" /></Link>
           <Link href="/moment/find"><Image src="/moment.svg" width={30} height={30} alt="Logo" /></Link>
         </>}
 

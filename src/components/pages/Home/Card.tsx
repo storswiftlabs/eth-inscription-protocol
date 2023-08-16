@@ -7,7 +7,7 @@ export function Card() {
   return (
         <Grid.Container gap={2} justify="center">
             <Grid xs={6} >
-                <Link href={'/chat/general'}><Card1 /></Link>
+                <Link href={'/chat/general?type=group'}><Card1 /></Link>
             </Grid>
             <Grid xs={6} >
                 <Link href={'/moment/find'}><Card2 /></Link>

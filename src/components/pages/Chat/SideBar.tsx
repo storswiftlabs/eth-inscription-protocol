@@ -52,7 +52,8 @@ export function ChatSideBar({ path = 'general' }) {
   }
   useEffect(() => {
     if (!isConnected)
-      return Router.push('/')
+      typeof window !== 'undefined' && alert('Please connect your wallet first')
+      // return Router.push('/')
   }, [isConnected])
 
   const handleSend = () => {
@@ -83,7 +84,7 @@ export function ChatSideBar({ path = 'general' }) {
         Chat
       </h1>
       <div className='w-full flex justify-center flex-col'>
-        <Link href="/chat/general"> <div className={`m-2 rounded-lg p-2 ${path === 'general' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 💬 General</div></Link>
+        <Link href="/chat/general?type=group"> <div className={`m-2 rounded-lg p-2 ${path === 'general' ? 'bg-red-200 dark:bg-slate-500/40' : ''}`}> 💬 General</div></Link>
         <Collapse
           expanded={messageGroupList.filter(t => t.title === decodeURIComponent(path)).length > 0}
           css={{ border: 'none', padding: '0 16px' }}
