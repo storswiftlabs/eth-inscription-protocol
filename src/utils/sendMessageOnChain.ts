@@ -15,6 +15,6 @@ export function sendMessageOnChain(data: MessageOnChain) {
     image: data?.image ?? [''],
     receiver: data?.receiver ?? [''],
     at: data?.at ?? [''],
-    with: data?.with ?? [''],
+    with: data?.with ?? '',
   }
 }

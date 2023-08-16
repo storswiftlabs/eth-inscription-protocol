@@ -67,6 +67,7 @@ export function ChatInput({ type }: Props) {
   useEffect(() => {
     setSendDataOnChain({ ...sendDataOnChain, text: inputData })
   }, [inputData])
+
   useEffect(() => {
     (async () => {
       replyMessage.txHash && setSendDataOnChain({ ...sendDataOnChain, with: replyMessage.txHash })
