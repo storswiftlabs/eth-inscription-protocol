@@ -1,15 +1,15 @@
-export const Follow = '/api/follow'
+export const Follow = '/follow'
 
-export const Group = '/api/group'
+export const Group = '/group'
 
-export const MessageWin = '/api/message_window'
+export const MessageWin = '/message_window'
 
-export const MessageAddress = '/api/message'
+export const MessageAddress = '/message'
 
-export const GroupMessage = '/api/group_message'
+export const GroupMessage = '/group_message'
 
-export const Tweet = '/api/tweet'
+export const Tweet = '/tweet'
 
-export const FollowTweet = '/api/follow_tweet'
+export const FollowTweet = '/follow_tweet'
 
-export const Profile = '/api/profile'
+export const Profile = '/profile'
