@@ -9,6 +9,7 @@ data:
   database:
     driver: postgres
     source: postgres://admin:secure@localhost:5433/inscription?sslmode=disable
+    swift_url: http://103.1.65.125:8010/
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s

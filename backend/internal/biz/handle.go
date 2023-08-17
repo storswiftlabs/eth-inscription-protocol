@@ -3,6 +3,7 @@ package biz
 import (
 	"backend/module"
 	"context"
+	"time"
 )
 
 func (uc *InscriptionUsecase) HandleSwift(ctx context.Context, swifts []module.Swift)  {
@@ -68,7 +69,7 @@ func (uc *InscriptionUsecase) SwiftCreateProfileHandle(ctx context.Context, swif
 		Text:    swift.Text,
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
-		TrxTime: swift.TrxTime,
+		TrxTime: time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertProfile(ctx, profile)
 }
@@ -80,7 +81,7 @@ func (uc *InscriptionUsecase) SwiftUpdateProfileHandle(ctx context.Context, swif
 		Text:    swift.Text,
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
-		TrxTime: swift.TrxTime,
+		TrxTime: time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.UpdateProfile(ctx, profile)
 }
@@ -103,7 +104,7 @@ func (uc *InscriptionUsecase) SwiftGroupMessageHandle(ctx context.Context, swift
 		With:     swift.With,
 		Height:   swift.Height,
 		TrxHash:  swift.TrxHash,
-		TrxTime:  swift.TrxTime,
+		TrxTime:  time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertGroupMessage(ctx, groupMessage)
 }
@@ -129,7 +130,7 @@ func (uc *InscriptionUsecase) SwiftMessageHandle(ctx context.Context, swift modu
 		With:     swift.With,
 		Height:   swift.Height,
 		TrxHash:  swift.TrxHash,
-		TrxTime:  swift.TrxTime,
+		TrxTime:  time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertMessage(ctx, message)
 }
@@ -141,7 +142,7 @@ func (uc *InscriptionUsecase) SwiftCreateGroupHandle(ctx context.Context, swift 
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
-			TrxTime: swift.TrxTime,
+			TrxTime: time.Unix(swift.TrxTime, 0),
 		}
 		err := uc.repo.InsertGroup(ctx, group)
 		if err != nil {
@@ -158,7 +159,7 @@ func (uc *InscriptionUsecase) SwiftUpdateGroupAddHandle(ctx context.Context, swi
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
-			TrxTime: swift.TrxTime,
+			TrxTime: time.Unix(swift.TrxTime, 0),
 		}
 		err := uc.repo.InsertGroup(ctx, group)
 		if err != nil {
@@ -192,7 +193,7 @@ func (uc *InscriptionUsecase) SwiftTweetHandle(ctx context.Context, swift module
 		At:      swift.At,
 		With:    swift.With,
 		Height:  swift.Height,
-		TrxTime: swift.TrxTime,
+		TrxTime: time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertTweet(ctx, tweet)
 }
@@ -206,7 +207,7 @@ func (uc *InscriptionUsecase) SwiftTweetCommentHandle(ctx context.Context, swift
 		At:      swift.At,
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
-		TrxTime: swift.TrxTime,
+		TrxTime: time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertComment(ctx, comment)
 }
@@ -217,7 +218,7 @@ func (uc *InscriptionUsecase) SwiftTweetLikeHandle(ctx context.Context, swift mo
 		Sender:  swift.Sender,
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
-		TrxTime: swift.TrxTime,
+		TrxTime: time.Unix(swift.TrxTime, 0),
 	}
 	return uc.repo.InsertLike(ctx, like)
 }

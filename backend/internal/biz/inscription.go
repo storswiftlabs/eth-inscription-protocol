@@ -5,6 +5,7 @@ import (
 	"context"
 	"github.com/avast/retry-go/v4"
 	"github.com/go-kratos/kratos/v2/log"
+	"time"
 )
 
 type Inscription struct {
@@ -12,8 +13,8 @@ type Inscription struct {
 }
 
 const (
-	ZksyncStartHeight = 10000
-	GoerliStartHeight = 10000
+	ZksyncStartHeight = 9531144
+	GoerliStartHeight = 9531144
 )
 
 // InscriptionRepo is a Inscription repo.
@@ -72,7 +73,7 @@ func NewInscriptionUsecase(repo InscriptionRepo, logger log.Logger) *Inscription
 	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.goerli.GetName(), Height: GoerliStartHeight})
 	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.zkSync.GetName(), Height: ZksyncStartHeight})
 	//go uc.SyncZksync(ctx)
-	//go uc.SyncGoerli(ctx)
+	go uc.SyncGoerli(ctx)
 	return uc
 }
 
@@ -93,21 +94,23 @@ func (uc *InscriptionUsecase) SyncZksync(ctx context.Context) {
 				}
 				if len(swifts) > 0 {
 					uc.HandleSwift(ctx, swifts)
+					currentHeight = swifts[len(swifts)-1].Height + 1
+					err = uc.repo.UpdateChainHeight(ctx, &Chain{
+						Name:   uc.zkSync.GetName(),
+						Height: currentHeight,
+					})
+					if err != nil {
+						return err
+					}
 				}
-				err = uc.repo.UpdateChainHeight(ctx, &Chain{
-					Name:   uc.zkSync.GetName(),
-					Height: currentHeight,
-				})
-				if err != nil {
-					return err
-				}
-				uc.log.Infof("current sync height: %d", currentHeight)
+
+				uc.log.Infof("zkSync current sync height: %d", currentHeight)
+				time.Sleep(time.Second * 5)
 				return nil
 			})
 		if err != nil {
-			uc.log.Error("Get Swift Fail At Height %d: %v", currentHeight, err)
+			uc.log.Error("Get Swift Fail At zkSync Height %d: %v", currentHeight, err)
 		}
-		currentHeight++
 	}
 }
 
@@ -128,22 +131,23 @@ func (uc *InscriptionUsecase) SyncGoerli(ctx context.Context) {
 				}
 				if len(swifts) > 0 {
 					uc.HandleSwift(ctx, swifts)
+					currentHeight = swifts[len(swifts)-1].Height + 1
+					err = uc.repo.UpdateChainHeight(ctx, &Chain{
+						Name:   uc.goerli.GetName(),
+						Height: currentHeight,
+					})
+					if err != nil {
+						return err
+					}
 				}
 
-				err = uc.repo.UpdateChainHeight(ctx, &Chain{
-					Name:   uc.goerli.GetName(),
-					Height: currentHeight,
-				})
-				if err != nil {
-					return err
-				}
-				uc.log.Infof("current sync height: %d", currentHeight)
+				uc.log.Infof("goerli current sync height: %d", currentHeight)
+				time.Sleep(time.Second * 5)
 				return nil
 			})
 		if err != nil {
-			uc.log.Error("Get Swift Fail At Height %d: %v", currentHeight, err)
+			uc.log.Error("Get Swift Fail At goerli Height %d: %v", currentHeight, err)
 		}
-		currentHeight++
 	}
 }
 

@@ -86,7 +86,7 @@ func TestInscriptionRepo_UpdateProfile(t *testing.T) {
 func TestInscriptionRepo_InsertGroup(t *testing.T) {
 	group := &module.Group{
 		Address: "0xDE2C8959BBCE26dD27E956B7b5ea9bB2d6eeB591",
-		Title:   "Magic Castle",
+		Title:   "general",
 		Height:  1000001,
 		TrxHash: "0x9d4841ad749878456c9d6ebeb3e57a5bee0e9dc7f4e4cc184a4b6ba90aa4005b3q",
 		TrxTime: time.Now(),
@@ -132,11 +132,11 @@ func TestInscriptionRepo_InsertMessage(t *testing.T) {
 
 func TestInscriptionRepo_InsertGroupMessage(t *testing.T) {
 	groupMessage := &module.GroupMessage{
-		Title:    "Warm Home",
-		Sender:   "0x50b6d02B9194dDf386A56ae92d251c7e3e0f06ba",
-		Text:     "Polygon Labs此前向DeLabs提供了300万美元作为从Solana迁移的协议款，DeLabs将进行返还。",
-		//Image:    []string{"ipfs://bafybeictvrpb2vdek7i3gmfihnwrl4j6egoht6em36slnbghq7jqdl7ul4/315.png"},
-		//At:       []string{"0x9d4841ad7498784561", "0x9d4841ad7498784562"},
+		Title:    "general",
+		Sender:   "0xA7308D4D83b14859916671A17370476E6c6Cd1A9",
+		Text:     "很紧密！区块链是Web3的核心技术之一，它允许数据以去中心化、不可篡改的方式存储，从而确保数据的透明性和安全性。Web3利用区块链来构建分布式应用（DApps）和智能合约，使用户可以直接参与到网络中，而不必依赖中心化的机构。",
+		//Image:    []string{"ipfs://bafybeictvrpb2vdek7i3gmfihnwrl4j6egoht6em36slnbghq7jqdl7ul4/1141.png"},
+		//At:       []string{"0x50b6d02B9194dDf386A56ae92d251c7e3e0f06ba"},
 		//With:     "0x1112",
 		Height:   3000000,
 		TrxHash:  "0x9d4841ad7498784562",

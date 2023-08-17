@@ -3,20 +3,20 @@ package module
 import "time"
 
 type Swift struct {
-	Id       int64     `json:"id"`
-	Type     string    `json:"type"`
-	Chain    string    `json:"chain"`
-	Title    string    `json:"title"`
-	Text     string    `json:"text"`
-	Image    []string  `json:"image"`
-	Receiver []string  `json:"receiver"`
-	At       []string  `json:"at"`
-	With     string    `json:"with"`
-	Height   int64     `json:"height"`
-	TrxHash  string    `json:"trx_hash"`
-	TrxTime  time.Time `json:"timestamp"`
-	Sender   string    `json:"sender"`
-	To       string    `json:"to"`
+	Id       int64    `json:"id"`
+	Type     string   `json:"type"`
+	Chain    string   `json:"chain"`
+	Title    string   `json:"title"`
+	Text     string   `json:"text"`
+	Image    []string `json:"image"`
+	Receiver []string `json:"receiver"`
+	At       []string `json:"at"`
+	With     string   `json:"with"`
+	Height   int64    `json:"height"`
+	TrxHash  string   `json:"trx_hash"`
+	TrxTime  int64    `json:"timestamp"`
+	Sender   string   `json:"sender"`
+	To       string   `json:"to"`
 }
 
 type Profile struct {

@@ -46,4 +46,5 @@ services:
       - postgres
     environment:
       POSTGRES_DB_URL: "postgres://admin:secure@postgres:5432/inscription?sslmode=disable"
+      GET_SWIFT_URL: "http://103.1.65.125:8010/"
 
