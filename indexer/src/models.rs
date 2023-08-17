@@ -9,27 +9,27 @@ pub struct SwiftResp {
     pub chain: String,
     pub height: i64,
     pub trx_hash: String,
-    pub timestamp: SystemTime,
+    pub timestamp: u64,
     pub sender: String,
     pub to: String,
     pub r#type: String,
-    pub title: String,
-    pub text: String,
-    pub image: Vec<String>,
-    pub receiver: Vec<String>,
-    pub at: Vec<String>,
-    pub with: String,
+    pub title: Option<String>,
+    pub text: Option<String>,
+    pub with: Option<String>,
+    pub at: Option<Vec<String>>,
+    pub image: Option<Vec<String>>,
+    pub receiver: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Default)]
 pub struct InscriptionProtocolV1 {
     pub r#type: String,
-    pub title: String,
-    pub text: String,
-    pub image: Vec<String>,
-    pub receiver: Vec<String>,
-    pub at: Vec<String>,
-    pub with: String,
+    pub title: Option<String>,
+    pub text: Option<String>,
+    pub with: Option<String>,
+    pub at: Option<Vec<String>>,
+    pub image: Option<Vec<String>>,
+    pub receiver: Option<Vec<String>>,
 }
 
 #[derive(Queryable, Selectable, Deserialize, Serialize)]

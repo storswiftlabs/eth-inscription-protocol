@@ -1,0 +1,13 @@
+TraceID: 334b3aaf839678c8e3804178c265cf96
+{
+  "@module": "map_eth_swifts",
+  "@block": 9526182,
+  "@type": "swift.type.v1.Swifts",
+  "@data": {
+    "swifts": [
+      "CgYI0NPxpgYQprfFBBpCMHhmNjAzN2I2YTdiYTRlNmIzYWJhYTY1M2JlYmUzNTkxYzhiNWZhY2E3ZDNhY2JmZWNhMTdmYjg2OTc1MjIwNzg1IghldGhlcmV1bSoqMHhkZTJjODk1OWJiY2UyNmRkMjdlOTU2YjdiNWVhOWJiMmQ2ZWViNTkxMioweGRlMmM4OTU5YmJjZTI2ZGQyN2U5NTZiN2I1ZWE5YmIyZDZlZWI1OTE6AmltQgdnZW5lcmFsSgNhc2RSFDB4OWQ0ODQxYWQ3NDk4Nzg0NTYyWgBiAGoA"
+    ]
+  }
+}
+
+all done

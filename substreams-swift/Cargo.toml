@@ -1,9 +1,9 @@
 [package]
-name = "substreams-nexus-dao"
+name = "substreams-swift"
 version = "0.1.0"
-description = "Substream for NexusDAO"
+description = "Substream for Swift"
 edition = "2021"
-repository = "https://github.com/NexusDAO/substreams-nexus-dao"
+repository = "https://github.com/storswiftlabs/eth-inscription-protocol.git"
 license = "Apache 2.0"
 
 [lib]
@@ -20,6 +20,8 @@ substreams = "0.5"
 serde_json = "1.0.104"
 serde = { version = "1.0.183", features = ["derive"] }
 hex = "0.4.3"
+prost-types = "0.11.9"
+base64 = "0.21.2"
 
 # Required so that ethabi > ethereum-types build correctly under wasm32-unknown-unknown
 [target.wasm32-unknown-unknown.dependencies]

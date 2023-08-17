@@ -30,6 +30,7 @@ lazy_static = "1.4.0"
 tower-http = { version = "0.3.5", features = ["cors"] }
 regex = "1.8.4"
 ureq = "2.7.1"
+base64 = "0.21.2"
 
 [build-dependencies]
 tonic-build = { version = "0.7.2", features = ["prost"] }

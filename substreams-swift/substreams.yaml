@@ -1,14 +1,15 @@
 specVersion: v0.1.0
 package:
-  name: "substreams_starknet"
+  name: "substreams_swift"
   version: v0.1.0
 
 protobuf:
   files:
-    - starknet.proto
-    - inscription.proto
+    - swift.proto
+    - type.proto
   importPaths:
     - ./proto
+    - ./proto/sf/ethereum/type/v2
 
 binaries:
   default:
@@ -16,10 +17,10 @@ binaries:
     file: ./target/wasm32-unknown-unknown/release/substreams.wasm
 
 modules:
-  - name: map_transactions
+  - name: map_eth_swifts
     kind: map
     initialBlock: 0
     inputs:
-      - source: zklend.starknet.type.v1
+      - source: sf.ethereum.type.v2.Block
     output:
-      type: proto:inscription.type.v1.Transactions
+      type: proto:swift.type.v1.Swifts

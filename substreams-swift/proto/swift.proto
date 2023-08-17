@@ -5,7 +5,7 @@ package swift.type.v1;
 import "google/protobuf/timestamp.proto";
 
 message Swifts {
-    repeated Swift swifts = 1;
+    repeated string swifts = 1;
 }
 
 message Swift {

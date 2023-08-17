@@ -42,7 +42,7 @@ pub fn batch_insert_swifts(
         .map(|tx| {
             let ts = tx.timestamp.as_ref().unwrap();
             Swift {
-                chain: tx.chain.to_string(),
+                chain: "goerli".to_string(),
                 timestamp: SystemTime::from(
                     UNIX_EPOCH.add(Duration::new(ts.seconds as u64, ts.nanos as u32)),
                 ),
@@ -52,12 +52,21 @@ pub fn batch_insert_swifts(
                 _to: tx.to.to_string(),
                 data: serde_json::to_string(&InscriptionProtocolV1 {
                     r#type: tx.r#type.to_string(),
-                    title: tx.title.to_string(),
-                    text: tx.text.to_string(),
-                    image: tx.image.clone(),
-                    receiver: tx.receiver.clone(),
-                    at: tx.at.clone(),
-                    with: tx.with.to_string(),
+                    title: tx.title.clone(),
+                    text: tx.text.clone(),
+                    image: match tx.image.len() {
+                        0 => None,
+                        _ => Some(tx.image.clone()),
+                    },
+                    receiver: match tx.receiver.len() {
+                        0 => None,
+                        _ => Some(tx.receiver.clone()),
+                    },
+                    at: match tx.at.len() {
+                        0 => None,
+                        _ => Some(tx.at.clone()),
+                    },
+                    with: tx.with.clone(),
                 })
                 .unwrap_or_default(),
             }
@@ -91,10 +100,7 @@ pub fn get_swifts_by_height_range(
 ) -> Result<Vec<Swift>, Error> {
     use schema::swift::dsl;
 
-    let grouped = dsl::height.ge(start_height);
-    if end_height > 0 {
-        grouped.and(dsl::height.le(end_height));
-    }
+    let grouped = dsl::height.ge(start_height).and(dsl::height.le(end_height));
 
     let txs = FilterDsl::filter(dsl::swift, grouped)
         .select(Swift::as_select())

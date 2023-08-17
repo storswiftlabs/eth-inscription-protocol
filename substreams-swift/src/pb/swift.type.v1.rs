@@ -1,8 +1,11 @@
+// @generated
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swifts {
-    #[prost(message, repeated, tag="1")]
-    pub swifts: ::prost::alloc::vec::Vec<Swift>,
+    #[prost(string, repeated, tag="1")]
+    pub swifts: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Swift {
     #[prost(message, optional, tag="1")]
@@ -32,3 +35,4 @@ pub struct Swift {
     #[prost(string, repeated, tag="13")]
     pub at: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
+// @@protoc_insertion_point(module)

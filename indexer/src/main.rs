@@ -5,13 +5,13 @@ use anyhow::{format_err, Context, Error};
 use clap::Parser;
 use cli::{Cli, Commands};
 use database::{batch_insert_swifts, POOL};
-use futures03::StreamExt;
 use http::Method;
+use pb::{
+    sf::substreams::{rpc::v2::BlockScopedData, v1::Package},
+    Swift, Swifts,
+};
 use prost::Message;
-use pb::{Swifts, sf::substreams::{v1::Package, rpc::v2::BlockScopedData}};
-use std::{env, net::SocketAddr, str::FromStr, sync::Arc, process::exit};
-use substreams::SubstreamsEndpoint;
-use substreams_stream::{BlockResponse, SubstreamsStream};
+use std::{net::SocketAddr, process::Command, str::FromStr};
 use tower_http::cors::{Any, CorsLayer};
 
 mod cli;
@@ -82,59 +82,91 @@ async fn sync(
     start_block: &i64,
     end_block: &u64,
 ) {
-    let token_env = env::var("SUBSTREAMS_API_TOKEN").unwrap_or("".to_string());
-    let mut token: Option<String> = None;
-    if token_env.len() > 0 {
-        token = Some(token_env);
-    }
-
-    let package = read_package(&package_file).await.unwrap();
-    let endpoint = Arc::new(SubstreamsEndpoint::new(&endpoint_url, token).await.unwrap());
-
-    // FIXME: Handling of the cursor is missing here. It should be loaded from
-    // the database and the SubstreamStream will correctly resume from the right
-    // block.
-    let cursor: Option<String> = None;
-
-    let mut stream = SubstreamsStream::new(
-        endpoint.clone(),
-        cursor,
-        package.modules.clone(),
-        module_name.to_string(),
-        *start_block,
-        *end_block,
-    );
-
     let mut conn = POOL.get().unwrap();
 
+    let command = std::env::var("COMMAND").unwrap();
+    let mut start_height = std::env::var("START_HEIGHT")
+        .unwrap()
+        .parse::<u64>()
+        .unwrap();
+
     loop {
-        match stream.next().await {
-            None => {
-                println!("Stream consumed");
-                break;
-            }
-            Some(Ok(BlockResponse::New(data))) => {
-                println!("Consuming module output (cursor {})", data.cursor);
-                match extract_swifts(data, &module_name).unwrap() {
-                    Some(swifts) => {
-                        batch_insert_swifts(&mut conn, swifts)
-                            .context("insertion in db failed")
-                            .unwrap();
-                    }
-                    None => {}
+        println!("Current height {}", start_height);
+        let append = &format!(" {command} {start_height}");
+        let out = Command::new("bash").arg("-c").arg(append).output().unwrap();
+
+        let swifts: Vec<Swift> = String::from_utf8_lossy(&out.stdout)
+            .lines()
+            .filter_map(|mut line| {
+                line = line.trim().trim_matches('"');
+                if !line.starts_with("swift-base64-encode ") {
+                    return None;
                 }
-            }
-            Some(Ok(BlockResponse::Undo(undo_signal))) => {
-                println!("BlockUndoSignal");
-            }
-            Some(Err(err)) => {
-                println!();
-                println!("Stream terminated with error");
-                println!("{:?}", err);
-                exit(1);
-            }
-        }
+                line = line.trim_start_matches("swift-base64-encode ");
+                let bytes = base64::decode(line).unwrap();
+                let swift: Swift = Message::decode(bytes.as_slice()).unwrap();
+                println!("Capturing Inscription Data: {:?}", swift);
+                Some(swift)
+            })
+            .collect();
+
+        batch_insert_swifts(&mut conn, Swifts { swifts: swifts });
+        start_height += 1;
     }
+
+    // let token_env = env::var("SUBSTREAMS_API_TOKEN").unwrap_or("".to_string());
+    // let mut token: Option<String> = None;
+    // if token_env.len() > 0 {
+    //     token = Some(token_env);
+    // }
+
+    // let package = read_package(&package_file).await.unwrap();
+    // let endpoint = Arc::new(SubstreamsEndpoint::new(&endpoint_url, token).await.unwrap());
+
+    // // FIXME: Handling of the cursor is missing here. It should be loaded from
+    // // the database and the SubstreamStream will correctly resume from the right
+    // // block.
+    // let cursor: Option<String> = None;
+
+    // let mut stream = SubstreamsStream::new(
+    //     endpoint.clone(),
+    //     cursor,
+    //     package.modules.clone(),
+    //     module_name.to_string(),
+    //     *start_block,
+    //     *end_block,
+    // );
+
+    // let mut conn = POOL.get().unwrap();
+
+    // loop {
+    //     match stream.next().await {
+    //         None => {
+    //             println!("Stream consumed");
+    //             break;
+    //         }
+    //         Some(Ok(BlockResponse::New(data))) => {
+    //             println!("Consuming module output (cursor {})", data.cursor);
+    //             match extract_swifts(data, &module_name).unwrap() {
+    //                 Some(swifts) => {
+    //                     batch_insert_swifts(&mut conn, swifts)
+    //                         .context("insertion in db failed")
+    //                         .unwrap();
+    //                 }
+    //                 None => {}
+    //             }
+    //         }
+    //         Some(Ok(BlockResponse::Undo(undo_signal))) => {
+    //             println!("BlockUndoSignal");
+    //         }
+    //         Some(Err(err)) => {
+    //             println!();
+    //             println!("Stream terminated with error");
+    //             println!("{:?}", err);
+    //             exit(1);
+    //         }
+    //     }
+    // }
 }
 
 async fn serve(host: &String, port: &u16) {
@@ -165,7 +197,6 @@ fn extract_swifts(data: BlockScopedData, module_name: &String) -> Result<Option<
     }
     let swifts: Swifts = Message::decode(output.map_output.as_ref().unwrap().value.as_slice())?;
     Ok(Some(swifts))
-
 }
 
 async fn read_package(input: &str) -> Result<Package, anyhow::Error> {

@@ -1,9 +1,9 @@
 ENDPOINT_URL ?= https://goerli.eth.streamingfast.io:443
-START_BLOCK ?= 0
+START_BLOCK ?= 9000000
 END_BLOCK ?= 0
 MODULE_NAME ?= map_eth_swifts
 PACKAGE_FILE ?= ./substreams-swift-v0.1.0.spkg
-HOST ?= 127.0.0.1
+HOST ?= 0.0.0.0
 PORT ?= 8010
 
 .PHONY: build
