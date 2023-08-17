@@ -32,7 +32,7 @@ function Bookmark() {
     )
   }
 
-  return <>
+  return <div>
     <div className=' p-[1rem] cursor-pointer'>
       <Row align='center' justify='space-between' >
         <div className='cursor-pointer'>
@@ -46,7 +46,7 @@ function Bookmark() {
           contentRightStyling={false}
           placeholder="Search Lists..."
           contentLeft={
-            <>{svg}</>
+            <div>{svg}</div>
           }
         />
         <span className='flex gap-[1rem] cursor-pointer'>
@@ -82,7 +82,7 @@ function Bookmark() {
       <List children={<ListFocusIcon />} head='Your Lists' data={[1, 2, 3]} />
       <div className='p-[1rem]'>You haven't created or followed any Lists. When you do, they'll show up here.</div>
     </div>
-  </>
+  </div>
 }
 
 export default Bookmark

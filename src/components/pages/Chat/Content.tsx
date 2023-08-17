@@ -35,18 +35,18 @@ export function ChatContent({ type }: ContentData) {
 
   const getData = useCallback(async () => {
     if (window.location.search === '?type=group')
-      setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages])
+      setMessageData([...messageData, ...(await getMessageGroup(type, limit, offset)).messages.reverse()])
 
     if (window.location.search === '?type=message')
-      setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages])
+      setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages.reverse()])
   }, [])
 
   const getNewData = async () => {
     if (window.location.search === '?type=group')
-      setNewMessageData((await getMessageGroup(type, limit, offset)).messages)
+      setNewMessageData((await getMessageGroup(type, limit, offset)).messages.reverse())
 
     if (window.location.search === '?type=message')
-      setNewMessageData((await getMessagePerson(address!, type, limit, offset)).messages)
+      setNewMessageData((await getMessagePerson(address!, type, limit, offset)).messages.reverse())
   }
   useEffect(() => {
     if (newMessageData.length > 0) {
@@ -65,13 +65,13 @@ export function ChatContent({ type }: ContentData) {
     if (messageRef.current?.scrollTop === 0) {
       setLoadingMessage(true)
       if (window.location.search === '?type=group') {
-        setMessageData([...(await getMessageGroup(type, limit, messageData.length)).messages, ...messageData])
+        setMessageData([...(await getMessageGroup(type, limit, messageData.length)).messages.reverse(), ...messageData])
         setLoadingMessage(false)
         setScrollToBottomOnFirstLoad(false)
       }
 
       if (window.location.search === '?type=message') {
-        setMessageData([...(await getMessagePerson(address!, type, limit, messageData.length)).messages, ...messageData])
+        setMessageData([...(await getMessagePerson(address!, type, limit, messageData.length)).messages.reverse(), ...messageData])
         setLoadingMessage(false)
         setScrollToBottomOnFirstLoad(false)
       }

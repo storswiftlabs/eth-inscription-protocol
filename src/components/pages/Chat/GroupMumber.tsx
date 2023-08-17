@@ -22,7 +22,7 @@ export default function GroupMember({ title }: { title: string }) {
         <div className=" top-16 max-w-sm px-4">
             <Popover className="relative">
                 {({ open }) => (
-                    <>
+                    <div>
                         <Popover.Button
                             className={`
                 ${open ? '' : 'text-opacity-90'}
@@ -87,7 +87,7 @@ export default function GroupMember({ title }: { title: string }) {
                                 </div>
                             </Popover.Panel>
                         </Transition>
-                    </>
+                    </div>
                 )}
             </Popover>
         </div >

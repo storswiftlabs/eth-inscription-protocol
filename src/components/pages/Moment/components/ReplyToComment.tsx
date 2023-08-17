@@ -53,7 +53,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
 
   // const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
   return (
-    <>
+    <div>
       <div>
         <Row wrap='wrap'>
           <User src={aimsAvatar} name={name} zoomed className='commentaries-div' css={{ '.nextui-c-eGlVTL': { color: theme === 'dark' ? '#fff' : '#000' }, 'padding': '0' }}>
@@ -105,7 +105,7 @@ function ReplyToComment({ children, aimsAvatar, name, evaluation, releaseTime, a
           <DialogueInput isSuccess={false} closeHandler={closeHandlerFunction} rowCss={{ padding: '0' }} isSolid={true} />
         </Modal.Body>
       </Modal> */}
-    </>
+    </div>
   )
 }
 

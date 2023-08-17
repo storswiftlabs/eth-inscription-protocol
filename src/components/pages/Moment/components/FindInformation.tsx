@@ -234,15 +234,15 @@ function FindInformation({ type }: Props) {
         <DialogueInput bottonText='Reply' isSuccess={false} closeHandler={closeHandler} />
         <Spacer y={1} />
         {
-          tweetDetails?.comments?.length > 0 ? <>
+          tweetDetails?.comments?.length > 0 ? <div>
             {
               pag?.data?.map((i, j) => {
                 const { comment, profile } = i
                 return (
-                  <>
+                  <div>
                     <ReplyToComment
                       at={tweetDetails?.tweet?.at}
-                      // children={i === 1 || i === 3 ? <ReplyToComment aimsAvatar={b} avatar={c} name={'djksh dwjk'} evaluation={'hahahha'} releaseTime={'2023-09-50 34:55'} agree={11} noAgree={33} /> : <></>}
+                      // children={i === 1 || i === 3 ? <ReplyToComment aimsAvatar={b} avatar={c} name={'djksh dwjk'} evaluation={'hahahha'} releaseTime={'2023-09-50 34:55'} agree={11} noAgree={33} /> : <div></div>}
                       avatar={imageFormat(comment?.image[0])}
                       // agree={0}
                       // noAgree={0}
@@ -250,14 +250,14 @@ function FindInformation({ type }: Props) {
                       aimsAvatar={''}
                       name={profile?.text}
                       evaluation={comment?.text} />
-                  </>
+                  </div>
                 )
               })
             }
             <div className=' mb-4'>
               <Pagination onChange={(page) => pagFunction(page)} color="secondary" size={'xs'} total={pag.totalPages} />
             </div>
-          </> : <div className='w-full  flex justify-center items-center flex-col'>
+          </div> : <div className='w-full  flex justify-center items-center flex-col'>
             <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
             No message
           </div>

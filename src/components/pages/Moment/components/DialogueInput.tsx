@@ -135,7 +135,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
 
 
   return (
-    <>
+    <div>
       <EmojiDialog isOpen={isOpen2} closeModal={closeModal2} selectedOK={x => selectedOK2(x)} type='at' />
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
       <EmojiDialog dialogCss={{ position: 'absolute', zIndex: '19999' }} isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
@@ -172,7 +172,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
         </Row>
       </Row>
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
-    </>
+    </div>
   )
 }
 

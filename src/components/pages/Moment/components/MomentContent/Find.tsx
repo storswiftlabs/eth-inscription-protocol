@@ -193,8 +193,8 @@ function Find({ isUpper }: Props) {
         }} type="gradient" size="lg" />
       </div>
     } else {
-      return <>
-      </>
+      return <div>
+      </div>
     }
   }
 

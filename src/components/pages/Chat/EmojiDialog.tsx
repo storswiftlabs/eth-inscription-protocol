@@ -19,7 +19,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
   const render = () => {
     switch (type) {
       case 'addGroup':
-        return <> < Dialog.Title
+        return <div> < Dialog.Title
                     as="h2"
                     className="text-lg font-medium leading-6 text-gray-900"
                 >
@@ -29,9 +29,9 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                     <div>Name: <Input onChange={e => setSelectedGroup({ ...selectedGroup, title: e.target.value })}></Input></div>
                     <br />
                     <div>Receiver: <Input onChange={e => setSelectedGroup({ ...selectedGroup, receiver: e.target.value })}></Input></div>
-                </>
+                </div>
       case 'inviteGroup':
-        return <> < Dialog.Title
+        return <div> < Dialog.Title
                     as="h2"
                     className="text-lg font-medium leading-6 text-gray-900"
                 >
@@ -39,9 +39,9 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                 </Dialog.Title >
                     <br />
                     Invite: <Input onChange={e => setSelected(e.target.value)}></Input>
-                </>
+                </div>
       case 'at':
-        return <> < Dialog.Title
+        return <div> < Dialog.Title
                     as="h2"
                     className="text-lg font-medium leading-6 text-gray-900"
                 >
@@ -49,9 +49,9 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                 </Dialog.Title >
                     <br />
                     @&nbsp;<Input onChange={e => setSelected(e.target.value)}></Input>
-                </>
+                </div>
       case 'emoji':
-        return <> < Dialog.Title
+        return <div> < Dialog.Title
                     as="h2"
                     className="text-lg font-medium leading-6 text-gray-900"
                 >
@@ -62,7 +62,7 @@ export function EmojiDialog({ isOpen, closeModal, selectedOK, dialogCss, type }:
                             {'😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 🥰 😗 😙 😚 🙂 🤗 🤩 🤔 🤨 😐 😑 😶 🙄 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 🥵 🥶 😳 🤪 😵 😡 😠 🤬 😷 🤒 🤕 🤢 🤮 🤧 😇 🤠 🤡 🥳 🥴 🥺 🤥 🤫 🤭 🧐 🤓 👩‍👧‍👦 👩‍👦‍👦 👩‍👧‍👧 👨‍👦 👨‍👧 👨‍👧‍👦 👨‍👦‍👦 👨‍👧‍👧 🤲 👐 🙌 👏 🤝 👍 👎 👊 ✊ 🤛 🤜 🤞 ✌️ 🤟 🤘 👌 👈 👉 👆 👇 ☝️ ✋ 🤚 🖐 🖖 👋 🤙 💪 🦵 🦶 🖕 ✍️ 🤲🏻 👐🏻 🙌🏻 👏🏻 🙏🏻 👍🏻 👎🏻 👊🏻 ✊🏻 🤛🏻 🤜🏻 🤞🏻 ✌🏻 🤟🏻 🤘🏻 👌🏻 👈🏻 👉🏻 👆🏻 👇🏻 ☝🏻 ✋🏻 🤚🏻 🖐🏻 🖖🏻 👋🏻 🤙🏻 💪🏻 🖕🏻 ✍🏻 🤳🏻 💅🏻 👂🏻 🤲🏼 👐🏼 🙌🏼 👏🏼 🙏🏼 👍🏼 👎🏼 👊🏼 ✊🏼 🤛🏼 🤜🏼 🤞🏼 ✌🏼 🤟🏼 🤘🏼 👌🏼 👈🏼 👉🏼 👆🏼 👇🏼 ☝🏼 ✋🏼 🤚🏼 🖐🏼 🖖🏼 👋🏼 🤙🏼 💪🏼 🖕🏼 ✍🏼 🤳🏼'.split(' ').map(t => <span onClick={() => setSelected(t)} className={`cursor-pointer flex justify-center rounded-md hover:bg-slate-200 ${selected === t ? 'bg-slate-200' : ''}`} > {t}</span>)}
                         </div>
                     </div>
-                </>
+                </div>
     }
   }
   return <Transition appear show={isOpen} as={Fragment}>

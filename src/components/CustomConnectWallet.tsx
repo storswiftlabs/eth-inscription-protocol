@@ -48,7 +48,7 @@ export function CustomConnectButton() {
     }
   }
   return (
-    <>
+    <div>
       <ConnectButton.Custom>
         {({
           account,
@@ -183,6 +183,6 @@ export function CustomConnectButton() {
         }}
       </ConnectButton.Custom>
 
-    </>
+    </div>
   )
 }
