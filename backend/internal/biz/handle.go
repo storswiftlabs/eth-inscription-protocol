@@ -3,6 +3,7 @@ package biz
 import (
 	"backend/module"
 	"context"
+	"strings"
 	"time"
 )
 
@@ -64,7 +65,7 @@ func (uc *InscriptionUsecase) HandleSwift(ctx context.Context, swifts []module.S
 
 func (uc *InscriptionUsecase) SwiftCreateProfileHandle(ctx context.Context, swift module.Swift) error {
 	profile := &module.Profile{
-		Address: swift.Sender,
+		Address: strings.ToUpper(swift.Sender),
 		Image:   swift.Image[0],
 		Text:    swift.Text,
 		Height:  swift.Height,
@@ -76,7 +77,7 @@ func (uc *InscriptionUsecase) SwiftCreateProfileHandle(ctx context.Context, swif
 
 func (uc *InscriptionUsecase) SwiftUpdateProfileHandle(ctx context.Context, swift module.Swift) error {
 	profile := &module.Profile{
-		Address: swift.Sender,
+		Address: strings.ToUpper(swift.Sender),
 		Image:   swift.Image[0],
 		Text:    swift.Text,
 		Height:  swift.Height,
@@ -97,7 +98,7 @@ func (uc *InscriptionUsecase) SwiftGroupMessageHandle(ctx context.Context, swift
 	groupMessage := &module.GroupMessage{
 		Title:    swift.Title,
 		Receiver: swift.Receiver,
-		Sender:   swift.Sender,
+		Sender:   strings.ToUpper(swift.Sender),
 		Text:     swift.Text,
 		Image:    swift.Image,
 		At:       swift.At,
@@ -110,20 +111,20 @@ func (uc *InscriptionUsecase) SwiftGroupMessageHandle(ctx context.Context, swift
 }
 func (uc *InscriptionUsecase) SwiftMessageHandle(ctx context.Context, swift module.Swift) error {
 	window1 := &module.MessageWindow{
-		Owner: swift.Sender,
-		Link:  swift.To,
+		Owner: strings.ToUpper(swift.Sender),
+		Link:  strings.ToUpper(swift.To),
 	}
 
 	window2 := &module.MessageWindow{
-		Owner: swift.To,
-		Link:  swift.Sender,
+		Owner: strings.ToUpper(swift.To),
+		Link:  strings.ToUpper(swift.Sender),
 	}
 	_ = uc.repo.InsertMessageWindow(ctx, window1)
 	_ = uc.repo.InsertMessageWindow(ctx, window2)
 
 	message := &module.Message{
-		Receiver: swift.To,
-		Sender:   swift.Sender,
+		Receiver: strings.ToUpper(swift.To),
+		Sender:   strings.ToUpper(swift.Sender),
 		Text:     swift.Text,
 		Image:    swift.Image,
 		At:       swift.At,
@@ -138,7 +139,7 @@ func (uc *InscriptionUsecase) SwiftMessageHandle(ctx context.Context, swift modu
 func (uc *InscriptionUsecase) SwiftCreateGroupHandle(ctx context.Context, swift module.Swift) error {
 	for _, v := range swift.Receiver{
 		group := &module.Group{
-			Address: v,
+			Address: strings.ToUpper(v),
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
@@ -155,7 +156,7 @@ func (uc *InscriptionUsecase) SwiftCreateGroupHandle(ctx context.Context, swift 
 func (uc *InscriptionUsecase) SwiftUpdateGroupAddHandle(ctx context.Context, swift module.Swift) error {
 	for _, v := range swift.Receiver{
 		group := &module.Group{
-			Address: v,
+			Address: strings.ToUpper(v),
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
@@ -172,7 +173,7 @@ func (uc *InscriptionUsecase) SwiftUpdateGroupAddHandle(ctx context.Context, swi
 func (uc *InscriptionUsecase) SwiftUpdateGroupDelHandle(ctx context.Context, swift module.Swift) error {
 	for _, v := range swift.Receiver{
 		group := &module.Group{
-			Address: v,
+			Address: strings.ToUpper(v),
 			Title:   swift.Title,
 		}
 		err := uc.repo.DeleteGroupByAddressAndTitle(ctx, group)
@@ -186,7 +187,7 @@ func (uc *InscriptionUsecase) SwiftUpdateGroupDelHandle(ctx context.Context, swi
 func (uc *InscriptionUsecase) SwiftTweetHandle(ctx context.Context, swift module.Swift) error {
 	tweet := &module.Tweet{
 		TrxHash: swift.TrxHash,
-		Sender:  swift.Sender,
+		Sender:  strings.ToUpper(swift.Sender),
 		Title:   swift.Title,
 		Text:    swift.Text,
 		Image:   swift.Image,
@@ -201,7 +202,7 @@ func (uc *InscriptionUsecase) SwiftTweetHandle(ctx context.Context, swift module
 func (uc *InscriptionUsecase) SwiftTweetCommentHandle(ctx context.Context, swift module.Swift) error {
 	comment := &module.Comment{
 		With:    swift.With,
-		Sender:  swift.Sender,
+		Sender:  strings.ToUpper(swift.Sender),
 		Text:    swift.Text,
 		Image:   swift.Image,
 		At:      swift.At,
@@ -215,7 +216,7 @@ func (uc *InscriptionUsecase) SwiftTweetCommentHandle(ctx context.Context, swift
 func (uc *InscriptionUsecase) SwiftTweetLikeHandle(ctx context.Context, swift module.Swift) error {
 	like := &module.Like{
 		With:    swift.With,
-		Sender:  swift.Sender,
+		Sender:  strings.ToUpper(swift.Sender),
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
 		TrxTime: time.Unix(swift.TrxTime, 0),
@@ -226,23 +227,23 @@ func (uc *InscriptionUsecase) SwiftTweetLikeHandle(ctx context.Context, swift mo
 func (uc *InscriptionUsecase) SwiftTweetUnLikeHandle(ctx context.Context, swift module.Swift) error {
 	like := &module.Like{
 		With:    swift.With,
-		Sender:  swift.Sender,
+		Sender:  strings.ToUpper(swift.Sender),
 	}
 	return uc.repo.DeleteLike(ctx, like)
 }
 
 func (uc *InscriptionUsecase) SwiftTweetFollowHandle(ctx context.Context, swift module.Swift) error {
 	follow := &module.Follow{
-		Address:  swift.Sender,
-		Follower: swift.With,
+		Address:  strings.ToUpper(swift.Sender),
+		Follower: strings.ToUpper(swift.With),
 	}
 	return uc.repo.InsertFollow(ctx, follow)
 }
 
 func (uc *InscriptionUsecase) SwiftUnFollowHandle(ctx context.Context, swift module.Swift) error {
 	follow := &module.Follow{
-		Address:  swift.Sender,
-		Follower: swift.With,
+		Address:  strings.ToUpper(swift.Sender),
+		Follower: strings.ToUpper(swift.With),
 	}
 	return uc.repo.DeleteFollow(ctx, follow)
 }

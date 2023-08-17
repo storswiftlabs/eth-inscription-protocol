@@ -105,7 +105,7 @@ func (uc *InscriptionUsecase) SyncZksync(ctx context.Context) {
 				}
 
 				uc.log.Infof("zkSync current sync height: %d", currentHeight)
-				time.Sleep(time.Second * 5)
+				time.Sleep(time.Second * 12)
 				return nil
 			})
 		if err != nil {
@@ -142,7 +142,7 @@ func (uc *InscriptionUsecase) SyncGoerli(ctx context.Context) {
 				}
 
 				uc.log.Infof("goerli current sync height: %d", currentHeight)
-				time.Sleep(time.Second * 5)
+				time.Sleep(time.Second * 12)
 				return nil
 			})
 		if err != nil {
