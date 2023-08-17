@@ -145,7 +145,7 @@ func (r *inscriptionRepo) FindGroupReceiverByTitle(ctx context.Context, title st
 
 func (r *inscriptionRepo) FindMessageByAddress(ctx context.Context, req *module.GetMTReq) ([]*module.Message, error) {
 	message := make([]*module.Message, 0)
-	err := r.data.postgre.Where("receiver = ? AND sender = ?", req.Owner, req.Address).Or("sender = ? AND receiver = ?", req.Owner, req.Address).Limit(int(req.Limit), int(req.Offset)).Find(&message)
+	err := r.data.postgre.Desc("id").Where("receiver = ? AND sender = ?", req.Owner, req.Address).Or("sender = ? AND receiver = ?", req.Owner, req.Address).Limit(int(req.Limit), int(req.Offset)).Find(&message)
 	return message, err
 }
 
@@ -163,7 +163,7 @@ func (r *inscriptionRepo) GetGroupMessageByTrxHash(ctx context.Context, hash str
 
 func (r *inscriptionRepo) FindGroupMessageByTitle(ctx context.Context, req *module.GetMTReq) ([]*module.GroupMessage, error) {
 	groupMessage := make([]*module.GroupMessage, 0)
-	err := r.data.postgre.Where("title = ?", req.Owner).Limit(int(req.Limit), int(req.Offset)).Find(&groupMessage)
+	err := r.data.postgre.Desc("id").Where("title = ?", req.Owner).Limit(int(req.Limit), int(req.Offset)).Find(&groupMessage)
 	return groupMessage, err
 }
 
