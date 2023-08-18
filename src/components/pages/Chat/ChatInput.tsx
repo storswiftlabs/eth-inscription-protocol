@@ -87,7 +87,6 @@ export function ChatInput({ type }: Props) {
       setAtMember([])
       setPictureArrCid([])
       clearReplyMessage()
-      // window.location.reload()
     }
     isSuccess && clearData()
   }, [isSuccess])
@@ -154,7 +153,7 @@ export function ChatInput({ type }: Props) {
         </div>}
       <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target?.files && e.target?.files[0]
-        setPictureArr([...pictureArr, file])
+        file && setPictureArr([...pictureArr, file])
         const reader = new FileReader()
         reader.onload = function () {
           const dataURL = reader.result as string

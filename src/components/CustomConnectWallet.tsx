@@ -117,7 +117,6 @@ export function CustomConnectButton() {
                     <Modal
                       closeButton
                       blur
-                      preventClose
                       aria-labelledby="modal-title"
                       open={visible}
                       onClose={() => setVisible(false)
@@ -171,7 +170,7 @@ export function CustomConnectButton() {
                           </Dropdown.Menu>
                         </Dropdown>
                         <Button auto flat color="success" onPress={closeHandler}>
-                          OK!
+                          Change!
                         </Button>
                       </Modal.Footer>
                     </Modal>

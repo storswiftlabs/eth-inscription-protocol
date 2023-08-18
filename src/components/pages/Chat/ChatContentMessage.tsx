@@ -11,6 +11,7 @@ import type { ChatContentMessageType, ProfileResponse } from '@/type/Chat'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { getMessageWith, getProfile } from '@/utils/requestApi'
 import { imageFormat } from '@/utils/imageFormat'
+import { AbbreviatedText } from '@/utils/AbbreviatedText'
 
 export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -48,21 +49,32 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
       })()
     }
   }, [])
+  function generateNumberColor(number: number | string) {
+    const colorClasses = [
+      'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500',
+      'bg-purple-500', 'bg-pink-500', 'bg-indigo-500', 'bg-teal-500',
+      'bg-orange-500', 'bg-gray-500',
+    ]
+    if (typeof number === 'string')
+      number = 0
+
+    return colorClasses[number]
+  }
 
   return <div className={`min-h-[100px] w-full flex ${data.sender !== address ? 'justify-start' : 'justify-end'}`} >
     <div className={`flex m-4  ${data.sender !== address ? '' : 'flex-row-reverse'}`}>
-      {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== 'ipfs://test' ? <img src={imageFormat(profileData?.image[0])} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={'relative w-10 m-2  h-10 rounded-xl bg-neutral-200 dark:bg-neutral-500'} />}
+      {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== '' && profileData?.image[0] !== 'ipfs://test' ? <img src={imageFormat(profileData?.image[0])} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={`relative w-10 m-2  h-10 rounded-xl ${generateNumberColor(Number(data?.sender.slice(-1)))}  dark:${generateNumberColor(Number(profileData?.sender.slice(-1)))}`} />}
       <div className={`flex flex-col ${data.sender !== address ? '' : 'items-end'} group relative`}>
-        {profileData?.text}
+        {profileData?.text !== '' ? profileData?.text : <div className='text-gray-500/70 dark:text-gray-500'>{AbbreviatedText(data.sender)}</div>}
         <div className='max-w-[800px] text-sm'>
           <div className={`rounded-xl p-2   ${data.sender !== address ? 'bg-neutral-200 dark:bg-neutral-700' : 'bg-green-300 dark:bg-[#48BD67]'}`}>
             <div>
               {data.text}
             </div>
-            {data?.image?.length >= 1 && <br />}
+            {data?.image?.length >= 1 && data?.image[0] !== '' && <br />}
             <div className='flex gap-2 flex-wrap'>
               {data?.image?.map((t, index) => {
-                return <img src={imageFormat(t)} alt='' className='rounded-xl' width={150} height={150}></img>
+                return t !== '' && <img src={imageFormat(t)} alt='' className='rounded-xl' width={150} height={150}></img>
               })}
             </div>
           </div>
