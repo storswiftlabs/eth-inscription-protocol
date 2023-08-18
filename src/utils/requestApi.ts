@@ -22,5 +22,5 @@ export async function getMessageWith(txhash: string, type: string) {
   return await fetch(`${ApiUrl}/message/${txhash}?type=${type}`).then(e => e.json())
 }
 export async function getProfile(owner: string) {
-  return await fetch(`${ApiUrl}/profile?address=${owner}`).then(e => e.json())
+  return await fetch(`${ApiUrl}/profile?address=${owner.toUpperCase()}`).then(e => e.json())
 }

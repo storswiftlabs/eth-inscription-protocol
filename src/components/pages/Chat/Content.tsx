@@ -18,6 +18,7 @@ export function ChatContent({ type }: ContentData) {
   const [messageData, setMessageData] = useState<ChatContentMessageType[]>([])
   const [newMessageData, setNewMessageData] = useState<ChatContentMessageType[]>([])
   const [loadingMessage, setLoadingMessage] = useState(false)
+  const [scrollBottom, setScrollBottom] = useState(false)
   const [scrollToBottomOnFirstLoad, setScrollToBottomOnFirstLoad] = useState(true)
 
   const { address } = useAccount()
@@ -39,6 +40,12 @@ export function ChatContent({ type }: ContentData) {
 
     if (window.location.search === '?type=message')
       setMessageData([...messageData, ...(await getMessagePerson(address!, type, limit, offset)).messages.reverse()])
+    messageRef.current?.addEventListener('scroll', () => {
+      if (messageRef.current && messageRef.current?.clientHeight + messageRef.current?.scrollTop + 50 >= messageRef.current?.scrollHeight)
+        setScrollBottom(false)
+      else
+        setScrollBottom(true)
+    })
   }, [])
 
   const getNewData = async () => {
@@ -89,7 +96,7 @@ export function ChatContent({ type }: ContentData) {
   return (
     <div className='w-full h-screen flex flex-col'>
       <ChatHeader title={type} />
-      <div ref={messageRef as React.MutableRefObject<HTMLDivElement>} onScroll={handleScroll} className="border border-neutral-200 dark:border-neutral-700 content-border m-2 rounded-xl flex-1 overflow-auto ">
+      <div ref={messageRef as React.MutableRefObject<HTMLDivElement>} onScroll={handleScroll} className="border relative border-neutral-200 dark:border-neutral-700 content-border m-2 rounded-xl flex-1 overflow-auto ">
         {loadingMessage && <div className='w-full flex items-center justify-center my-4'>
           <Loading />
         </div>}
@@ -100,6 +107,9 @@ export function ChatContent({ type }: ContentData) {
           : <div className='w-full h-full flex justify-center items-center flex-col'>
             <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
             NO DATA</div>}
+        {scrollBottom && <div onClick={scrollToBottom} className='fixed  bottom-40 right-10  cursor-pointer'>
+          <Image src='/down.svg' alt='' width='20' height='20'></Image>
+        </div>}
       </div>
 
       <ChatInput type={type} />

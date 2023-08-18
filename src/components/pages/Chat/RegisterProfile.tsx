@@ -28,10 +28,6 @@ export function RegisterProfile() {
       setIsLoading(true)
     }
   }, [profileUpload])
-  useEffect(() => {
-    if (!sendStatusLoading)
-      setIsLoading(false)
-  }, [sendStatusLoading])
 
   useEffect(() => {
     if (!data)
@@ -46,30 +42,29 @@ export function RegisterProfile() {
     return () => clearInterval(timer)
   }, [data])
   return isConnected && <>
-        {isLoading
-          ? <Loading />
-          : <>
+    {isLoading
+      ? <Loading />
+      : <>
+        <h1 className="font-bold text-3xl m-8">Register</h1>
+        <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+          const file = e.target?.files && e.target?.files[0]
+          file && setProfile({ ...profile, image: file })
+        }} className='w-0 h-0 none' />
+        <div className="border  rounded-xl">
 
-            <h1 className="font-bold text-3xl m-8">Register</h1>
-            <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const file = e.target?.files && e.target?.files[0]
-              file && setProfile({ ...profile, image: file })
-            }} className='w-0 h-0 none' />
-            <div className="border  rounded-xl">
+          <Image
+            onClick={() => fileRef.current?.click()}
+            className="rounded-xl cursor-pointer"
+            width={100}
+            alt="NextUI hero Image"
+            src={profile.image ? URL.createObjectURL(profile.image) : '/image.svg'}
+          />
+        </div>
+        <br />
+        <Input type="name" label="Name" placeholder={address && AbbreviatedText(address)} onChange={e => setProfile({ ...profile, text: e.currentTarget.value })} />
+        <br />
+        <Button onClick={sendProfile}>Register</Button>
+      </>}
 
-                <Image
-                    onClick={() => fileRef.current?.click()}
-                    className="rounded-xl cursor-pointer"
-                    width={100}
-                    alt="NextUI hero Image"
-                    src={profile.image ? URL.createObjectURL(profile.image) : '/image.svg'}
-                />
-            </div>
-            <br />
-            <Input type="name" label="Name" placeholder={address && AbbreviatedText(address)} onChange={e => setProfile({ ...profile, text: e.currentTarget.value })} />
-            <br />
-            <Button onClick={sendProfile}>Register</Button>
-        </>}
-
-    </>
+  </>
 }
