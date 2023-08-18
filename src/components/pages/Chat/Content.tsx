@@ -79,7 +79,11 @@ export function ChatContent({ type }: ContentData) {
   }
   useEffect(() => {
     getData()
+    timer.current = setInterval(() => getNewData(), 5000)
     document.addEventListener('visibilitychange', checkVisibilityAndRequest)
+    return () => {
+      clearInterval(timer.current)
+    }
   }, [])
 
   return (

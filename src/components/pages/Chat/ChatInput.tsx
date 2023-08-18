@@ -87,7 +87,6 @@ export function ChatInput({ type }: Props) {
       setAtMember([])
       setPictureArrCid([])
       clearReplyMessage()
-      // window.location.reload()
     }
     isSuccess && clearData()
   }, [isSuccess])
