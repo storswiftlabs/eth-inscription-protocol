@@ -9,12 +9,12 @@ import { uploadFile } from '@/utils/ipfs'
 
 export function RegisterProfile() {
   const { isConnected, address } = useAccount()
-  const [profile, setProfile] = useState({ type: 'create-profile', image: '', text: '' })
+  const [profile, setProfile] = useState<{ type: string; image: string | File; text: string }>({ type: 'create-profile', image: '', text: '' })
   const [profileUpload, setProfileUpload] = useState({ image: [''], text: '' })
   const [isLoading, setIsLoading] = useState(false)
   const setProfileStore = useProfile(s => s.setProfile)
   const profileStore = useProfile(s => s.profile)
-  const fileRef = useRef<HTMLInputElement>()
+  const fileRef = useRef<HTMLInputElement>(null)
   const isOk = useRef(false)
   const { data, isLoading: sendStatusLoading, isSuccess, sendTransaction } = useSendMessageToChain(profileUpload)
   const sendProfile = async () => {
@@ -57,7 +57,7 @@ export function RegisterProfile() {
             className="rounded-xl cursor-pointer"
             width={100}
             alt="NextUI hero Image"
-            src={profile.image ? URL.createObjectURL(profile.image) : '/image.svg'}
+            src={profile.image ? URL.createObjectURL(profile.image as any) : '/image.svg'}
           />
         </div>
         <br />
