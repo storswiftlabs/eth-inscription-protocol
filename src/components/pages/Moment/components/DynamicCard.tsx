@@ -54,12 +54,8 @@ export default function DynamicCard({ item }: Props) {
 
 
   const onFindformation = (item: WelcomeTweet) => {
-    router.push(`${tweet.trxHash}`)
+    router.push(`?hash=${tweet.trxHash}`)
   }
-
-  console.log(tweet.trxTime,'tweet.trxTime');
-  
-  console.log(getTimeDifference(tweet.trxTime),'getTimeDifference(tweet.trxTime)',tweet.trxTime);
   
 
   return (

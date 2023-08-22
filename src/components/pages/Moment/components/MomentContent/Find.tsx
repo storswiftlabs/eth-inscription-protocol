@@ -20,7 +20,7 @@ interface Props {
 }
 
 interface objtyle {
-  owner: `0x${string}` | undefined
+  owner: `0x${string}` | any
   limit: number
   offset: number
 }
@@ -37,7 +37,7 @@ function Find({ isUpper }: Props) {
   const [page, setPage] = useState(0)
   const [ownerObj, setOwnerObj] = useState<objtyle>({
     owner: address,
-    limit: 4,
+    limit: 10,
     offset: 0,
   })
   const { theme } = useTheme()
