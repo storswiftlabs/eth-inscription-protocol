@@ -31,10 +31,10 @@ import type { createGroup, createProfile, sendMessage, tweetComment, tweetFollow
  */
 export function useSendMessageToChain(chainData: tweetLike | tweetSend | tweetComment | tweetFollow | updateGroupDel | updateGroupAdd | createGroup | sendMessage | updateProfile | createProfile) {
   const { data: walletClient } = useWalletClient()
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction({
+  const { data, isLoading, isSuccess, status, sendTransaction } = useSendTransaction({
     to: walletClient?.account.address,
     data: `0x${Buffer.from(`data:,${JSON.stringify(chainData)}`, 'utf-8').toString('hex')}` || undefined,
   })
 
-  return { sendTransaction, data, isLoading, isSuccess }
+  return { sendTransaction, data, isLoading, isSuccess, status }
 }
