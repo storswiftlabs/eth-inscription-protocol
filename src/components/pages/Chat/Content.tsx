@@ -7,6 +7,7 @@ import { ChatInput } from './ChatInput'
 import { ChatContentMessage } from './ChatContentMessage'
 import type { ChatContentMessageType } from '@/type/Chat'
 import { getMessageGroup, getMessagePerson } from '@/utils/requestApi'
+import { useChatMessageReply } from '@/store/useChatMessage'
 
 interface ContentData {
   type: string
@@ -20,6 +21,8 @@ export function ChatContent({ type }: ContentData) {
   const [loadingMessage, setLoadingMessage] = useState(false)
   const [scrollBottom, setScrollBottom] = useState(false)
   const [scrollToBottomOnFirstLoad, setScrollToBottomOnFirstLoad] = useState(true)
+  const clearNewMessage = useChatMessageReply(state => state.clearNewMessage)
+  const newMessage = useChatMessageReply(state => state.newMessage)
 
   const { address } = useAccount()
   const timer = useRef<any>()
@@ -33,6 +36,9 @@ export function ChatContent({ type }: ContentData) {
     if (messageRef.current)
       messageRef.current.scrollTop = messageRef.current.scrollHeight + 100
   }
+  useEffect(() => {
+
+  }, [newMessage])
 
   const getData = useCallback(async () => {
     if (window.location.search === '?type=group')
@@ -58,7 +64,8 @@ export function ChatContent({ type }: ContentData) {
   useEffect(() => {
     if (newMessageData.length > 0) {
       const newData = (newMessageData.filter(t => Number(t.height) > Number(messageData[messageData.length - 1].height)))
-      setMessageData([...messageData, ...newData])
+      newData.length > 0 && clearNewMessage()
+      newData.length > 0 && setMessageData([...messageData, ...newData])
     }
   }, [newMessageData])
   function checkVisibilityAndRequest() {
@@ -107,6 +114,7 @@ export function ChatContent({ type }: ContentData) {
           : <div className='w-full h-full flex justify-center items-center flex-col'>
             <Image src='/no-data.svg' alt='' width={200} height={200}></Image>
             NO DATA</div>}
+        {newMessage.text !== '' && <ChatContentMessage data={newMessage} />}
         {scrollBottom && <div onClick={scrollToBottom} className='fixed  bottom-40 right-10  cursor-pointer'>
           <Image src='/down.svg' alt='' width='20' height='20'></Image>
         </div>}

@@ -13,7 +13,15 @@ import { getMessageWith, getProfile } from '@/utils/requestApi'
 import { imageFormat } from '@/utils/imageFormat'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
 
-export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
+export function ChatContentMessage({ data }: {
+  data: ChatContentMessageType | {
+    text: string
+    sender: string
+    image: (File | string)[]
+    with?: string
+    trxHash?: string
+  }
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const { theme } = useTheme()
   const { address, isConnected } = useAccount()
@@ -40,12 +48,12 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
     (async () => {
       setProfileData(await getProfile(data.sender))
     })()
-    if (data.with !== '') {
+    if (data?.with !== '') {
       (async () => {
         if (window.location.search === '?type=group')
-          setWithMessageData(await getMessageWith(data.with, 'group_message'))
+          setWithMessageData(await getMessageWith(data?.with ?? '', 'group_message'))
         if (window.location.search === '?type=message')
-          setWithMessageData(await getMessageWith(data.with, 'message'))
+          setWithMessageData(await getMessageWith(data?.with ?? '', 'message'))
       })()
     }
   }, [])
@@ -81,11 +89,12 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
           {withMessageData?.text && <div className='bg-neutral-300/20 text-gray-500/70 dark:text-gray-500 rounded-md p-1 mt-1'>{withMessageData?.text}</div>}
 
         </div>
-
-        <Image onClick={() => Router.push(`https://etherscan.io/tx/${data.trxHash}`)} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address?.toUpperCase() ? 'right-[-10px]' : 'left-0'}  group-hover:visible invisible`} src='/Ethereum.svg' alt='' width={20} height={20}></Image>
-        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-7 h-7 cursor-pointer absolute top-0 ${data.sender !== address?.toUpperCase() ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
-          <ReplyIcon fill={handleFillColor()}></ReplyIcon>
-        </div>
+        {data?.trxHash && <>
+          <Image onClick={() => Router.push(`https://etherscan.io/tx/${data.trxHash}`)} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address?.toUpperCase() ? 'right-[-10px]' : 'left-0'}  group-hover:visible invisible`} src='/Ethereum.svg' alt='' width={20} height={20}></Image>
+          <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash ?? '' }) }} className={`w-7 h-7 cursor-pointer absolute top-0 ${data.sender !== address?.toUpperCase() ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+            <ReplyIcon fill={handleFillColor()}></ReplyIcon>
+          </div>
+        </>}
 
       </div>
 

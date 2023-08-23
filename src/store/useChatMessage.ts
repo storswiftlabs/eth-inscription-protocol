@@ -9,6 +9,17 @@ interface Store {
     text: string
     txHash: string
   }
+  newMessage: {
+    text: string
+    image: (File | string)[]
+    sender: string
+  }
+  setNewMessage: (conten: {
+    text: string
+    sender: string
+    image: (File | string)[]
+  }) => void
+  clearNewMessage: () => void
   setOwnerProfileF: (conten: {
     image: string
     text: string
@@ -22,8 +33,11 @@ interface Store {
 
 export const useChatMessageReply = create<Store>()(set => ({
   ownerProfile: { image: '', text: '' },
-  setOwnerProfileF: content => set({ ownerProfile: content }),
   reply: { text: '', txHash: '' },
+  newMessage: { text: '', sender: '', image: [''] },
+  setNewMessage: content => set({ newMessage: content }),
+  clearNewMessage: () => set({ newMessage: { text: '', image: [''], sender: '' } }),
+  setOwnerProfileF: content => set({ ownerProfile: content }),
   setReplyMessage: content => set({ reply: content }),
   clearReplyMessage: () => set({ reply: { text: '', txHash: '' } }),
 }))

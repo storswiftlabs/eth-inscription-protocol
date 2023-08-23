@@ -34,6 +34,7 @@ export function ChatInput({ type }: Props) {
   const [sendDataOnChain, setSendDataOnChain] = useState<MessageOnChain>({ type: 'im' })
   const replyMessage = useChatMessageReply(state => state.reply)
   const clearReplyMessage = useChatMessageReply(state => state.clearReplyMessage)
+  const setNewMessage = useChatMessageReply(state => state.setNewMessage)
   const Router = useSearchParams()
 
   function closeModal() {
@@ -58,7 +59,8 @@ export function ChatInput({ type }: Props) {
     if (pictureArr.length !== pictureArrCid.length)
       typeof window !== 'undefined' && alert('wait a minute')
     else
-      sendTransaction()
+      setNewMessage({ sender: walletClient?.account.address.toUpperCase() as string, text: inputData, image: pictureArr })
+    sendTransaction()
   }
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter')
