@@ -29,6 +29,8 @@ export default function DynamicCard({ avatar, name, time, text, img }: Props) {
   const { theme } = useTheme()
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
+  
+
   return (
     <div onClick={() => router.push((`/moment/${1}`))} className="DynamicCard-grid bg-[#f7f9f9] dark:bg-[#1e1e1e] hover:bg-[#edecf3] dark:hover:bg-[#262626]" >
       <img src={avatar} alt={''} width={35} height={35} ></img>

@@ -26,7 +26,7 @@ interface Props {
 }
 
 interface objtyle {
-  owner: `0x${string}` | undefined
+  owner: `0x${string}` | any
   limit: number
   offset: number
 }
@@ -40,9 +40,13 @@ interface tweetSendType {
 function FindInformation({ type }: Props) {
   const router = useRouter()
   const params = useParams()
+
+
+
+
   const { address, isConnected } = useAccount()
   const [pag, setPag] = useState({
-    pageSize: 2, // 每页显示数据
+    pageSize: 10, // 每页显示数据
     currentPage: 1, // 当前页
     totalPages: 10, // 总页数
     data: [] as Comment[]
@@ -54,10 +58,10 @@ function FindInformation({ type }: Props) {
     offset: 0,
   })
 
-  const getTweetFunction = async (obj: objtyle) => {
+  const getTweetFunction = async (obj: objtyle, hash: string | null) => {
     try {
       const tweetData = await getTweet(obj)
-      const dist = tweetData.tweets.filter(t => t.tweet.trxHash === params.type)
+      const dist = tweetData.tweets.filter(t => t.tweet.trxHash === hash)
       setTweetDetails(dist[0])
     }
     catch (error) {
@@ -66,7 +70,9 @@ function FindInformation({ type }: Props) {
   }
 
   useEffect(() => {
-    getTweetFunction(ownerObj)
+    const urlParams = new URLSearchParams(window.location.search);
+    const hash = urlParams.get('hash');
+    getTweetFunction(ownerObj, hash)
   }, [params.type])
 
   const [tweetCommentData, setTweetCommentData] = useState<tweetComment | tweetFollow>({
