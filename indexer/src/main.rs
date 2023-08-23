@@ -1,28 +1,29 @@
 extern crate diesel;
 
+use crate::models::InscriptionProtocolV1;
 use crate::routes::routes;
-use anyhow::{format_err, Context, Error};
+use anyhow::Error;
 use clap::Parser;
 use cli::{Cli, Commands};
-use database::{batch_insert_transactions, POOL};
-use futures03::StreamExt;
+use db::{batch_insert_swifts, POOL};
 use http::Method;
-use prost::Message;
-use proto::{module_output::Data as ModuleOutputData, BlockScopedData, Transactions};
-use std::{env, net::SocketAddr, str::FromStr, sync::Arc};
-use substreams::SubstreamsEndpoint;
-use substreams_stream::{BlockResponse, SubstreamsStream};
+use std::{
+    env,
+    net::SocketAddr,
+    ops::Add,
+    str::FromStr,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 use tower_http::cors::{Any, CorsLayer};
+use zksync::prelude::*;
+use zksync_web3_rs as zksync;
 
 mod cli;
-mod database;
+mod db;
 mod handlers;
 mod models;
-mod proto;
 mod routes;
 mod schema;
-mod substreams;
-mod substreams_stream;
 
 #[tokio::main]
 async fn main() {
@@ -31,19 +32,10 @@ async fn main() {
     match &cli.command {
         Some(Commands::Sync {
             endpoint_url,
-            package_file,
-            module_name,
             start_block,
             end_block,
         }) => {
-            sync(
-                endpoint_url,
-                package_file,
-                module_name,
-                start_block,
-                end_block,
-            )
-            .await;
+            sync(endpoint_url, start_block, end_block).await;
         }
 
         Some(Commands::Serve { port, host }) => {
@@ -52,21 +44,13 @@ async fn main() {
 
         Some(Commands::All {
             endpoint_url,
-            package_file,
-            module_name,
             start_block,
             end_block,
             port,
             host,
         }) => {
             tokio::join!(
-                sync(
-                    endpoint_url,
-                    package_file,
-                    module_name,
-                    start_block,
-                    end_block,
-                ),
+                sync(endpoint_url, start_block, end_block),
                 serve(host, port),
             );
         }
@@ -75,112 +59,84 @@ async fn main() {
     }
 }
 
-async fn sync(
-    endpoint_url: &String,
-    package_file: &String,
-    module_name: &String,
-    start_block: &i64,
-    end_block: &u64,
-) {
-    let token_env = env::var("SUBSTREAMS_API_TOKEN").unwrap_or("".to_string());
-    let mut token: Option<String> = None;
-    if token_env.len() > 0 {
-        token = Some(token_env);
-    }
+async fn sync(endpoint_url: &String, start_block: &u64, end_block: &u64) -> Result<(), Error> {
+    let mut conn = POOL.get()?;
+    let provider = Provider::try_from(endpoint_url).unwrap();
 
-    let package = read_package(&package_file).unwrap();
-    let endpoint = Arc::new(SubstreamsEndpoint::new(&endpoint_url, token).await.unwrap());
-
-    // FIXME: Handling of the cursor is missing here. It should be loaded from
-    // the database and the SubstreamStream will correctly resume from the right
-    // block.
-    let cursor: Option<String> = None;
-
-    let mut stream = SubstreamsStream::new(
-        endpoint.clone(),
-        cursor,
-        package.modules.clone(),
-        module_name.to_string(),
-        *start_block,
-        *end_block,
-    );
-
-    let mut conn = POOL.get().unwrap();
-
-    loop {
-        match stream.next().await {
-            None => {
-                println!("Stream consumed");
-                break;
-            }
-            Some(event) => match event {
-                Err(_) => {}
-                Ok(BlockResponse::New(data)) => {
-                    println!("Consuming module output (cursor {})", data.cursor);
-
-                    match extract_records(data, &module_name).unwrap() {
-                        Some(txs) => {
-                            batch_insert_transactions(&mut conn, txs)
-                                .context("insertion in db failed")
-                                .unwrap();
-                        }
-                        None => {}
-                    }
-
-                    // FIXME: Handling of the cursor is missing here. It should be saved each time
-                    // a full block has been correctly inserted in the database. By saving it
-                    // in the database, we ensure that if we crash, on startup we are going to
-                    // read it back from database and start back our SubstreamsStream with it
-                    // ensuring we are continuously streaming without ever losing a single
-                    // element.
-                }
+    let mut current_block = *start_block;
+    println!("🎏 starting synchronization from {} height", current_block);
+    while current_block <= *end_block {
+        println!(
+            "- currently synchronizing block at height {}",
+            current_block
+        );
+        let block = provider.get_block_with_txs(current_block).await;
+        let block = match block {
+            Ok(blk) => match blk {
+                Some(blk) => blk,
+                _ => continue,
             },
+            Err(err) => {
+                println!(
+                    "🚨 failed to get block at {}, error: {}",
+                    current_block, err
+                );
+                continue;
+            }
+        };
+
+        let trxs: Vec<models::Swift> = block
+            .transactions
+            .iter()
+            .filter_map(|trx| {
+                let v1: InscriptionProtocolV1 =
+                    InscriptionProtocolV1::from_bytes(&trx.input.to_vec())?;
+                let v1 = match serde_json::to_string(&v1) {
+                    Ok(value) => Some(value),
+                    _ => None,
+                }?;
+                Some(models::Swift {
+                    chain: "zksync".to_string(),
+                    timestamp: SystemTime::from(
+                        UNIX_EPOCH.add(Duration::new(block.number?.as_u64(), 0)),
+                    ),
+                    height: block.number?.as_u32().into(),
+                    trx_hash: bytes_to_hex_str(&trx.hash.0.to_vec()),
+                    sender: bytes_to_hex_str(&trx.from.0.to_vec()),
+                    _to: bytes_to_hex_str(&trx.to?.0.to_vec()),
+                    data: v1,
+                })
+            })
+            .collect();
+
+        if trxs.len() != 0 {
+            if let Err(err) = batch_insert_swifts(&mut conn, trxs) {
+                println!("🚨 batch insertion of database failed: error: {}", err);
+            };
         }
+
+        current_block += 1;
     }
+
+    Ok(())
 }
 
-async fn serve(host: &String, port: &u16) {
+async fn serve(host: &String, port: &u16) -> Result<(), Error> {
     let app = routes().layer(
         CorsLayer::new()
             .allow_methods([Method::GET])
             .allow_origin(Any)
             .allow_headers(Any),
     );
-    let addr = SocketAddr::from_str(&format!("{}:{}", host, port)).unwrap();
-    println!("listening on {}", addr);
+    let addr = SocketAddr::from_str(&format!("{}:{}", host, port))?;
+    println!("🚀 listening on {}", addr);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
-        .await
-        .unwrap();
+        .await?;
+
+    Ok(())
 }
 
-fn extract_records(
-    data: BlockScopedData,
-    module_name: &String,
-) -> Result<Option<Transactions>, Error> {
-    let output = data
-        .outputs
-        .first()
-        .ok_or(format_err!("expecting one module output"))?;
-    if &output.name != module_name {
-        return Err(format_err!(
-            "invalid module output name {}, expecting {}",
-            output.name,
-            module_name
-        ));
-    }
-    match output.data.as_ref().unwrap() {
-        ModuleOutputData::MapOutput(data) => {
-            let txs: Transactions = Message::decode(data.value.as_slice())?;
-            Ok(Some(txs))
-        }
-        ModuleOutputData::StoreDeltas(_) => Err(format_err!(
-            "invalid module output StoreDeltas, expecting MapOutput"
-        )),
-    }
-}
-
-fn read_package(file: &str) -> Result<proto::Package, anyhow::Error> {
-    let content = std::fs::read(file).context(format_err!("read package {}", file))?;
-    proto::Package::decode(content.as_ref()).context("decode command")
+pub fn bytes_to_hex_str(data: &Vec<u8>) -> String {
+    format!("0x{}", hex::encode(data))
 }

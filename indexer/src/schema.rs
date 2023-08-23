@@ -1,12 +1,13 @@
 // @generated automatically by Diesel CLI.
 
 diesel::table! {
-    transition (transaction_hash) {
-        transaction_hash -> Text,
+    swift (trx_hash) {
+        trx_hash -> Text,
         chain -> Text,
-        from_address -> Text,
-        input_data -> Text,
-        block_number -> Int8,
-        timestamp -> Int8,
+        sender -> Text,
+        _to -> Text,
+        height -> Int8,
+        timestamp -> Timestamp,
+        data -> Text,
     }
 }

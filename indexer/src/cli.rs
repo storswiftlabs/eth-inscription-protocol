@@ -16,17 +16,9 @@ pub enum Commands {
         #[arg(short, long, default_value_t = String::from("http://localhost:18015"))]
         endpoint_url: String,
 
-        /// File path for ".spkg"
-        #[arg(short, long)]
-        package_file: String,
-
-        /// Module name
-        #[arg(short, long)]
-        module_name: String,
-
         /// Start block to stream from
         #[arg(short, long)]
-        start_block: i64,
+        start_block: u64,
 
         /// Start block to stream from
         #[arg(short = 't', long, default_value_t = u64::MAX)]
@@ -49,17 +41,9 @@ pub enum Commands {
         #[arg(short, long, default_value_t = String::from("http://localhost:18015"))]
         endpoint_url: String,
 
-        /// File path for ".spkg"
-        #[arg(short, long)]
-        package_file: String,
-
-        /// Module name
-        #[arg(short, long)]
-        module_name: String,
-
         /// Start block to stream from
         #[arg(short, long)]
-        start_block: i64,
+        start_block: u64,
 
         /// Start block to stream from
         #[arg(short = 't', long, default_value_t = u64::MAX)]

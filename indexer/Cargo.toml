@@ -1,5 +1,5 @@
 [package]
-name = "starknet-indexer"
+name = "swift-indexer"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,15 +7,11 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-async-stream = "0.3"
 diesel = { version = "2.1.0", features = ["postgres", "numeric", "r2d2", "chrono"] }
-chrono = { version = "0.4.19", features = ["serde"] }
-futures03 = { version = "0.3.1", package = "futures", features = ["compat"] }
 http = "0.2.3"
 tokio = { version = "1.16.1", features = ["time", "sync", "macros", "test-util", "rt-multi-thread", "parking_lot"] }
 tokio-stream = { version = "0.1.9", features = ["sync"] }
 tokio-retry = "0.3.0"
-tonic = { version = "0.7.1", features = ["tls-roots"] }
 prost = "0.10.4"
 prost-types = "0.10.1"
 thiserror = "1.0.25"
@@ -28,8 +24,9 @@ r2d2_postgres = "0.18.1"
 lazy_static = "1.4.0"
 tower-http = { version = "0.3.5", features = ["cors"] }
 regex = "1.8.4"
-snarkvm = { version = "0.13.0", features = ["synthesizer"] }
-ureq = "2.7.1"
+ethers = { version = "2.0", features = ["ws"] }
+zksync-web3-rs = { git = "https://www.github.com/lambdaclass/zksync-web3-rs" }
+hex = "0.4.3"
 
 [build-dependencies]
 tonic-build = { version = "0.7.2", features = ["prost"] }
