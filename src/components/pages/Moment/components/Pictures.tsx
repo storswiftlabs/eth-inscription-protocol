@@ -15,7 +15,7 @@ function Pictures({ pictureArr, setPictureArr }: Props) {
   const handleFillColor = (): FillColor => theme === 'dark' ? FillColor.White : FillColor.Black
 
   return (
-    <div>
+    <>
       <input type="file" ref={fileRef} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target?.files && e.target?.files[0]
         const reader = new FileReader()
@@ -26,7 +26,7 @@ function Pictures({ pictureArr, setPictureArr }: Props) {
         file && reader.readAsDataURL(file)
       }} className='w-0 h-0 none' />
       <PictureIcon onClick={() => fileRef.current?.click()} fill={handleFillColor()}></PictureIcon>
-    </div>
+    </>
   )
 }
 
