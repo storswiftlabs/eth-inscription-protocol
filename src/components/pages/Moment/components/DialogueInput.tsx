@@ -10,6 +10,10 @@ import { AtIcon, EmojiIcon } from '@/components/pages/Chat/Icons'
 import { FillColor } from '@/type/Moment'
 import { useChatMessageReply } from '@/store/useChatMessage'
 import { uploadFile } from '@/utils/ipfs'
+import { getProfile } from '@/utils/api'
+import { useAccount } from 'wagmi'
+import { useProfile } from '@/store/useProfile'
+import { imageFormat } from '@/utils/imageFormat'
 
 /**
  * @DialogueInput - 评论回复的样式框
@@ -51,6 +55,14 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
   const ownerProfile = useChatMessageReply(state => state.ownerProfile) // 存储一下给公共状态
   const [pictureArrCid, setPictureArrCid] = useState<string[]>([])
 
+  const profileStore = useProfile(s => s.profile)
+  const { isConnected, address } = useAccount()
+  const setProfileStore = useProfile(s => s.setProfile)
+
+  useEffect(() => {
+    if (isConnected)
+      getProfile(address!).then(e => setProfileStore(e))
+  }, [isConnected])
 
   useEffect(() => {
     if (isSuccess) {
@@ -140,7 +152,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
       {isSolid ? '' : <Solid foll={isSolid ? '' : 'y'} />}
       <EmojiDialog dialogCss={{ position: 'absolute', zIndex: '19999' }} isOpen={isOpen} closeModal={closeModal} selectedOK={x => selectedOK(x)} type='emoji' />
       <Row className={'reply p-4 border-[#edecf3] dark:border-[#262626] '} css={{ ...rowCss }}>
-        <User css={{ padding: '0' }} src={ownerProfile.image ? ownerProfile.image : 'https://i.pravatar.cc/150?u=a042581f4e29026704d'} name="" />
+        <User css={{ padding: '0' }} src={imageFormat(profileStore.image[0]) ? imageFormat(profileStore.image[0]) : '/logo.png'} name="" />
         <Row wrap='wrap'>
           <div style={{ width: '100%' }}>
             <Textarea ref={chatInputRef} css={customTextareaStyles} size='xl' value={inputData} onChange={(e) => { setInputData(e.target.value) }} fullWidth placeholder="Default Textarea!" />
