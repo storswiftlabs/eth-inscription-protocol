@@ -61,13 +61,13 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
     return colorClasses[number]
   }
 
-  return <div className={`min-h-[100px] w-full flex ${data.sender !== address ? 'justify-start' : 'justify-end'}`} >
-    <div className={`flex m-4  ${data.sender !== address ? '' : 'flex-row-reverse'}`}>
+  return <div className={`min-h-[100px] w-full flex ${data.sender !== address?.toUpperCase() ? 'justify-start' : 'justify-end'}`} >
+    <div className={`flex m-4  ${data.sender !== address?.toUpperCase() ? '' : 'flex-row-reverse'}`}>
       {profileData && profileData?.image?.length > 0 && profileData?.image[0] !== '' && profileData?.image[0] !== 'ipfs://test' ? <img src={imageFormat(profileData?.image[0])} alt='' className='w-10 h-10 m-1 rounded-lg' /> : <div className={`relative w-10 m-2  h-10 rounded-xl ${generateNumberColor(Number(data?.sender.slice(-1)))}  dark:${generateNumberColor(Number(profileData?.sender.slice(-1)))}`} />}
-      <div className={`flex flex-col ${data.sender !== address ? '' : 'items-end'} group relative`}>
+      <div className={`flex flex-col ${data.sender !== address?.toUpperCase() ? '' : 'items-end'} group relative`}>
         {profileData?.text !== '' ? profileData?.text : <div className='text-gray-500/70 dark:text-gray-500'>{AbbreviatedText(data.sender)}</div>}
         <div className='max-w-[800px] text-sm'>
-          <div className={`rounded-xl p-2   ${data.sender !== address ? 'bg-neutral-200 dark:bg-neutral-700' : 'bg-green-300 dark:bg-[#48BD67]'}`}>
+          <div className={`rounded-xl p-2   ${data.sender !== address?.toUpperCase() ? 'bg-neutral-200 dark:bg-neutral-700' : 'bg-green-300 dark:bg-[#48BD67]'}`}>
             <div>
               {data.text}
             </div>
@@ -82,8 +82,8 @@ export function ChatContentMessage({ data }: { data: ChatContentMessageType }) {
 
         </div>
 
-        <Image onClick={() => Router.push(`https://etherscan.io/tx/${data.trxHash}`)} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address ? 'right-[-10px]' : 'left-0'}  group-hover:visible invisible`} src='/Ethereum.svg' alt='' width={20} height={20}></Image>
-        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-7 h-7 cursor-pointer absolute top-0 ${data.sender !== address ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
+        <Image onClick={() => Router.push(`https://etherscan.io/tx/${data.trxHash}`)} className={`w-10 h-10 cursor-pointer absolute top-10 ${data.sender !== address?.toUpperCase() ? 'right-[-10px]' : 'left-0'}  group-hover:visible invisible`} src='/Ethereum.svg' alt='' width={20} height={20}></Image>
+        <div onClick={() => { setReplyMessage({ text: data.text, txHash: data.trxHash }) }} className={`w-7 h-7 cursor-pointer absolute top-0 ${data.sender !== address?.toUpperCase() ? 'right-0' : 'left-0'}  group-hover:visible invisible`}>
           <ReplyIcon fill={handleFillColor()}></ReplyIcon>
         </div>
 

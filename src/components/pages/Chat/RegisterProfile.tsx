@@ -1,6 +1,7 @@
 import { Button, Image, Input, Loading } from '@nextui-org/react'
 import { useEffect, useRef, useState } from 'react'
 import { useAccount } from 'wagmi'
+import type { GetStaticProps } from 'next'
 import { useSendMessageToChain } from '@/hooks/useSendMessageToChain'
 import { useProfile } from '@/store/useProfile'
 import { AbbreviatedText } from '@/utils/AbbreviatedText'
@@ -78,4 +79,10 @@ export function RegisterProfile() {
       </>}
 
   </>
+}
+
+export const getStaticProps: GetStaticProps = () => {
+  return {
+    props: {},
+  }
 }

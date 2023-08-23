@@ -39,18 +39,17 @@ export default function Home() {
       {isConnected
         ? profileStore.text !== ''
           ? <>
-
-          <h1 className='font-bold text-5xl text-black dark:text-white mb-10'>
-            Discover
-          </h1>
-          <div>
-            <Card />
-          </div>
-        </>
+            <h1 className='font-bold text-5xl text-black dark:text-white mb-10'>
+              Discover
+            </h1>
+            <div>
+              <Card />
+            </div>
+          </>
           : <RegisterProfile />
         : <h1 ref={ref} className='flex items-center flex-col'>
-        <h1 className='text-3xl font-bold'> Please Login Your Wallet</h1>
-      </h1>
+          <h1 className='text-3xl font-bold'> Please Login Your Wallet</h1>
+        </h1>
       }
     </main>
   )
