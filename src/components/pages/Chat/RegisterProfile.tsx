@@ -12,12 +12,16 @@ export function RegisterProfile() {
   const [profile, setProfile] = useState<{ type: string; image: string | File; text: string }>({ type: 'create-profile', image: '', text: '' })
   const [profileUpload, setProfileUpload] = useState({ image: [''], text: '' })
   const [isLoading, setIsLoading] = useState(false)
+  const [clickLoading, setClickLoading] = useState(false)
   const setProfileStore = useProfile(s => s.setProfile)
   const profileStore = useProfile(s => s.profile)
   const fileRef = useRef<HTMLInputElement>(null)
   const isOk = useRef(false)
-  const { data, isLoading: sendStatusLoading, isSuccess, sendTransaction } = useSendMessageToChain(profileUpload)
+  const { data, isLoading: sendStatusLoading, isSuccess, sendTransaction, status } = useSendMessageToChain(profileUpload)
   const sendProfile = async () => {
+    if (profile.image === '' || profile.text === '')
+      alert('Please select an Avatar or Text')
+    setClickLoading(true)
     setProfileUpload({ ...profile, image: [`ipfs://${await uploadFile(profile.image)}`] })
     isOk.current = true
   }
@@ -30,8 +34,15 @@ export function RegisterProfile() {
   }, [profileUpload])
 
   useEffect(() => {
+    if (status === 'error') {
+      setIsLoading(false)
+      setClickLoading(false)
+    }
+  }, [status])
+  useEffect(() => {
     if (!data)
       return
+
     const timer = setInterval(() => {
       getProfile(address!).then(e => setProfileStore(e))
       if (profileStore.text !== '') {
@@ -63,7 +74,7 @@ export function RegisterProfile() {
         <br />
         <Input type="name" label="Name" placeholder={address && AbbreviatedText(address)} onChange={e => setProfile({ ...profile, text: e.currentTarget.value })} />
         <br />
-        <Button onClick={sendProfile}>Register</Button>
+        <Button onClick={sendProfile}>Register &nbsp;{clickLoading && <Loading size='sm' color={'white'} />}</Button>
       </>}
 
   </>
