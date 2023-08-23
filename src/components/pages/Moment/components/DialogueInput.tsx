@@ -161,7 +161,7 @@ function DialogueInput({ isSolid, closeHandler, rowCss, isSuccess, bottonText }:
             </div>}
             {pictureArr.map((t, index) => (
               <div className=' relative'>
-                <img key={index} className='my-2' src={t} alt={`image-${index}`} />
+                <img key={index} className='my-2' src={URL?.createObjectURL(t as any)} alt={`image-${index}`} />
                 <div className='absolute w-5 h-5 bg-neutral-400/90 cursor-pointer top-[-10px] right-[-10px] z-10 rounded-full flex items-center justify-center' onClick={() => setPictureArr([...pictureArr.filter(s => s !== t)])} >
                   {svg}
                 </div>
