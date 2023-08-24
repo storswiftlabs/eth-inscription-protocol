@@ -1,35 +1,37 @@
-version: "3"
+version: "3.1"
 services:
-  postgres:
-    container_name: postgres-starknet-indexer
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
-    #command: ["postgres", "-cshared_preload_libraries=pg_stat_statements", "-clog_statement=all"]
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secure
-      POSTGRES_DB: indexer-dev
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "5432"]
-      interval: 30s
-      timeout: 10s
-      retries: 15
-  pgweb:
-    container_name: pgweb-starknet-indexer
-    image: sosedoff/pgweb:0.11.10
-    restart: on-failure
-    ports:
-      - "8081:8081"
-    command: ["pgweb", "--bind=0.0.0.0", "--listen=8081", "--binary-codec=hex"]
-    #command: ["pgweb", "--binary-codec=base58"]
-    #command: ["pgweb", "--binary-codec=base64"]
-    links:
-      - postgres:postgres
-    environment:
-      - DATABASE_URL=postgres://admin:secure@postgres-starknet-indexer:5432/indexer-dev?sslmode=disable
+  swift-indexer:
+    container_name: swift-indexer
+    restart: always
+    image: swift-indexer:0.1.0
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    # ports:
+    #   - "8081:8081"
     depends_on:
-      - postgres
+      - db-init
+    entrypoint:
+      [
+        "swift-indexer",
+        "sync",
+        "--start-block=${START_BLOCK:-0}",
+        "--endpoint-url=${ENDPOINT_URL:-https://mainnet.era.zksync.io}",
+      ]
+    environment:
+      DATABASE_URL: postgres://admin:secure@postgres-swift-indexer:5432/swift-indexer-dev?sslmode=disable
+    networks:
+      - SIP
+  db-init:
+    image: willsquire/diesel-cli:latest
+    networks:
+      - SIP
+    environment:
+      DATABASE_URL: postgres://admin:secure@postgres-swift-indexer:5432/swift-indexer-dev?sslmode=disable
+    volumes:
+      - ./migrations:/app/migrations
+    command: ["migration", "run"]
+
+networks:
+  SIP:
+    external: true

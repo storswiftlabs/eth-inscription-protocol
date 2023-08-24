@@ -6,6 +6,7 @@ use anyhow::Error;
 use clap::Parser;
 use cli::{Cli, Commands};
 use db::{batch_insert_swifts, POOL};
+use ethers::prelude::*;
 use http::Method;
 use std::{
     env,
@@ -15,8 +16,6 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 use tower_http::cors::{Any, CorsLayer};
-use zksync::prelude::*;
-use zksync_web3_rs as zksync;
 
 mod cli;
 mod db;
@@ -61,10 +60,12 @@ async fn main() {
 
 async fn sync(endpoint_url: &String, start_block: &u64, end_block: &u64) -> Result<(), Error> {
     let mut conn = POOL.get()?;
-    let provider = Provider::try_from(endpoint_url).unwrap();
+    let provider =
+        Provider::<Http>::try_from(endpoint_url).expect("🚨 could not instantiate HTTP Provider");
 
     let mut current_block = *start_block;
     println!("🎏 starting synchronization from {} height", current_block);
+
     while current_block <= *end_block {
         println!(
             "- currently synchronizing block at height {}",

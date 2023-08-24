@@ -24,8 +24,8 @@ r2d2_postgres = "0.18.1"
 lazy_static = "1.4.0"
 tower-http = { version = "0.3.5", features = ["cors"] }
 regex = "1.8.4"
-ethers = { version = "2.0", features = ["ws"] }
-zksync-web3-rs = { git = "https://www.github.com/lambdaclass/zksync-web3-rs" }
+# zksync-web3-rs = { path = "zksync-web3-rs" }
+ethers = { version = "2.0.4", path = "ethers-rs/ethers" }
 hex = "0.4.3"
 
 [build-dependencies]

@@ -7,8 +7,8 @@ PORT ?= 8081
 build:
 	cargo build --release
 
-.PHONY: all
-all:
+.PHONY: run
+run:
 	cargo run -- all \
 		--endpoint-url $(ENDPOINT_URL) \
 		--start-block $(START_BLOCK) \
@@ -26,4 +26,3 @@ serve:
 	cargo run -- serve \
 		--host $(HOST) \
 		--port $(PORT)
-
