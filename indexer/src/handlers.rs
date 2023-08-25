@@ -2,10 +2,16 @@ use crate::{
     db::{get_swifts_by_height_range, POOL},
     models::{InscriptionProtocolV1, SwiftResp},
 };
-use axum::{extract::Query, Json};
+use axum::{
+    extract::{Path, Query},
+    Json,
+};
 use std::{collections::HashMap, time::UNIX_EPOCH};
 
-pub async fn swifts_handler(Query(params): Query<HashMap<String, String>>) -> Json<Vec<SwiftResp>> {
+pub async fn swifts_handler(
+    Query(params): Query<HashMap<String, String>>,
+    Path(chain): Path<String>,
+) -> Json<Vec<SwiftResp>> {
     let mut conn = POOL.get().unwrap();
     let start_height = params
         .get("start_height")
@@ -22,9 +28,17 @@ pub async fn swifts_handler(Query(params): Query<HashMap<String, String>>) -> Js
 
     let results = txs
         .iter()
-        .map(|tx| {
-            let v1_data: InscriptionProtocolV1 = serde_json::from_str(&tx.data).unwrap_or_default();
-            SwiftResp {
+        .filter_map(|tx| {
+            if tx.chain != chain {
+                return None;
+            }
+
+            let v1_data: InscriptionProtocolV1 = match serde_json::from_str(&tx.data) {
+                Ok(v1) => Some(v1),
+                _ => None,
+            }?;
+
+            Some(SwiftResp {
                 chain: tx.chain.to_string(),
                 height: tx.height,
                 trx_hash: tx.trx_hash.to_string(),
@@ -38,7 +52,7 @@ pub async fn swifts_handler(Query(params): Query<HashMap<String, String>>) -> Js
                 receiver: v1_data.receiver,
                 at: v1_data.at,
                 with: v1_data.with,
-            }
+            })
         })
         .collect::<Vec<SwiftResp>>();
 

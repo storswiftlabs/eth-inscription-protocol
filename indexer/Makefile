@@ -1,7 +1,7 @@
 ENDPOINT_URL ?= https://mainnet.era.zksync.io
 START_BLOCK ?= 0
 HOST ?= 127.0.0.1
-PORT ?= 8081
+PORT ?= 8010
 
 .PHONY: build
 build:
