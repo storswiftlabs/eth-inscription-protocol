@@ -14,7 +14,7 @@ cd sip-zksync
 The first startup requires creating a docker network:
 
 ```bash
-docker docker network create SIP
+docker network create SIP
 ```
 
 Run the docker container:
