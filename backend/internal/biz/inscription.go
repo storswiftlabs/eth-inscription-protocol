@@ -13,8 +13,8 @@ type Inscription struct {
 }
 
 const (
-	ZksyncStartHeight = 9531144
-	GoerliStartHeight = 9531144
+	ZksyncStartHeight = 1000
+	GoerliStartHeight = 1000
 )
 
 // InscriptionRepo is a Inscription repo.
@@ -72,7 +72,7 @@ func NewInscriptionUsecase(repo InscriptionRepo, logger log.Logger) *Inscription
 	}
 	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.goerli.GetName(), Height: GoerliStartHeight})
 	_ = uc.repo.InsertChainHeight(ctx, &Chain{Name: uc.zkSync.GetName(), Height: ZksyncStartHeight})
-	//go uc.SyncZksync(ctx)
+	go uc.SyncZksync(ctx)
 	go uc.SyncGoerli(ctx)
 	return uc
 }

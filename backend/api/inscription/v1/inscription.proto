@@ -145,6 +145,7 @@ message SwiftResponse{
   string trx_hash = 9;
   string trx_time = 10;
   string sender = 11;
+  string chain = 12;
 }
 
 

@@ -26,6 +26,7 @@ type Profile struct {
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+	Chain   string    `xorm:"notnull"`
 }
 
 type Group struct {
@@ -35,6 +36,7 @@ type Group struct {
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+	Chain   string    `xorm:"notnull"`
 }
 
 type MessageWindow struct {
@@ -54,6 +56,7 @@ type Message struct {
 	Height   int64     `xorm:"notnull"`
 	TrxHash  string    `xorm:"notnull"`
 	TrxTime  time.Time `xorm:"notnull"`
+	Chain    string    `xorm:"notnull"`
 }
 
 type GroupMessage struct {
@@ -68,6 +71,7 @@ type GroupMessage struct {
 	Height   int64     `xorm:"notnull"`
 	TrxHash  string    `xorm:"notnull"`
 	TrxTime  time.Time `xorm:"notnull"`
+	Chain    string    `xorm:"notnull"`
 }
 
 type Tweet struct {
@@ -81,6 +85,7 @@ type Tweet struct {
 	With    string
 	Height  int64     `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+	Chain   string    `xorm:"notnull"`
 }
 
 type Comment struct {
@@ -93,6 +98,7 @@ type Comment struct {
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+	Chain   string    `xorm:"notnull"`
 }
 
 type Like struct {
@@ -102,12 +108,14 @@ type Like struct {
 	Height  int64     `xorm:"notnull"`
 	TrxHash string    `xorm:"notnull"`
 	TrxTime time.Time `xorm:"notnull"`
+	Chain   string    `xorm:"notnull"`
 }
 
 type Follow struct {
 	Id       int64
 	Address  string `xorm:"notnull"`
 	Follower string `xorm:"notnull"`
+	Chain    string `xorm:"notnull"`
 }
 
 type GetMTReq struct {

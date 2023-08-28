@@ -302,6 +302,8 @@ components:
                     type: string
                 sender:
                     type: string
+                chain:
+                    type: string
         api.inscription.v1.SwiftResponses:
             type: object
             properties:

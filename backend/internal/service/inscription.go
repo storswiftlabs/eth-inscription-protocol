@@ -36,6 +36,7 @@ func (s *InscriptionService) GetProfile(ctx context.Context, req *pb.ByAddress) 
 		TrxHash:  profile.TrxHash,
 		TrxTime:  profile.TrxTime.String(),
 		Sender:   "",
+		Chain:    profile.Chain,
 	}, nil
 }
 
@@ -62,6 +63,7 @@ func (s *InscriptionService) GetGroup(ctx context.Context, req *pb.ByAddress) (*
 			TrxHash:  v.TrxHash,
 			TrxTime:  v.TrxTime.String(),
 			Sender:   "",
+			Chain:    v.Chain,
 		}
 	}
 	return &pb.SwiftResponses{Groups: swiftResponses}, nil
@@ -86,6 +88,7 @@ func (s *InscriptionService) GetMessageWindow(ctx context.Context, req *pb.GetMe
 			TrxHash:  v.TrxHash,
 			TrxTime:  v.TrxTime.String(),
 			Sender:   v.Address,
+			Chain:    v.Chain,
 		}
 	}
 	return &pb.MessageWindow{Profiles: swiftResponses}, nil
@@ -115,6 +118,7 @@ func (s *InscriptionService) GetMessage(ctx context.Context, req *pb.GetMessageR
 			TrxHash:  v.TrxHash,
 			TrxTime:  v.TrxTime.String(),
 			Sender:   v.Sender,
+			Chain:    v.Chain,
 		}
 	}
 	return &pb.GetMessageResponse{Messages: swiftResponses}, nil
@@ -162,6 +166,7 @@ func (s *InscriptionService) GetGroupMessage(ctx context.Context, req *pb.GetGro
 			TrxHash:  v.TrxHash,
 			TrxTime:  v.TrxTime.String(),
 			Sender:   v.Sender,
+			Chain:    v.Chain,
 		}
 	}
 	return &pb.GetMessageResponse{Messages: swiftResponses}, nil
@@ -180,12 +185,12 @@ func (s *InscriptionService) GetTweet(ctx context.Context, req *pb.GetTweetReq) 
 	tweetResponse := make([]*pb.Tweets, len(tweets))
 	for k, v := range tweets {
 		tweetResponse[k] = &pb.Tweets{
-			Profile:  profileChangeSwiftResponse(v.Profile),
-			Tweet:    tweetChangeSwiftResponse(v.Twt),
+			Profile:     profileChangeSwiftResponse(v.Profile),
+			Tweet:       tweetChangeSwiftResponse(v.Twt),
 			WithProfile: profileChangeSwiftResponse(v.WithProfile),
-			With:     tweetChangeSwiftResponse(v.With),
-			LikeNum:  v.LikeNum,
-			LikeBool: v.LikeBool,
+			With:        tweetChangeSwiftResponse(v.With),
+			LikeNum:     v.LikeNum,
+			LikeBool:    v.LikeBool,
 		}
 		comments := make([]*pb.Comment, len(v.Comments))
 		for k, v := range v.Comments {
@@ -213,12 +218,12 @@ func (s *InscriptionService) GetFollowTweet(ctx context.Context, req *pb.GetFoll
 	tweetResponse := make([]*pb.Tweets, len(tweets))
 	for k, v := range tweets {
 		tweetResponse[k] = &pb.Tweets{
-			Profile:  profileChangeSwiftResponse(v.Profile),
-			Tweet:    tweetChangeSwiftResponse(v.Twt),
+			Profile:     profileChangeSwiftResponse(v.Profile),
+			Tweet:       tweetChangeSwiftResponse(v.Twt),
 			WithProfile: profileChangeSwiftResponse(v.WithProfile),
-			With:     tweetChangeSwiftResponse(v.With),
-			LikeNum:  v.LikeNum,
-			LikeBool: v.LikeBool,
+			With:        tweetChangeSwiftResponse(v.With),
+			LikeNum:     v.LikeNum,
+			LikeBool:    v.LikeBool,
 		}
 		comments := make([]*pb.Comment, len(v.Comments))
 		for k, v := range v.Comments {
@@ -243,12 +248,12 @@ func (s *InscriptionService) GetTweetByAddress(ctx context.Context, req *pb.GetT
 	tweetResponse := make([]*pb.Tweets, len(tweets))
 	for k, v := range tweets {
 		tweetResponse[k] = &pb.Tweets{
-			Profile:  profileChangeSwiftResponse(v.Profile),
-			Tweet:    tweetChangeSwiftResponse(v.Twt),
+			Profile:     profileChangeSwiftResponse(v.Profile),
+			Tweet:       tweetChangeSwiftResponse(v.Twt),
 			WithProfile: profileChangeSwiftResponse(v.WithProfile),
-			With:     tweetChangeSwiftResponse(v.With),
-			LikeNum:  v.LikeNum,
-			LikeBool: v.LikeBool,
+			With:        tweetChangeSwiftResponse(v.With),
+			LikeNum:     v.LikeNum,
+			LikeBool:    v.LikeBool,
 		}
 		comments := make([]*pb.Comment, len(v.Comments))
 		for k, v := range v.Comments {
@@ -281,6 +286,7 @@ func (s *InscriptionService) GetFollower(ctx context.Context, req *pb.ByAddress)
 			TrxHash:  v.TrxHash,
 			TrxTime:  v.TrxTime.String(),
 			Sender:   "",
+			Chain:    v.Chain,
 		}
 	}
 	return &pb.GetFollowerResponse{Follower: swiftResponses}, nil
@@ -299,6 +305,7 @@ func tweetChangeSwiftResponse(tweet module.Tweet) *pb.SwiftResponse {
 		TrxHash:  tweet.TrxHash,
 		TrxTime:  tweet.TrxTime.String(),
 		Sender:   tweet.Sender,
+		Chain:    tweet.Chain,
 	}
 }
 
@@ -315,6 +322,7 @@ func commentChangeSwiftResponse(comment module.Comment) *pb.SwiftResponse {
 		TrxHash:  comment.TrxHash,
 		TrxTime:  comment.TrxTime.String(),
 		Sender:   comment.Sender,
+		Chain:    comment.Chain,
 	}
 }
 
@@ -331,6 +339,7 @@ func messageChangeSwiftResponse(message *module.Message) *pb.SwiftResponse {
 		TrxHash:  message.TrxHash,
 		TrxTime:  message.TrxTime.String(),
 		Sender:   message.Sender,
+		Chain:    message.Chain,
 	}
 }
 
@@ -347,6 +356,7 @@ func groupMessageChangeSwiftResponse(message *module.GroupMessage) *pb.SwiftResp
 		TrxHash:  message.TrxHash,
 		TrxTime:  message.TrxTime.String(),
 		Sender:   message.Sender,
+		Chain:    message.Chain,
 	}
 }
 
@@ -363,5 +373,6 @@ func profileChangeSwiftResponse(profile module.Profile) *pb.SwiftResponse {
 		TrxHash:  profile.TrxHash,
 		TrxTime:  profile.TrxTime.String(),
 		Sender:   profile.Address,
+		Chain:    profile.Chain,
 	}
 }

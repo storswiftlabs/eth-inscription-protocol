@@ -7,55 +7,55 @@ import (
 	"time"
 )
 
-func (uc *InscriptionUsecase) HandleSwift(ctx context.Context, swifts []module.Swift)  {
+func (uc *InscriptionUsecase) HandleSwift(ctx context.Context, swifts []module.Swift) {
 	for _, v := range swifts {
 		switch v.Type {
 		case "create-profile":
-			if err := uc.SwiftCreateProfileHandle(ctx, v); err != nil{
+			if err := uc.SwiftCreateProfileHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle create-profile fail: %v", err)
 			}
 		case "update-profile":
-			if err := uc.SwiftUpdateProfileHandle(ctx, v); err != nil{
+			if err := uc.SwiftUpdateProfileHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle update-profile fail: %v", err)
 			}
 		case "im":
-			if err := uc.SwiftImHandle(ctx, v); err != nil{
+			if err := uc.SwiftImHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle im fail: %v", err)
 			}
 		case "create-group":
-			if err := uc.SwiftCreateGroupHandle(ctx, v); err != nil{
+			if err := uc.SwiftCreateGroupHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle create-group fail: %v", err)
 			}
 		case "update-group-add":
-			if err := uc.SwiftUpdateGroupAddHandle(ctx, v); err != nil{
+			if err := uc.SwiftUpdateGroupAddHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle update-group-add fail: %v", err)
 			}
 		case "update-group-del":
-			if err := uc.SwiftUpdateGroupDelHandle(ctx, v); err != nil{
+			if err := uc.SwiftUpdateGroupDelHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle update-group-del: %v", err)
 			}
 		case "tweet":
-			if err := uc.SwiftTweetHandle(ctx, v); err != nil{
+			if err := uc.SwiftTweetHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle tweet fail: %v", err)
 			}
 		case "tweet-comment":
-			if err := uc.SwiftTweetCommentHandle(ctx, v); err != nil{
+			if err := uc.SwiftTweetCommentHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle tweet-comment fail: %v", err)
 			}
 		case "tweet-like":
-			if err := uc.SwiftTweetLikeHandle(ctx, v); err != nil{
+			if err := uc.SwiftTweetLikeHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle tweet-like fail: %v", err)
 			}
 		case "un-like":
-			if err := uc.SwiftTweetUnLikeHandle(ctx, v); err != nil{
+			if err := uc.SwiftTweetUnLikeHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle un-like fail: %v", err)
 			}
 		case "tweet-follow":
-			if err := uc.SwiftTweetFollowHandle(ctx, v); err != nil{
+			if err := uc.SwiftTweetFollowHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle tweet-follow fail: %v", err)
 			}
 		case "un-follow":
-			if err := uc.SwiftUnFollowHandle(ctx, v); err != nil{
+			if err := uc.SwiftUnFollowHandle(ctx, v); err != nil {
 				uc.log.Fatalf("handle un-follow fail: %v", err)
 			}
 		}
@@ -71,6 +71,7 @@ func (uc *InscriptionUsecase) SwiftCreateProfileHandle(ctx context.Context, swif
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
 		TrxTime: time.Unix(swift.TrxTime, 0),
+		Chain:   swift.Chain,
 	}
 	return uc.repo.InsertProfile(ctx, profile)
 }
@@ -83,6 +84,7 @@ func (uc *InscriptionUsecase) SwiftUpdateProfileHandle(ctx context.Context, swif
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
 		TrxTime: time.Unix(swift.TrxTime, 0),
+		Chain:   swift.Chain,
 	}
 	return uc.repo.UpdateProfile(ctx, profile)
 }
@@ -106,6 +108,7 @@ func (uc *InscriptionUsecase) SwiftGroupMessageHandle(ctx context.Context, swift
 		Height:   swift.Height,
 		TrxHash:  swift.TrxHash,
 		TrxTime:  time.Unix(swift.TrxTime, 0),
+		Chain:    swift.Chain,
 	}
 	return uc.repo.InsertGroupMessage(ctx, groupMessage)
 }
@@ -132,18 +135,20 @@ func (uc *InscriptionUsecase) SwiftMessageHandle(ctx context.Context, swift modu
 		Height:   swift.Height,
 		TrxHash:  swift.TrxHash,
 		TrxTime:  time.Unix(swift.TrxTime, 0),
+		Chain:    swift.Chain,
 	}
 	return uc.repo.InsertMessage(ctx, message)
 }
 
 func (uc *InscriptionUsecase) SwiftCreateGroupHandle(ctx context.Context, swift module.Swift) error {
-	for _, v := range swift.Receiver{
+	for _, v := range swift.Receiver {
 		group := &module.Group{
 			Address: strings.ToUpper(v),
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
 			TrxTime: time.Unix(swift.TrxTime, 0),
+			Chain:   swift.Chain,
 		}
 		err := uc.repo.InsertGroup(ctx, group)
 		if err != nil {
@@ -154,13 +159,14 @@ func (uc *InscriptionUsecase) SwiftCreateGroupHandle(ctx context.Context, swift 
 }
 
 func (uc *InscriptionUsecase) SwiftUpdateGroupAddHandle(ctx context.Context, swift module.Swift) error {
-	for _, v := range swift.Receiver{
+	for _, v := range swift.Receiver {
 		group := &module.Group{
 			Address: strings.ToUpper(v),
 			Title:   swift.Title,
 			Height:  swift.Height,
 			TrxHash: swift.TrxHash,
 			TrxTime: time.Unix(swift.TrxTime, 0),
+			Chain:   swift.Chain,
 		}
 		err := uc.repo.InsertGroup(ctx, group)
 		if err != nil {
@@ -171,10 +177,11 @@ func (uc *InscriptionUsecase) SwiftUpdateGroupAddHandle(ctx context.Context, swi
 }
 
 func (uc *InscriptionUsecase) SwiftUpdateGroupDelHandle(ctx context.Context, swift module.Swift) error {
-	for _, v := range swift.Receiver{
+	for _, v := range swift.Receiver {
 		group := &module.Group{
 			Address: strings.ToUpper(v),
 			Title:   swift.Title,
+			Chain:   swift.Chain,
 		}
 		err := uc.repo.DeleteGroupByAddressAndTitle(ctx, group)
 		if err != nil {
@@ -195,6 +202,7 @@ func (uc *InscriptionUsecase) SwiftTweetHandle(ctx context.Context, swift module
 		With:    swift.With,
 		Height:  swift.Height,
 		TrxTime: time.Unix(swift.TrxTime, 0),
+		Chain:   swift.Chain,
 	}
 	return uc.repo.InsertTweet(ctx, tweet)
 }
@@ -209,6 +217,7 @@ func (uc *InscriptionUsecase) SwiftTweetCommentHandle(ctx context.Context, swift
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
 		TrxTime: time.Unix(swift.TrxTime, 0),
+		Chain:   swift.Chain,
 	}
 	return uc.repo.InsertComment(ctx, comment)
 }
@@ -220,14 +229,15 @@ func (uc *InscriptionUsecase) SwiftTweetLikeHandle(ctx context.Context, swift mo
 		Height:  swift.Height,
 		TrxHash: swift.TrxHash,
 		TrxTime: time.Unix(swift.TrxTime, 0),
+		Chain:   swift.Chain,
 	}
 	return uc.repo.InsertLike(ctx, like)
 }
 
 func (uc *InscriptionUsecase) SwiftTweetUnLikeHandle(ctx context.Context, swift module.Swift) error {
 	like := &module.Like{
-		With:    swift.With,
-		Sender:  strings.ToUpper(swift.Sender),
+		With:   swift.With,
+		Sender: strings.ToUpper(swift.Sender),
 	}
 	return uc.repo.DeleteLike(ctx, like)
 }
@@ -236,6 +246,7 @@ func (uc *InscriptionUsecase) SwiftTweetFollowHandle(ctx context.Context, swift 
 	follow := &module.Follow{
 		Address:  strings.ToUpper(swift.Sender),
 		Follower: strings.ToUpper(swift.With),
+		Chain:    swift.Chain,
 	}
 	return uc.repo.InsertFollow(ctx, follow)
 }
